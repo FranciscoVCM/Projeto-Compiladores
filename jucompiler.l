@@ -176,11 +176,6 @@ alnum      [a-zA-Z0-9_$]
     column += yyleng;
 }
 
-{digit}+[eE][+-]? {
-    printf("Line %d, col %d: invalid decimal literal (%s)\n",
-           line, column, yytext);
-    column += yyleng;
-}
 
 {nonzero}(_*{digit})* {
     if(print_tokens) printf("NATURAL(%s)\n", yytext);
