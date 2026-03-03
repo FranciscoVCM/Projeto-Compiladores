@@ -1,0 +1,4 @@
+Line 1, col 1: invalid natural literal (11_)
+NATURAL(5_6)
+NATURAL(38_0)
+Line 3, col 5: invalid natural literal (___)

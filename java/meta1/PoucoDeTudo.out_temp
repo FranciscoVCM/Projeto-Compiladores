@@ -1,0 +1,32 @@
+CLASS
+IDENTIFIER(Compiladores2020)
+DIV
+NATURAL(2019)
+STAR
+STAR
+DIV
+WHILE
+IDENTIFIER(e)
+MINUS
+NATURAL(1)
+RESERVED(++)
+PRINT
+LPAR
+Line 8, col 36: invalid escape sequence (\
+)
+Line 8, col 40: illegal character (\)
+Line 8, col 41: illegal character (\)
+Line 8, col 43: unterminated string literal
+Line 9, col 26: invalid escape sequence (\	)
+Line 9, col 1: unterminated string literal
+DECIMAL(0.0e0)
+DECIMAL(.0e0)
+DECIMAL(.0)
+DECIMAL(123.123e123)
+IDENTIFIER(e)
+RESERVED(--)
+NATURAL(123)
+ARROW
+IDENTIFIER(reallit)
+Line 12, col 29: illegal character (?)
+STRLIT(" \\\\\n 	")

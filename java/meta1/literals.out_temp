@@ -1,0 +1,58 @@
+Line 1, col 1: invalid natural literal (02115)
+NATURAL(1215)
+NATURAL(125_251)
+Line 4, col 1: invalid natural literal (0_)
+NATURAL(1515_0)
+Line 5, col 1: invalid natural literal (001_)
+NATURAL(15151_2)
+DECIMAL(12.12)
+IDENTIFIER(E)
+PLUS
+NATURAL(2)
+DECIMAL(0.124)
+Line 10, col 1: invalid natural literal (24_)
+DECIMAL(.52)
+DECIMAL(024.)
+IDENTIFIER(E)
+Line 12, col 1: invalid natural literal (24_)
+IDENTIFIER(E)
+DECIMAL(02.14)
+DECIMAL(0.02)
+DECIMAL(.01)
+DECIMAL(.999)
+DECIMAL(423e-3)
+DECIMAL(0E+4)
+DECIMAL(05e2)
+DECIMAL(09.5e+1)
+DECIMAL(0.4e2)
+DECIMAL(64.8E-2)
+DECIMAL(64.)
+IDENTIFIER(E)
+Line 24, col 1: illegal character (.)
+IDENTIFIER(e)
+MINUS
+NATURAL(1)
+IDENTIFIER(e2)
+Line 27, col 1: illegal character (.)
+IDENTIFIER(e2)
+STRLIT("string")
+STRLIT("varios escapes \n \f \r")
+Line 31, col 1: unterminated string literal
+Line 32, col 2: invalid escape sequence (\
+)
+IDENTIFIER(newline)
+Line 32, col 12: unterminated string literal
+STRLIT("\"\"")
+STRLIT("")
+STRLIT("")
+STRLIT("\n")
+Line 36, col 1: unterminated string literal
+Line 37, col 1: unterminated string literal
+STRLIT("")
+IDENTIFIER(aaaaa)
+Line 40, col 1: unterminated string literal
+STRLIT("   ")
+Line 41, col 29: invalid escape sequence (\h)
+Line 41, col 7: unterminated string literal
+Line 42, col 1: unterminated string literal
+Line 42, col 1: unterminated string literal

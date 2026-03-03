@@ -1,0 +1,95 @@
+Line 1, col 2: invalid escape sequence (\
+)
+Line 1, col 5: illegal character (\)
+STRLIT("\"î")
+IDENTIFIER(n)
+Line 1, col 16: unterminated string literal
+Line 2, col 1: unterminated string literal
+Line 3, col 1: illegal character (î)
+Line 4, col 2: invalid escape sequence (\î)
+Line 4, col 8: invalid escape sequence (\)
+Line 4, col 10: invalid escape sequence (\î)
+Line 4, col 1: unterminated string literal
+STRLIT("")
+STRLIT("")
+Line 5, col 8: illegal character (\)
+Line 5, col 11: illegal character (\)
+Line 5, col 12: illegal character (\)
+Line 5, col 14: unterminated string literal
+Line 6, col 1: illegal character (î)
+Line 6, col 2: illegal character (î)
+Line 6, col 3: unterminated string literal
+Line 7, col 2: illegal character (î)
+Line 7, col 3: illegal character (î)
+IDENTIFIER(nnn)
+Line 7, col 7: unterminated string literal
+Line 8, col 1: unterminated string literal
+IDENTIFIER(nn)
+Line 9, col 4: illegal character (\)
+Line 9, col 8: invalid escape sequence (\
+)
+Line 9, col 5: unterminated string literal
+IDENTIFIER(n)
+Line 10, col 6: illegal character (\)
+IDENTIFIER(n)
+Line 10, col 8: illegal character (î)
+Line 11, col 1: illegal character (î)
+Line 11, col 2: illegal character (î)
+Line 11, col 3: illegal character (\)
+IDENTIFIER(n)
+Line 11, col 5: illegal character (\)
+Line 11, col 7: illegal character (î)
+Line 11, col 8: illegal character (î)
+Line 11, col 9: illegal character (\)
+Line 11, col 11: invalid escape sequence (\
+)
+Line 11, col 10: unterminated string literal
+Line 12, col 1: illegal character (î)
+Line 12, col 2: illegal character (î)
+IDENTIFIER(n)
+Line 13, col 1: unterminated string literal
+Line 14, col 1: illegal character (\)
+Line 14, col 2: illegal character (\)
+Line 14, col 3: illegal character (î)
+STRLIT("î")
+Line 14, col 8: illegal character (\)
+Line 16, col 1: illegal character (î)
+Line 16, col 2: illegal character (î)
+Line 16, col 3: illegal character (î)
+Line 16, col 4: illegal character (\)
+Line 16, col 5: illegal character (\)
+STRLIT("n")
+Line 16, col 10: unterminated string literal
+IDENTIFIER(n)
+Line 19, col 1: illegal character (î)
+IDENTIFIER(nn)
+IDENTIFIER(n)
+IDENTIFIER(nn)
+Line 20, col 6: illegal character (\)
+Line 20, col 7: illegal character (\)
+IDENTIFIER(n)
+Line 20, col 9: illegal character (\)
+Line 20, col 10: illegal character (î)
+STRLIT("\"\n")
+STRLIT("în")
+IDENTIFIER(n)
+Line 20, col 23: illegal character (\)
+Line 20, col 24: illegal character (\)
+Line 21, col 1: illegal character (î)
+Line 21, col 3: unterminated string literal
+Line 22, col 1: illegal character (\)
+STRLIT("î")
+IDENTIFIER(n)
+STRLIT("nn")
+IDENTIFIER(nn)
+Line 26, col 4: invalid escape sequence (\)
+Line 26, col 6: invalid escape sequence (\)
+Line 26, col 10: illegal character (\)
+Line 26, col 11: illegal character (î)
+Line 26, col 12: illegal character (\)
+IDENTIFIER(n)
+IDENTIFIER(n)
+Line 26, col 18: invalid escape sequence (\)
+Line 27, col 2: invalid escape sequence (\)
+Line 27, col 1: unterminated string literal
+Line 28, col 1: unterminated string literal
