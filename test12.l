@@ -85,16 +85,6 @@ alnum      [a-zA-Z0-9_$]
     column += yyleng;
 }
 
-<STRING>\\(\r\n|\n|\r) {
-    printf("Line %d, col %d: invalid escape sequence (\\)\n",
-           line, column);
-    printf("Line %d, col %d: unterminated string literal\n",
-           str_start_line, str_start_column);
-    line++;
-    column = 1;
-    BEGIN(INITIAL);
-}
-
 <STRING>\\[fnrt\\\"] {
     if(!str_error) {
         for(int i = 0; i < yyleng; i++)
@@ -118,6 +108,36 @@ alnum      [a-zA-Z0-9_$]
     column += yyleng;
 }
 
+<STRING>\" {
+    if(!str_error && print_tokens) {
+        str_buffer[str_index++] = '"';
+        str_buffer[str_index] = '\0';
+        printf("STRLIT(%s)\n", str_buffer);
+    }
+    column += yyleng;
+    BEGIN(INITIAL);
+}
+
+<STRING>\\\r\n {
+    printf("Line %d, col %d: invalid escape sequence (\\)\n",
+           line, column);
+    line++;
+    column = 1;
+    printf("Line %d, col %d: unterminated string literal\n",
+           str_start_line, str_start_column);
+    BEGIN(INITIAL);
+}
+
+<STRING>\\\n {
+    printf("Line %d, col %d: invalid escape sequence (\\)\n",
+           line, column);
+    line++;
+    column = 1;
+    printf("Line %d, col %d: unterminated string literal\n",
+           str_start_line, str_start_column);
+    BEGIN(INITIAL);
+}
+
 <STRING>\r\n {
     printf("Line %d, col %d: unterminated string literal\n",
            str_start_line, str_start_column);
@@ -125,6 +145,7 @@ alnum      [a-zA-Z0-9_$]
     column = 1;
     BEGIN(INITIAL);
 }
+
 <STRING>\r {
     printf("Line %d, col %d: unterminated string literal\n",
            str_start_line, str_start_column);
@@ -141,20 +162,9 @@ alnum      [a-zA-Z0-9_$]
     BEGIN(INITIAL);
 }
 
-<STRING>\" {
-    if(!str_error && print_tokens) {
-        str_buffer[str_index++] = '"';
-        str_buffer[str_index] = '\0';
-        printf("STRLIT(%s)\n", str_buffer);
-    }
-    column += yyleng;
-    BEGIN(INITIAL);
-}
-
 <STRING><<EOF>> {
     printf("Line %d, col %d: unterminated string literal\n",
            str_start_line, str_start_column);
-    BEGIN(INITIAL);
     return 0;
 }
 
@@ -240,11 +250,11 @@ alnum      [a-zA-Z0-9_$]
     column += yyleng;
 }
 
-<INITIAL>\r\n { line++; column = 1; }
-<INITIAL>\r   { line++; column = 1; }
-<INITIAL>\n   { line++; column = 1; }
+\r\n { line++; column = 1; }
+\r   { line++; column = 1; }
+\n   { line++; column = 1; }
 
-<INITIAL>[ \t\f]+ { column += yyleng; }
+[ \t]+ { column += yyleng; }
 
 . {
     printf("Line %d, col %d: illegal character (%s)\n",
@@ -265,6 +275,10 @@ int yywrap() {
     if(YY_START == COMMENT) {
         printf("Line %d, col %d: unterminated comment\n",
                comment_start_line, comment_start_column);
+    }
+    if(YY_START == STRING) {
+        printf("Line %d, col %d: unterminated string literal\n",
+               str_start_line, str_start_column);
     }
     return 1;
 }

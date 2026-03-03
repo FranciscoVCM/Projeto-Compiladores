@@ -57,4 +57,3 @@ STRLIT("   ")
 Line 42, col 29: invalid escape sequence (\h)
 Line 42, col 7: unterminated string literal
 Line 43, col 1: unterminated string literal
-Line 43, col 1: unterminated string literal
