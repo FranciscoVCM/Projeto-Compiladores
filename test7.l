@@ -26,9 +26,9 @@ int print_tokens = 0;
 
 digit      [0-9]
 nonzero    [1-9]
-nat        {digit}(_*{digit})*
-frac       {digit}(_*{digit})*
-exp        [eE][+-]?{digit}(_*{digit})*
+nat        {digit}(_?{digit})*
+frac       {digit}(_?{digit})*
+exp        [eE][+-]?{digit}(_?{digit})*
 letter     [a-zA-Z_$]
 alnum      [a-zA-Z0-9_$]
 
@@ -47,22 +47,12 @@ alnum      [a-zA-Z0-9_$]
         BEGIN(INITIAL);
     }
 
-    [^*\r\n]+ {
+    [^*\n]+ {
         column += yyleng;
     }
 
     "*" {
         column += yyleng;
-    }
-
-    \r\n {
-        line++;
-        column = 1;
-    }
-
-    \r {
-        line++;
-        column = 1;
     }
 
     \n {
@@ -71,7 +61,7 @@ alnum      [a-zA-Z0-9_$]
     }
 }
 
-"//"[^\r\n]* {
+"//"[^\n]* {
     column += yyleng;
 }
 
@@ -93,14 +83,14 @@ alnum      [a-zA-Z0-9_$]
     column += yyleng;
 }
 
-<STRING>\\[^fnrt\\\"\r\n] {
+<STRING>\\[^fnrt\\\"] {
     printf("Line %d, col %d: invalid escape sequence (%s)\n",
            line, column, yytext);
     str_error = 1;
     column += yyleng;
 }
 
-<STRING>[^\\\"\r\n]+ {
+<STRING>[^\\\"\n]+ {
     if(!str_error) {
         for(int i = 0; i < yyleng; i++)
             str_buffer[str_index++] = yytext[i];
@@ -115,42 +105,6 @@ alnum      [a-zA-Z0-9_$]
         printf("STRLIT(%s)\n", str_buffer);
     }
     column += yyleng;
-    BEGIN(INITIAL);
-}
-
-<STRING>\\\r\n {
-    printf("Line %d, col %d: invalid escape sequence (\\)\n",
-           line, column);
-    line++;
-    column = 1;
-    printf("Line %d, col %d: unterminated string literal\n",
-           str_start_line, str_start_column);
-    BEGIN(INITIAL);
-}
-
-<STRING>\\\n {
-    printf("Line %d, col %d: invalid escape sequence (\\)\n",
-           line, column);
-    line++;
-    column = 1;
-    printf("Line %d, col %d: unterminated string literal\n",
-           str_start_line, str_start_column);
-    BEGIN(INITIAL);
-}
-
-<STRING>\r\n {
-    printf("Line %d, col %d: unterminated string literal\n",
-           str_start_line, str_start_column);
-    line++;
-    column = 1;
-    BEGIN(INITIAL);
-}
-
-<STRING>\r {
-    printf("Line %d, col %d: unterminated string literal\n",
-           str_start_line, str_start_column);
-    line++;
-    column = 1;
     BEGIN(INITIAL);
 }
 
@@ -171,6 +125,12 @@ alnum      [a-zA-Z0-9_$]
 "true"  { if(print_tokens) printf("BOOLLIT(true)\n"); column += yyleng; }
 "false" { if(print_tokens) printf("BOOLLIT(false)\n"); column += yyleng; }
 
+{digit}*_{2,}{digit}* {
+    printf("Line %d, col %d: invalid natural literal (%s)\n",
+           line, column, yytext);
+    column += yyleng;
+}
+
 ({nat}"."{frac}?{exp}?|"."{frac}{exp}?|{nat}{exp}) {
     if(print_tokens) printf("DECIMAL(%s)\n", yytext);
     column += yyleng;
@@ -182,7 +142,19 @@ alnum      [a-zA-Z0-9_$]
     column += yyleng;
 }
 
-{nonzero}(_*{digit})* {
+"0"{digit}+ {
+    printf("Line %d, col %d: invalid natural literal (%s)\n",
+           line, column, yytext);
+    column += yyleng;
+}
+
+{digit}+_+ {
+    printf("Line %d, col %d: invalid natural literal (%s)\n",
+           line, column, yytext);
+    column += yyleng;
+}
+
+{nonzero}(_?{digit})* {
     if(print_tokens) printf("NATURAL(%s)\n", yytext);
     column += yyleng;
 }
@@ -205,12 +177,13 @@ alnum      [a-zA-Z0-9_$]
 "<=" { TOKEN("LE"); column += yyleng; }
 "&&" { TOKEN("AND"); column += yyleng; }
 "||" { TOKEN("OR"); column += yyleng; }
-"^"  { TOKEN("XOR"); column += yyleng; }
+"^" { TOKEN("XOR"); column += yyleng; }
 "->" { TOKEN("ARROW"); column += yyleng; }
 
+
 "="  { TOKEN("ASSIGN"); column += yyleng; }
-">>" { TOKEN("RSHIFT"); column += yyleng; }
-"<<" { TOKEN("LSHIFT"); column += yyleng; }
+">>"  { TOKEN("RSHIFT"); column += yyleng; }
+"<<"  { TOKEN("LSHIFT"); column += yyleng; }
 ">"  { TOKEN("GT"); column += yyleng; }
 "<"  { TOKEN("LT"); column += yyleng; }
 
@@ -255,11 +228,8 @@ alnum      [a-zA-Z0-9_$]
     column += yyleng;
 }
 
-\r\n { line++; column = 1; }
-\r   { line++; column = 1; }
-\n   { line++; column = 1; }
-
-[ \t]+ { column += yyleng; }
+\n { line++; column = 1; }
+[ \t\r]+ { column += yyleng; }
 
 . {
     printf("Line %d, col %d: illegal character (%s)\n",

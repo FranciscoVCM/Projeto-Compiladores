@@ -1,7 +1,8 @@
 IDENTIFIER(loop)
 Line 2, col 5: illegal character (:)
 IDENTIFIER(cmp)
-Line 2, col 11: invalid natural literal (051)
+NATURAL(0)
+NATURAL(51)
 Line 2, col 14: illegal character (:)
 COMMA
 NATURAL(0)

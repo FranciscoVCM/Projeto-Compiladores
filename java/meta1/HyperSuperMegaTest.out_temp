@@ -89,8 +89,8 @@ IDENTIFIER(falsee)
 IDENTIFIER(sa9dyas9_ya9sydas$0as_0)
 NATURAL(9)
 IDENTIFIER(dyas9_ya9sydas$0as_0)
-Line 90, col 1: invalid natural literal (01039123_)
-Line 90, col 10: invalid natural literal (897123___8931271)
+NATURAL(0)
+NATURAL(1039123_897123___8931271)
 IDENTIFIER(_1039123_897123___8931271)
 IDENTIFIER(booleane)
 IDENTIFIER(classe)
@@ -272,7 +272,8 @@ NATURAL(0)
 NATURAL(0)
 EQ
 ASSIGN
-Line 174, col 38: invalid natural literal (00)
+NATURAL(0)
+NATURAL(0)
 LE
 EQ
 ASSIGN
@@ -338,19 +339,11 @@ STRLIT("sui ghasuidhasui dhiash ")
 STRLIT("")
 IDENTIFIER(sapdj)
 IDENTIFIER(a)
-Line 190, col 29: invalid escape sequence (\
-)
-IDENTIFIER(oashdao)
-IDENTIFIER(saosdjasodj)
-IDENTIFIER(a)
-Line 190, col 53: illegal character (\)
-IDENTIFIER(U)
-Line 190, col 55: unterminated string literal
-Line 191, col 18: invalid escape sequence (\
-)
-IDENTIFIER(asidj)
-IDENTIFIER(aspjdas)
-Line 191, col 35: illegal character (\)
-IDENTIFIER(f)
+Line 190, col 29: invalid escape sequence (\)
+Line 190, col 10: unterminated string literal
+Line 191, col 23: invalid escape sequence (\U)
+Line 192, col 18: invalid escape sequence (\)
+Line 192, col 1: unterminated string literal
+Line 193, col 1: unterminated string literal
 STRLIT("aspj dpas !")
 STRLIT("")

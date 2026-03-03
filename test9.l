@@ -26,9 +26,9 @@ int print_tokens = 0;
 
 digit      [0-9]
 nonzero    [1-9]
-nat        {digit}(_*{digit})*
-frac       {digit}(_*{digit})*
-exp        [eE][+-]?{digit}(_*{digit})*
+nat        {digit}(_?{digit})*
+frac       {digit}(_?{digit})*
+exp        [eE][+-]?{digit}(_?{digit})*
 letter     [a-zA-Z_$]
 alnum      [a-zA-Z0-9_$]
 
@@ -93,7 +93,7 @@ alnum      [a-zA-Z0-9_$]
     column += yyleng;
 }
 
-<STRING>\\[^fnrt\\\"\r\n] {
+<STRING>\\[^fnrt\\\"] {
     printf("Line %d, col %d: invalid escape sequence (%s)\n",
            line, column, yytext);
     str_error = 1;
@@ -115,26 +115,6 @@ alnum      [a-zA-Z0-9_$]
         printf("STRLIT(%s)\n", str_buffer);
     }
     column += yyleng;
-    BEGIN(INITIAL);
-}
-
-<STRING>\\\r\n {
-    printf("Line %d, col %d: invalid escape sequence (\\)\n",
-           line, column);
-    line++;
-    column = 1;
-    printf("Line %d, col %d: unterminated string literal\n",
-           str_start_line, str_start_column);
-    BEGIN(INITIAL);
-}
-
-<STRING>\\\n {
-    printf("Line %d, col %d: invalid escape sequence (\\)\n",
-           line, column);
-    line++;
-    column = 1;
-    printf("Line %d, col %d: unterminated string literal\n",
-           str_start_line, str_start_column);
     BEGIN(INITIAL);
 }
 
@@ -182,7 +162,7 @@ alnum      [a-zA-Z0-9_$]
     column += yyleng;
 }
 
-{nonzero}(_*{digit})* {
+{nonzero}(_?{digit})* {
     if(print_tokens) printf("NATURAL(%s)\n", yytext);
     column += yyleng;
 }

@@ -93,7 +93,7 @@ alnum      [a-zA-Z0-9_$]
     column += yyleng;
 }
 
-<STRING>\\[^fnrt\\\"\r\n] {
+<STRING>\\[^fnrt\\\"] {
     printf("Line %d, col %d: invalid escape sequence (%s)\n",
            line, column, yytext);
     str_error = 1;
@@ -115,26 +115,6 @@ alnum      [a-zA-Z0-9_$]
         printf("STRLIT(%s)\n", str_buffer);
     }
     column += yyleng;
-    BEGIN(INITIAL);
-}
-
-<STRING>\\\r\n {
-    printf("Line %d, col %d: invalid escape sequence (\\)\n",
-           line, column);
-    line++;
-    column = 1;
-    printf("Line %d, col %d: unterminated string literal\n",
-           str_start_line, str_start_column);
-    BEGIN(INITIAL);
-}
-
-<STRING>\\\n {
-    printf("Line %d, col %d: invalid escape sequence (\\)\n",
-           line, column);
-    line++;
-    column = 1;
-    printf("Line %d, col %d: unterminated string literal\n",
-           str_start_line, str_start_column);
     BEGIN(INITIAL);
 }
 
