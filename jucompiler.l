@@ -77,6 +77,15 @@ alnum      [a-zA-Z0-9_$]
     }
 }
 
+<COMMENT><<EOF>> {
+    printf("Line %d, col %d: unterminated comment\n",
+           comment_start_line, comment_start_column);
+    token_line = line;
+    token_column = column;
+    BEGIN(INITIAL);
+    return 0;
+}
+
 "//"[^\r\n]* {
     column += yyleng;
 }
@@ -131,6 +140,7 @@ alnum      [a-zA-Z0-9_$]
     column = 1;
     BEGIN(INITIAL);
 }
+
 <STRING_STATE>\r {
     printf("Line %d, col %d: unterminated string literal\n",
            str_start_line, str_start_column);
@@ -170,6 +180,8 @@ alnum      [a-zA-Z0-9_$]
 <STRING_STATE><<EOF>> {
     printf("Line %d, col %d: unterminated string literal\n",
            str_start_line, str_start_column);
+    token_line = line;
+    token_column = column;
     BEGIN(INITIAL);
     return 0;
 }
@@ -301,9 +313,5 @@ alnum      [a-zA-Z0-9_$]
 %%
 
 int yywrap() {
-    if(YY_START == COMMENT) {
-        printf("Line %d, col %d: unterminated comment\n",
-               comment_start_line, comment_start_column);
-    }
     return 1;
 }

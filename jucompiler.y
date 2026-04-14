@@ -313,7 +313,8 @@ method_body_items:
     }
 |   method_body_items stmt
     {
-        addchild($1, $2);
+        if (!is_empty_block($2))
+            addchild($1, $2);
         $$ = $1;
     }
 |   method_body_items error SEMICOLON
@@ -439,6 +440,11 @@ stmt:
     {
         $$ = newnode(Block, NULL);
     }
+|   error SEMICOLON
+    {
+        yyerrok;
+        $$ = newnode(Block, NULL);
+    }
 ;
 
 stmt_list:
@@ -447,7 +453,8 @@ stmt_list:
     }
 |   stmt_list stmt
     {
-        addchild($1, $2);
+        if (!is_empty_block($2))
+            addchild($1, $2);
         $$ = $1;
     }
 |   stmt_list error SEMICOLON

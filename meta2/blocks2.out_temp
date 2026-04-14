@@ -7,15 +7,6 @@ Program
 ......MethodParams
 ....MethodBody
 ......Block
-......Block
-......Block
-......Block
-......Block
-......Block
-......Block
-......Block
-......Block
-......Block
 ........Assign
 ..........Identifier(a)
 ..........Natural(2)
@@ -26,15 +17,6 @@ Program
 ..........Assign
 ............Identifier(c)
 ............Natural(1)
-......Block
-......Block
-......Block
-......Block
-......Block
-......Block
-......Block
-......Block
-......Block
 ......Assign
 ........Identifier(X)
 ........Natural(1000000000000000000000)
@@ -45,5 +27,3 @@ Program
 ........Assign
 ..........Identifier(b)
 ..........Natural(2)
-......Block
-......Block
