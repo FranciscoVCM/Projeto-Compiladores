@@ -1,10 +1,8 @@
 Program
-..Identifier
-..MethodBody
-....MethodDecl
-......MethodHeader
-........Void
-........Identifier
-........MethodParams
-......MethodBody
-........Block
+..Identifier(Teste)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+....MethodBody

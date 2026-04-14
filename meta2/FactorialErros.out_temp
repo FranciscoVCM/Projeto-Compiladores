@@ -1,1 +1,5 @@
-Line 11, col 17: syntax error: *
+Line 11, col 16: syntax error: *
+Line 17, col 29: syntax error: [
+Line 21, col 9: syntax error: argument
+Line 23, col 9: syntax error: System.out.print
+Line 27, col 1: syntax error: }

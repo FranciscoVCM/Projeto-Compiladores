@@ -7,8 +7,6 @@
 extern int yylex();
 extern int line;
 extern int column;
-extern int token_line;
-extern int token_column;
 extern int print_tokens;
 extern char *yytext;
 
@@ -40,68 +38,23 @@ static void append_holder(struct node *dst, struct node *src) {
     src->children->next = NULL;
 }
 
-static int child_count(struct node *node) {
-    int count = 0;
+static int holder_size(struct node *node) {
+    int n = 0;
     struct node_list *child;
-
     if (!node || !node->children)
         return 0;
-
     child = node->children->next;
     while (child) {
-        count++;
+        n++;
         child = child->next;
     }
-    return count;
+    return n;
 }
 
-static int is_empty_block(struct node *node) {
-    return node && node->category == Block && child_count(node) == 0;
-}
-
-static int meaningful_child_count(struct node *holder) {
-    int count = 0;
-    struct node_list *child;
-
-    if (!holder || !holder->children)
-        return 0;
-
-    child = holder->children->next;
-    while (child) {
-        if (!is_empty_block(child->node))
-            count++;
-        child = child->next;
-    }
-    return count;
-}
-
-static struct node *first_meaningful_child(struct node *holder) {
-    struct node_list *child;
-
-    if (!holder || !holder->children)
+static struct node *holder_first(struct node *node) {
+    if (!node || !node->children || !node->children->next)
         return NULL;
-
-    child = holder->children->next;
-    while (child) {
-        if (!is_empty_block(child->node))
-            return child->node;
-        child = child->next;
-    }
-    return NULL;
-}
-
-static void append_meaningful_children(struct node *dst, struct node *src) {
-    struct node_list *child;
-
-    if (!dst || !src || !src->children)
-        return;
-
-    child = src->children->next;
-    while (child) {
-        if (!is_empty_block(child->node))
-            addchild(dst, child->node);
-        child = child->next;
-    }
+    return node->children->next->node;
 }
 
 static void free_holder_only(struct node *node) {
@@ -115,7 +68,7 @@ static void free_holder_only(struct node *node) {
 void yyerror(char *s) {
     syntax_errors = 1;
     if (!only_errors)
-        printf("Line %d, col %d: syntax error: %s\n", token_line, token_column, yytext);
+        printf("Line %d, col %d: syntax error: %s\n", line, column, yytext);
 }
 %}
 
@@ -124,7 +77,8 @@ void yyerror(char *s) {
     struct node *node;
 }
 
-%token <lexeme> IDENTIFIER NATURAL DECIMAL STRLIT BOOLLIT
+%token <lexeme> IDENTIFIER NATURAL DECIMAL STRLIT
+%token BOOLLIT
 
 %token CLASS PUBLIC STATIC
 %token BOOL INT DOUBLE VOID STRING
@@ -357,17 +311,16 @@ var_ids:
 stmt:
     LBRACE stmt_list RBRACE
     {
-        int meaningful = meaningful_child_count($2);
-
-        if (meaningful == 0) {
+        int n = holder_size($2);
+        if (n == 0) {
             $$ = newnode(Block, NULL);
-        } else if (meaningful == 1) {
-            $$ = first_meaningful_child($2);
+        } else if (n == 1) {
+            $$ = holder_first($2);
             $2->children->next = NULL;
             free_holder_only($2);
         } else {
             $$ = newnode(Block, NULL);
-            append_meaningful_children($$, $2);
+            append_holder($$, $2);
             free_holder_only($2);
         }
     }
@@ -476,7 +429,7 @@ expr:
     }
 |   BOOLLIT
     {
-        $$ = newnode(BoolLit, $1);
+        $$ = newnode(BoolLit, NULL);
     }
 |   method_invocation
 |   parse_args

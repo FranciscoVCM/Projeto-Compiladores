@@ -7,8 +7,6 @@
 extern int yylex();
 extern int line;
 extern int column;
-extern int token_line;
-extern int token_column;
 extern int print_tokens;
 extern char *yytext;
 
@@ -17,28 +15,6 @@ struct node *ast = NULL;
 int print_tree = 0;
 int only_errors = 0;
 int syntax_errors = 0;
-
-static struct node *clone_type_node(struct node *node) {
-    if (!node)
-        return NULL;
-    return newnode(node->category, node->token);
-}
-
-static struct node *make_holder() {
-    return newnode(Program, NULL);
-}
-
-static void append_holder(struct node *dst, struct node *src) {
-    struct node_list *child;
-    if (!dst || !src || !src->children)
-        return;
-    child = src->children->next;
-    while (child) {
-        addchild(dst, child->node);
-        child = child->next;
-    }
-    src->children->next = NULL;
-}
 
 static int child_count(struct node *node) {
     int count = 0;
@@ -55,56 +31,27 @@ static int child_count(struct node *node) {
     return count;
 }
 
-static int is_empty_block(struct node *node) {
-    return node && node->category == Block && child_count(node) == 0;
-}
-
-static int meaningful_child_count(struct node *holder) {
-    int count = 0;
-    struct node_list *child;
-
-    if (!holder || !holder->children)
-        return 0;
-
-    child = holder->children->next;
-    while (child) {
-        if (!is_empty_block(child->node))
-            count++;
-        child = child->next;
-    }
-    return count;
-}
-
-static struct node *first_meaningful_child(struct node *holder) {
-    struct node_list *child;
-
-    if (!holder || !holder->children)
+static struct node *first_child(struct node *node) {
+    if (!node || !node->children || !node->children->next)
         return NULL;
-
-    child = holder->children->next;
-    while (child) {
-        if (!is_empty_block(child->node))
-            return child->node;
-        child = child->next;
-    }
-    return NULL;
+    return node->children->next->node;
 }
 
-static void append_meaningful_children(struct node *dst, struct node *src) {
-    struct node_list *child;
+static void append_children(struct node *parent, struct node *holder) {
+    struct node_list *tail;
 
-    if (!dst || !src || !src->children)
+    if (!parent || !holder || !holder->children)
         return;
 
-    child = src->children->next;
-    while (child) {
-        if (!is_empty_block(child->node))
-            addchild(dst, child->node);
-        child = child->next;
-    }
+    tail = parent->children;
+    while (tail->next)
+        tail = tail->next;
+
+    tail->next = holder->children->next;
+    holder->children->next = NULL;
 }
 
-static void free_holder_only(struct node *node) {
+static void free_holder(struct node *node) {
     if (!node)
         return;
     if (node->children)
@@ -115,7 +62,7 @@ static void free_holder_only(struct node *node) {
 void yyerror(char *s) {
     syntax_errors = 1;
     if (!only_errors)
-        printf("Line %d, col %d: syntax error: %s\n", token_line, token_column, yytext);
+        printf("Line %d, col %d: syntax error: %s\n", line, column, yytext);
 }
 %}
 
@@ -124,7 +71,8 @@ void yyerror(char *s) {
     struct node *node;
 }
 
-%token <lexeme> IDENTIFIER NATURAL DECIMAL STRLIT BOOLLIT
+%token <lexeme> IDENTIFIER NATURAL DECIMAL STRLIT
+%token BOOLLIT
 
 %token CLASS PUBLIC STATIC
 %token BOOL INT DOUBLE VOID STRING
@@ -157,83 +105,69 @@ void yyerror(char *s) {
 %right NOT
 %right UMINUS UPLUS
 
-%type <node> program class_body
-%type <node> field_decl field_ids
-%type <node> method_decl method_header method_body method_body_items
+%type <node> program class_body member
+%type <node> field_decl var_decl
+%type <node> method_decl method_header method_body method_body_items method_body_item
 %type <node> formal_params param_list param_decl
-%type <node> stmt stmt_list
-%type <node> expr expr_list args_opt
-%type <node> type
-%type <node> var_decl var_ids
-%type <node> method_invocation parse_args
+%type <node> stmt stmt_list stmt_item
+%type <node> expr type
+%type <node> method_invocation parse_args args_opt arg_list
 
 %%
 
 program:
     CLASS IDENTIFIER LBRACE class_body RBRACE
     {
-        $$ = newnode(Program, NULL);
-        addchild($$, newnode(Identifier, $2));
-        append_holder($$, $4);
-        free_holder_only($4);
-        ast = $$;
+        ast = newnode(Program, NULL);
+        addchild(ast, newnode(Identifier, $2));
+        append_children(ast, $4);
+        free_holder($4);
+        $$ = ast;
     }
 ;
 
 class_body:
     {
-        $$ = make_holder();
+        $$ = newnode(Program, NULL);
     }
-|   class_body field_decl
+|   class_body member
     {
-        append_holder($1, $2);
-        free_holder_only($2);
+        if ($2)
+            addchild($1, $2);
         $$ = $1;
     }
-|   class_body method_decl
+;
+
+member:
+    field_decl
+|   method_decl
+|   SEMICOLON
     {
-        addchild($1, $2);
-        $$ = $1;
-    }
-|   class_body SEMICOLON
-    {
-        $$ = $1;
-    }
-|   class_body error SEMICOLON
-    {
-        yyerrok;
-        $$ = $1;
+        $$ = NULL;
     }
 ;
 
 field_decl:
-    PUBLIC STATIC type field_ids SEMICOLON
+    type IDENTIFIER SEMICOLON
     {
-        struct node_list *child;
-        $$ = make_holder();
-        child = $4->children->next;
-        while (child) {
-            struct node *decl = newnode(FieldDecl, NULL);
-            addchild(decl, clone_type_node($3));
-            addchild(decl, newnode(Identifier, child->node->token));
-            addchild($$, decl);
-            child = child->next;
-        }
-        free_ast($3);
-        free_ast($4);
+        $$ = newnode(FieldDecl, NULL);
+        addchild($$, $1);
+        addchild($$, newnode(Identifier, $2));
+    }
+|   PUBLIC STATIC type IDENTIFIER SEMICOLON
+    {
+        $$ = newnode(FieldDecl, NULL);
+        addchild($$, $3);
+        addchild($$, newnode(Identifier, $4));
     }
 ;
 
-field_ids:
-    IDENTIFIER
+var_decl:
+    type IDENTIFIER SEMICOLON
     {
-        $$ = make_holder();
-        addchild($$, newnode(Identifier, $1));
-    }
-|   field_ids COMMA IDENTIFIER
-    {
-        addchild($1, newnode(Identifier, $3));
-        $$ = $1;
+        $$ = newnode(VarDecl, NULL);
+        addchild($$, $1);
+        addchild($$, newnode(Identifier, $2));
     }
 ;
 
@@ -296,80 +230,41 @@ method_body:
     LBRACE method_body_items RBRACE
     {
         $$ = newnode(MethodBody, NULL);
-        append_holder($$, $2);
-        free_holder_only($2);
+        append_children($$, $2);
+        free_holder($2);
     }
 ;
 
 method_body_items:
     {
-        $$ = make_holder();
+        $$ = newnode(MethodBody, NULL);
     }
-|   method_body_items var_decl
+|   method_body_items method_body_item
     {
-        append_holder($1, $2);
-        free_holder_only($2);
-        $$ = $1;
-    }
-|   method_body_items stmt
-    {
-        addchild($1, $2);
-        $$ = $1;
-    }
-|   method_body_items error SEMICOLON
-    {
-        yyerrok;
+        if ($2)
+            addchild($1, $2);
         $$ = $1;
     }
 ;
 
-var_decl:
-    type var_ids SEMICOLON
-    {
-        struct node_list *child;
-        $$ = make_holder();
-        child = $2->children->next;
-        while (child) {
-            struct node *decl = newnode(VarDecl, NULL);
-            addchild(decl, clone_type_node($1));
-            addchild(decl, newnode(Identifier, child->node->token));
-            addchild($$, decl);
-            child = child->next;
-        }
-        free_ast($1);
-        free_ast($2);
-    }
-;
-
-var_ids:
-    IDENTIFIER
-    {
-        $$ = make_holder();
-        addchild($$, newnode(Identifier, $1));
-    }
-|   var_ids COMMA IDENTIFIER
-    {
-        addchild($1, newnode(Identifier, $3));
-        $$ = $1;
-    }
+method_body_item:
+    var_decl
+|   stmt
 ;
 
 stmt:
     LBRACE stmt_list RBRACE
     {
-        int meaningful = meaningful_child_count($2);
-
-        if (meaningful == 0) {
+        int n = child_count($2);
+        if (n == 0) {
             $$ = newnode(Block, NULL);
-        } else if (meaningful == 1) {
-            $$ = first_meaningful_child($2);
-            $2->children->next = NULL;
-            free_holder_only($2);
+        } else if (n == 1) {
+            $$ = first_child($2);
         } else {
             $$ = newnode(Block, NULL);
-            append_meaningful_children($$, $2);
-            free_holder_only($2);
+            append_children($$, $2);
         }
+        free_holder($2);
     }
 |   IF LPAR expr RPAR stmt %prec LOWER_THAN_ELSE
     {
@@ -380,22 +275,6 @@ stmt:
     }
 |   IF LPAR expr RPAR stmt ELSE stmt
     {
-        $$ = newnode(If, NULL);
-        addchild($$, $3);
-        addchild($$, $5);
-        addchild($$, $7);
-    }
-|   IF LPAR expr error stmt %prec LOWER_THAN_ELSE
-    {
-        yyerrok;
-        $$ = newnode(If, NULL);
-        addchild($$, $3);
-        addchild($$, $5);
-        addchild($$, newnode(Block, NULL));
-    }
-|   IF LPAR expr error stmt ELSE stmt
-    {
-        yyerrok;
         $$ = newnode(If, NULL);
         addchild($$, $3);
         addchild($$, $5);
@@ -416,22 +295,18 @@ stmt:
     {
         $$ = newnode(Return, NULL);
     }
+|   PRINT LPAR expr RPAR SEMICOLON
+    {
+        $$ = newnode(Print, NULL);
+        addchild($$, $3);
+    }
 |   IDENTIFIER ASSIGN expr SEMICOLON
     {
         $$ = newnode(Assign, NULL);
         addchild($$, newnode(Identifier, $1));
         addchild($$, $3);
     }
-|   PRINT LPAR expr RPAR SEMICOLON
-    {
-        $$ = newnode(Print, NULL);
-        addchild($$, $3);
-    }
-|   method_invocation SEMICOLON
-    {
-        $$ = $1;
-    }
-|   parse_args SEMICOLON
+|   expr SEMICOLON
     {
         $$ = $1;
     }
@@ -443,18 +318,19 @@ stmt:
 
 stmt_list:
     {
-        $$ = make_holder();
+        $$ = newnode(Block, NULL);
     }
-|   stmt_list stmt
+|   stmt_list stmt_item
     {
-        addchild($1, $2);
+        if ($2)
+            addchild($1, $2);
         $$ = $1;
     }
-|   stmt_list error SEMICOLON
-    {
-        yyerrok;
-        $$ = $1;
-    }
+;
+
+stmt_item:
+    stmt
+|   var_decl
 ;
 
 expr:
@@ -476,16 +352,10 @@ expr:
     }
 |   BOOLLIT
     {
-        $$ = newnode(BoolLit, $1);
+        $$ = newnode(BoolLit, NULL);
     }
 |   method_invocation
 |   parse_args
-|   IDENTIFIER ASSIGN expr
-    {
-        $$ = newnode(Assign, NULL);
-        addchild($$, newnode(Identifier, $1));
-        addchild($$, $3);
-    }
 |   expr PLUS expr
     {
         $$ = newnode(Add, NULL);
@@ -613,25 +483,25 @@ method_invocation:
     {
         $$ = newnode(Call, NULL);
         addchild($$, newnode(Identifier, $1));
-        append_holder($$, $3);
-        free_holder_only($3);
+        append_children($$, $3);
+        free_holder($3);
     }
 ;
 
 args_opt:
     {
-        $$ = make_holder();
+        $$ = newnode(MethodBody, NULL);
     }
-|   expr_list
+|   arg_list
 ;
 
-expr_list:
+arg_list:
     expr
     {
-        $$ = make_holder();
+        $$ = newnode(MethodBody, NULL);
         addchild($$, $1);
     }
-|   expr_list COMMA expr
+|   arg_list COMMA expr
     {
         addchild($1, $3);
         $$ = $1;
