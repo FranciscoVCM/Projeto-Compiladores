@@ -11,7 +11,6 @@ extern int token_line;
 extern int token_column;
 extern int print_tokens;
 extern char *yytext;
-extern char token_text[];
 
 struct node *ast = NULL;
 
@@ -116,7 +115,7 @@ static void free_holder_only(struct node *node) {
 void yyerror(char *s) {
     syntax_errors = 1;
     if (!only_errors)
-        printf("Line %d, col %d: syntax error: %s\n", token_line, token_column, token_text);
+        printf("Line %d, col %d: syntax error: %s\n", token_line, token_column, yytext);
 }
 %}
 
@@ -147,6 +146,16 @@ void yyerror(char *s) {
 %nonassoc ELSE
 
 %right ASSIGN
+%left OR
+%left AND
+%left XOR
+%left EQ NE
+%left LT GT LE GE
+%left LSHIFT RSHIFT
+%left PLUS MINUS
+%left STAR DIV MOD
+%right NOT
+%right UMINUS UPLUS
 
 %type <node> program class_body
 %type <node> field_decl field_ids
@@ -297,11 +306,6 @@ method_body:
         append_holder($$, $2);
         free_holder_only($2);
     }
-|   LBRACE error RBRACE
-    {
-        yyerrok;
-        $$ = newnode(MethodBody, NULL);
-    }
 ;
 
 method_body_items:
@@ -326,6 +330,7 @@ method_body_items:
         $$ = $1;
     }
 ;
+
 
 var_decl:
     type var_ids SEMICOLON
@@ -374,11 +379,6 @@ stmt:
             append_meaningful_children($$, $2);
             free_holder_only($2);
         }
-    }
-|   LBRACE error RBRACE
-    {
-        yyerrok;
-        $$ = newnode(Block, NULL);
     }
 |   IF LPAR expr RPAR stmt %prec LOWER_THAN_ELSE
     {

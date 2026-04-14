@@ -22,9 +22,12 @@ int str_error;
 char str_buffer[10000];
 int str_index;
 
+char token_text[10000] = "";
+
 int print_tokens = 0;
 
 #define TOKEN(t) if(print_tokens) printf("%s\n", t);
+#define SET_TOKEN_TEXT(s) do { strncpy(token_text, (s), sizeof(token_text) - 1); token_text[sizeof(token_text) - 1] = '\0'; } while(0)
 
 %}
 
@@ -82,6 +85,7 @@ alnum      [a-zA-Z0-9_$]
            comment_start_line, comment_start_column);
     token_line = line;
     token_column = column;
+    SET_TOKEN_TEXT("");
     BEGIN(INITIAL);
     return 0;
 }
@@ -168,6 +172,7 @@ alnum      [a-zA-Z0-9_$]
         yylval.lexeme = strdup(str_buffer);
         token_line = str_start_line;
         token_column = str_start_column;
+        SET_TOKEN_TEXT(str_buffer);
         column += yyleng;
         BEGIN(INITIAL);
         return STRLIT;
@@ -182,6 +187,7 @@ alnum      [a-zA-Z0-9_$]
            str_start_line, str_start_column);
     token_line = line;
     token_column = column;
+    SET_TOKEN_TEXT("");
     BEGIN(INITIAL);
     return 0;
 }
@@ -191,6 +197,7 @@ alnum      [a-zA-Z0-9_$]
     yylval.lexeme = strdup("true");
     token_line = line;
     token_column = column;
+    SET_TOKEN_TEXT("true");
     column += yyleng;
     return BOOLLIT;
 }
@@ -200,6 +207,7 @@ alnum      [a-zA-Z0-9_$]
     yylval.lexeme = strdup("false");
     token_line = line;
     token_column = column;
+    SET_TOKEN_TEXT("false");
     column += yyleng;
     return BOOLLIT;
 }
@@ -209,6 +217,7 @@ alnum      [a-zA-Z0-9_$]
     yylval.lexeme = strdup(yytext);
     token_line = line;
     token_column = column;
+    SET_TOKEN_TEXT(yytext);
     column += yyleng;
     return DECIMAL;
 }
@@ -218,6 +227,7 @@ alnum      [a-zA-Z0-9_$]
     yylval.lexeme = strdup(yytext);
     token_line = line;
     token_column = column;
+    SET_TOKEN_TEXT(yytext);
     column += yyleng;
     return NATURAL;
 }
@@ -227,67 +237,69 @@ alnum      [a-zA-Z0-9_$]
     yylval.lexeme = strdup("0");
     token_line = line;
     token_column = column;
+    SET_TOKEN_TEXT("0");
     column += yyleng;
     return NATURAL;
 }
 
-"++" { if(print_tokens) printf("RESERVED(++)\n"); token_line = line; token_column = column; column += yyleng; return INC; }
-"--" { if(print_tokens) printf("RESERVED(--)\n"); token_line = line; token_column = column; column += yyleng; return DEC; }
+"++" { if(print_tokens) printf("RESERVED(++)\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return INC; }
+"--" { if(print_tokens) printf("RESERVED(--)\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return DEC; }
 
-"System.out.print" { TOKEN("PRINT"); token_line = line; token_column = column; column += yyleng; return PRINT; }
-"Integer.parseInt" { TOKEN("PARSEINT"); token_line = line; token_column = column; column += yyleng; return PARSEINT; }
-".length"          { TOKEN("DOTLENGTH"); token_line = line; token_column = column; column += yyleng; return DOTLENGTH; }
+"System.out.print" { TOKEN("PRINT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return PRINT; }
+"Integer.parseInt" { TOKEN("PARSEINT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return PARSEINT; }
+".length"          { TOKEN("DOTLENGTH"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return DOTLENGTH; }
 
-"==" { TOKEN("EQ"); token_line = line; token_column = column; column += yyleng; return EQ; }
-"!=" { TOKEN("NE"); token_line = line; token_column = column; column += yyleng; return NE; }
-">=" { TOKEN("GE"); token_line = line; token_column = column; column += yyleng; return GE; }
-"<=" { TOKEN("LE"); token_line = line; token_column = column; column += yyleng; return LE; }
-"&&" { TOKEN("AND"); token_line = line; token_column = column; column += yyleng; return AND; }
-"||" { TOKEN("OR"); token_line = line; token_column = column; column += yyleng; return OR; }
-"^"  { TOKEN("XOR"); token_line = line; token_column = column; column += yyleng; return XOR; }
-"->" { TOKEN("ARROW"); token_line = line; token_column = column; column += yyleng; return ARROW; }
+"==" { TOKEN("EQ"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return EQ; }
+"!=" { TOKEN("NE"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return NE; }
+">=" { TOKEN("GE"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return GE; }
+"<=" { TOKEN("LE"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return LE; }
+"&&" { TOKEN("AND"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return AND; }
+"||" { TOKEN("OR"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return OR; }
+"^"  { TOKEN("XOR"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return XOR; }
+"->" { TOKEN("ARROW"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return ARROW; }
 
-"="  { TOKEN("ASSIGN"); token_line = line; token_column = column; column += yyleng; return ASSIGN; }
-">>" { TOKEN("RSHIFT"); token_line = line; token_column = column; column += yyleng; return RSHIFT; }
-"<<" { TOKEN("LSHIFT"); token_line = line; token_column = column; column += yyleng; return LSHIFT; }
-">"  { TOKEN("GT"); token_line = line; token_column = column; column += yyleng; return GT; }
-"<"  { TOKEN("LT"); token_line = line; token_column = column; column += yyleng; return LT; }
+"="  { TOKEN("ASSIGN"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return ASSIGN; }
+">>" { TOKEN("RSHIFT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return RSHIFT; }
+"<<" { TOKEN("LSHIFT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return LSHIFT; }
+">"  { TOKEN("GT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return GT; }
+"<"  { TOKEN("LT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return LT; }
 
-"+"  { TOKEN("PLUS"); token_line = line; token_column = column; column += yyleng; return PLUS; }
-"-"  { TOKEN("MINUS"); token_line = line; token_column = column; column += yyleng; return MINUS; }
+"+"  { TOKEN("PLUS"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return PLUS; }
+"-"  { TOKEN("MINUS"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return MINUS; }
 
-"*"  { TOKEN("STAR"); token_line = line; token_column = column; column += yyleng; return STAR; }
-"/"  { TOKEN("DIV"); token_line = line; token_column = column; column += yyleng; return DIV; }
-"%"  { TOKEN("MOD"); token_line = line; token_column = column; column += yyleng; return MOD; }
+"*"  { TOKEN("STAR"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return STAR; }
+"/"  { TOKEN("DIV"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return DIV; }
+"%"  { TOKEN("MOD"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return MOD; }
 
-"!"  { TOKEN("NOT"); token_line = line; token_column = column; column += yyleng; return NOT; }
+"!"  { TOKEN("NOT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return NOT; }
 
-"{"  { TOKEN("LBRACE"); token_line = line; token_column = column; column += yyleng; return LBRACE; }
-"}"  { TOKEN("RBRACE"); token_line = line; token_column = column; column += yyleng; return RBRACE; }
-"("  { TOKEN("LPAR"); token_line = line; token_column = column; column += yyleng; return LPAR; }
-")"  { TOKEN("RPAR"); token_line = line; token_column = column; column += yyleng; return RPAR; }
-"["  { TOKEN("LSQ"); token_line = line; token_column = column; column += yyleng; return LSQ; }
-"]"  { TOKEN("RSQ"); token_line = line; token_column = column; column += yyleng; return RSQ; }
-";"  { TOKEN("SEMICOLON"); token_line = line; token_column = column; column += yyleng; return SEMICOLON; }
-","  { TOKEN("COMMA"); token_line = line; token_column = column; column += yyleng; return COMMA; }
+"{"  { TOKEN("LBRACE"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return LBRACE; }
+"}"  { TOKEN("RBRACE"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return RBRACE; }
+"("  { TOKEN("LPAR"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return LPAR; }
+")"  { TOKEN("RPAR"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return RPAR; }
+"["  { TOKEN("LSQ"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return LSQ; }
+"]"  { TOKEN("RSQ"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return RSQ; }
+";"  { TOKEN("SEMICOLON"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return SEMICOLON; }
+","  { TOKEN("COMMA"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return COMMA; }
 
-"class"   { if(print_tokens) printf("CLASS\n"); token_line = line; token_column = column; column += yyleng; return CLASS; }
-"public"  { if(print_tokens) printf("PUBLIC\n"); token_line = line; token_column = column; column += yyleng; return PUBLIC; }
-"static"  { if(print_tokens) printf("STATIC\n"); token_line = line; token_column = column; column += yyleng; return STATIC; }
-"int"     { if(print_tokens) printf("INT\n"); token_line = line; token_column = column; column += yyleng; return INT; }
-"double"  { if(print_tokens) printf("DOUBLE\n"); token_line = line; token_column = column; column += yyleng; return DOUBLE; }
-"boolean" { if(print_tokens) printf("BOOL\n"); token_line = line; token_column = column; column += yyleng; return BOOL; }
-"void"    { if(print_tokens) printf("VOID\n"); token_line = line; token_column = column; column += yyleng; return VOID; }
-"if"      { if(print_tokens) printf("IF\n"); token_line = line; token_column = column; column += yyleng; return IF; }
-"else"    { if(print_tokens) printf("ELSE\n"); token_line = line; token_column = column; column += yyleng; return ELSE; }
-"while"   { if(print_tokens) printf("WHILE\n"); token_line = line; token_column = column; column += yyleng; return WHILE; }
-"return"  { if(print_tokens) printf("RETURN\n"); token_line = line; token_column = column; column += yyleng; return RETURN; }
-"String"  { if(print_tokens) printf("STRING\n"); token_line = line; token_column = column; column += yyleng; return STRING; }
+"class"   { if(print_tokens) printf("CLASS\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return CLASS; }
+"public"  { if(print_tokens) printf("PUBLIC\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return PUBLIC; }
+"static"  { if(print_tokens) printf("STATIC\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return STATIC; }
+"int"     { if(print_tokens) printf("INT\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return INT; }
+"double"  { if(print_tokens) printf("DOUBLE\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return DOUBLE; }
+"boolean" { if(print_tokens) printf("BOOL\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return BOOL; }
+"void"    { if(print_tokens) printf("VOID\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return VOID; }
+"if"      { if(print_tokens) printf("IF\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return IF; }
+"else"    { if(print_tokens) printf("ELSE\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return ELSE; }
+"while"   { if(print_tokens) printf("WHILE\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return WHILE; }
+"return"  { if(print_tokens) printf("RETURN\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return RETURN; }
+"String"  { if(print_tokens) printf("STRING\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return STRING; }
 
 "abstract"|"assert"|"break"|"byte"|"case"|"catch"|"char"|"const"|"continue"|"default"|"do"|"enum"|"extends"|"final"|"finally"|"float"|"for"|"goto"|"implements"|"import"|"instanceof"|"interface"|"long"|"native"|"new"|"package"|"private"|"protected"|"short"|"strictfp"|"super"|"switch"|"synchronized"|"this"|"throw"|"throws"|"transient"|"try"|"volatile"|"null"|"Integer"|"System" {
     if(print_tokens) printf("RESERVED(%s)\n", yytext);
     token_line = line;
     token_column = column;
+    SET_TOKEN_TEXT(yytext);
     column += yyleng;
     return RESERVED;
 }
@@ -297,6 +309,7 @@ alnum      [a-zA-Z0-9_$]
     yylval.lexeme = strdup(yytext);
     token_line = line;
     token_column = column;
+    SET_TOKEN_TEXT(yytext);
     column += yyleng;
     return IDENTIFIER;
 }

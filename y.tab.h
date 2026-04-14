@@ -104,9 +104,7 @@ extern int yydebug;
     RSQ = 305,                     /* RSQ  */
     SEMICOLON = 306,               /* SEMICOLON  */
     COMMA = 307,                   /* COMMA  */
-    LOWER_THAN_ELSE = 308,         /* LOWER_THAN_ELSE  */
-    UMINUS = 309,                  /* UMINUS  */
-    UPLUS = 310                    /* UPLUS  */
+    LOWER_THAN_ELSE = 308          /* LOWER_THAN_ELSE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -166,19 +164,17 @@ extern int yydebug;
 #define SEMICOLON 306
 #define COMMA 307
 #define LOWER_THAN_ELSE 308
-#define UMINUS 309
-#define UPLUS 310
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 122 "jucompiler.y"
+#line 123 "jucompiler.y"
 
     char *lexeme;
     struct node *node;
 
-#line 182 "y.tab.h"
+#line 178 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
