@@ -286,7 +286,10 @@ alnum      [a-zA-Z0-9_$]
 
 "abstract"|"assert"|"break"|"byte"|"case"|"catch"|"char"|"const"|"continue"|"default"|"do"|"enum"|"extends"|"final"|"finally"|"float"|"for"|"goto"|"implements"|"import"|"instanceof"|"interface"|"long"|"native"|"new"|"package"|"private"|"protected"|"short"|"strictfp"|"super"|"switch"|"synchronized"|"this"|"throw"|"throws"|"transient"|"try"|"volatile"|"null"|"Integer"|"System" {
     if(print_tokens) printf("RESERVED(%s)\n", yytext);
+    token_line = line;
+    token_column = column;
     column += yyleng;
+    return RESERVED;
 }
 
 {letter}{alnum}* {

@@ -1,19 +1,2 @@
 Line 3, col 19: invalid escape sequence (\|)
-Program
-..Identifier(Teste)
-..MethodDecl
-....MethodHeader
-......Int
-......Identifier(main)
-......MethodParams
-........ParamDecl
-..........StringArray
-..........Identifier(args)
-....MethodBody
-......Call
-........Identifier(call)
-......Print
-........StrLit("String string")
-......Call
-........Identifier(call)
-........StrLit("valid string")
+Line 5, col 10: syntax error: "

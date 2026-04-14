@@ -126,7 +126,7 @@ void yyerror(char *s) {
 
 %token <lexeme> IDENTIFIER NATURAL DECIMAL STRLIT BOOLLIT
 
-%token CLASS PUBLIC STATIC
+%token CLASS PUBLIC STATIC RESERVED
 %token BOOL INT DOUBLE VOID STRING
 %token IF ELSE WHILE RETURN
 %token PRINT PARSEINT DOTLENGTH
@@ -340,6 +340,11 @@ var_decl:
         free_ast($1);
         free_ast($2);
     }
+|   error SEMICOLON
+    {
+        yyerrok;
+        $$ = make_holder();
+    }
 ;
 
 var_ids:
@@ -428,6 +433,11 @@ stmt:
         $$ = newnode(Print, NULL);
         addchild($$, $3);
     }
+|   PRINT LPAR STRLIT RPAR SEMICOLON
+    {
+        $$ = newnode(Print, NULL);
+        addchild($$, newnode(StrLit, $3));
+    }
 |   method_invocation SEMICOLON
     {
         $$ = $1;
@@ -457,11 +467,6 @@ stmt_list:
             addchild($1, $2);
         $$ = $1;
     }
-|   stmt_list error SEMICOLON
-    {
-        yyerrok;
-        $$ = $1;
-    }
 ;
 
 expr:
@@ -476,10 +481,6 @@ expr:
 |   DECIMAL
     {
         $$ = newnode(Decimal, $1);
-    }
-|   STRLIT
-    {
-        $$ = newnode(StrLit, $1);
     }
 |   BOOLLIT
     {
@@ -613,6 +614,11 @@ expr:
     {
         $$ = $2;
     }
+|   LPAR error RPAR
+    {
+        yyerrok;
+        $$ = NULL;
+    }
 ;
 
 method_invocation:
@@ -622,6 +628,12 @@ method_invocation:
         addchild($$, newnode(Identifier, $1));
         append_holder($$, $3);
         free_holder_only($3);
+    }
+|   IDENTIFIER LPAR error RPAR
+    {
+        yyerrok;
+        $$ = newnode(Call, NULL);
+        addchild($$, newnode(Identifier, $1));
     }
 ;
 
@@ -651,6 +663,11 @@ parse_args:
         $$ = newnode(ParseArgs, NULL);
         addchild($$, newnode(Identifier, $3));
         addchild($$, $5);
+    }
+|   PARSEINT LPAR error RPAR
+    {
+        yyerrok;
+        $$ = newnode(ParseArgs, NULL);
     }
 ;
 

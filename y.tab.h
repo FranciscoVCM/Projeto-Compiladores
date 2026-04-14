@@ -62,50 +62,51 @@ extern int yydebug;
     CLASS = 263,                   /* CLASS  */
     PUBLIC = 264,                  /* PUBLIC  */
     STATIC = 265,                  /* STATIC  */
-    BOOL = 266,                    /* BOOL  */
-    INT = 267,                     /* INT  */
-    DOUBLE = 268,                  /* DOUBLE  */
-    VOID = 269,                    /* VOID  */
-    STRING = 270,                  /* STRING  */
-    IF = 271,                      /* IF  */
-    ELSE = 272,                    /* ELSE  */
-    WHILE = 273,                   /* WHILE  */
-    RETURN = 274,                  /* RETURN  */
-    PRINT = 275,                   /* PRINT  */
-    PARSEINT = 276,                /* PARSEINT  */
-    DOTLENGTH = 277,               /* DOTLENGTH  */
-    INC = 278,                     /* INC  */
-    DEC = 279,                     /* DEC  */
-    ARROW = 280,                   /* ARROW  */
-    ASSIGN = 281,                  /* ASSIGN  */
-    PLUS = 282,                    /* PLUS  */
-    MINUS = 283,                   /* MINUS  */
-    STAR = 284,                    /* STAR  */
-    DIV = 285,                     /* DIV  */
-    MOD = 286,                     /* MOD  */
-    AND = 287,                     /* AND  */
-    OR = 288,                      /* OR  */
-    XOR = 289,                     /* XOR  */
-    LSHIFT = 290,                  /* LSHIFT  */
-    RSHIFT = 291,                  /* RSHIFT  */
-    EQ = 292,                      /* EQ  */
-    NE = 293,                      /* NE  */
-    LT = 294,                      /* LT  */
-    GT = 295,                      /* GT  */
-    LE = 296,                      /* LE  */
-    GE = 297,                      /* GE  */
-    NOT = 298,                     /* NOT  */
-    LPAR = 299,                    /* LPAR  */
-    RPAR = 300,                    /* RPAR  */
-    LBRACE = 301,                  /* LBRACE  */
-    RBRACE = 302,                  /* RBRACE  */
-    LSQ = 303,                     /* LSQ  */
-    RSQ = 304,                     /* RSQ  */
-    SEMICOLON = 305,               /* SEMICOLON  */
-    COMMA = 306,                   /* COMMA  */
-    LOWER_THAN_ELSE = 307,         /* LOWER_THAN_ELSE  */
-    UMINUS = 308,                  /* UMINUS  */
-    UPLUS = 309                    /* UPLUS  */
+    RESERVED = 266,                /* RESERVED  */
+    BOOL = 267,                    /* BOOL  */
+    INT = 268,                     /* INT  */
+    DOUBLE = 269,                  /* DOUBLE  */
+    VOID = 270,                    /* VOID  */
+    STRING = 271,                  /* STRING  */
+    IF = 272,                      /* IF  */
+    ELSE = 273,                    /* ELSE  */
+    WHILE = 274,                   /* WHILE  */
+    RETURN = 275,                  /* RETURN  */
+    PRINT = 276,                   /* PRINT  */
+    PARSEINT = 277,                /* PARSEINT  */
+    DOTLENGTH = 278,               /* DOTLENGTH  */
+    INC = 279,                     /* INC  */
+    DEC = 280,                     /* DEC  */
+    ARROW = 281,                   /* ARROW  */
+    ASSIGN = 282,                  /* ASSIGN  */
+    PLUS = 283,                    /* PLUS  */
+    MINUS = 284,                   /* MINUS  */
+    STAR = 285,                    /* STAR  */
+    DIV = 286,                     /* DIV  */
+    MOD = 287,                     /* MOD  */
+    AND = 288,                     /* AND  */
+    OR = 289,                      /* OR  */
+    XOR = 290,                     /* XOR  */
+    LSHIFT = 291,                  /* LSHIFT  */
+    RSHIFT = 292,                  /* RSHIFT  */
+    EQ = 293,                      /* EQ  */
+    NE = 294,                      /* NE  */
+    LT = 295,                      /* LT  */
+    GT = 296,                      /* GT  */
+    LE = 297,                      /* LE  */
+    GE = 298,                      /* GE  */
+    NOT = 299,                     /* NOT  */
+    LPAR = 300,                    /* LPAR  */
+    RPAR = 301,                    /* RPAR  */
+    LBRACE = 302,                  /* LBRACE  */
+    RBRACE = 303,                  /* RBRACE  */
+    LSQ = 304,                     /* LSQ  */
+    RSQ = 305,                     /* RSQ  */
+    SEMICOLON = 306,               /* SEMICOLON  */
+    COMMA = 307,                   /* COMMA  */
+    LOWER_THAN_ELSE = 308,         /* LOWER_THAN_ELSE  */
+    UMINUS = 309,                  /* UMINUS  */
+    UPLUS = 310                    /* UPLUS  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -122,50 +123,51 @@ extern int yydebug;
 #define CLASS 263
 #define PUBLIC 264
 #define STATIC 265
-#define BOOL 266
-#define INT 267
-#define DOUBLE 268
-#define VOID 269
-#define STRING 270
-#define IF 271
-#define ELSE 272
-#define WHILE 273
-#define RETURN 274
-#define PRINT 275
-#define PARSEINT 276
-#define DOTLENGTH 277
-#define INC 278
-#define DEC 279
-#define ARROW 280
-#define ASSIGN 281
-#define PLUS 282
-#define MINUS 283
-#define STAR 284
-#define DIV 285
-#define MOD 286
-#define AND 287
-#define OR 288
-#define XOR 289
-#define LSHIFT 290
-#define RSHIFT 291
-#define EQ 292
-#define NE 293
-#define LT 294
-#define GT 295
-#define LE 296
-#define GE 297
-#define NOT 298
-#define LPAR 299
-#define RPAR 300
-#define LBRACE 301
-#define RBRACE 302
-#define LSQ 303
-#define RSQ 304
-#define SEMICOLON 305
-#define COMMA 306
-#define LOWER_THAN_ELSE 307
-#define UMINUS 308
-#define UPLUS 309
+#define RESERVED 266
+#define BOOL 267
+#define INT 268
+#define DOUBLE 269
+#define VOID 270
+#define STRING 271
+#define IF 272
+#define ELSE 273
+#define WHILE 274
+#define RETURN 275
+#define PRINT 276
+#define PARSEINT 277
+#define DOTLENGTH 278
+#define INC 279
+#define DEC 280
+#define ARROW 281
+#define ASSIGN 282
+#define PLUS 283
+#define MINUS 284
+#define STAR 285
+#define DIV 286
+#define MOD 287
+#define AND 288
+#define OR 289
+#define XOR 290
+#define LSHIFT 291
+#define RSHIFT 292
+#define EQ 293
+#define NE 294
+#define LT 295
+#define GT 296
+#define LE 297
+#define GE 298
+#define NOT 299
+#define LPAR 300
+#define RPAR 301
+#define LBRACE 302
+#define RBRACE 303
+#define LSQ 304
+#define RSQ 305
+#define SEMICOLON 306
+#define COMMA 307
+#define LOWER_THAN_ELSE 308
+#define UMINUS 309
+#define UPLUS 310
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -176,7 +178,7 @@ union YYSTYPE
     char *lexeme;
     struct node *node;
 
-#line 180 "y.tab.h"
+#line 182 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

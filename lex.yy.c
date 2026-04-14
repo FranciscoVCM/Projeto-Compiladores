@@ -1475,12 +1475,15 @@ YY_RULE_SETUP
 #line 287 "jucompiler.l"
 {
     if(print_tokens) printf("RESERVED(%s)\n", yytext);
+    token_line = line;
+    token_column = column;
     column += yyleng;
+    return RESERVED;
 }
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 292 "jucompiler.l"
+#line 295 "jucompiler.l"
 {
     if(print_tokens) printf("IDENTIFIER(%s)\n", yytext);
     yylval.lexeme = strdup(yytext);
@@ -1493,28 +1496,28 @@ YY_RULE_SETUP
 case 69:
 /* rule 69 can match eol */
 YY_RULE_SETUP
-#line 301 "jucompiler.l"
+#line 304 "jucompiler.l"
 { line++; column = 1; }
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 302 "jucompiler.l"
+#line 305 "jucompiler.l"
 { line++; column = 1; }
 	YY_BREAK
 case 71:
 /* rule 71 can match eol */
 YY_RULE_SETUP
-#line 303 "jucompiler.l"
+#line 306 "jucompiler.l"
 { line++; column = 1; }
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 305 "jucompiler.l"
+#line 308 "jucompiler.l"
 { column += yyleng; }
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 307 "jucompiler.l"
+#line 310 "jucompiler.l"
 {
     printf("Line %d, col %d: illegal character (%s)\n",
            line, column, yytext);
@@ -1523,10 +1526,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 313 "jucompiler.l"
+#line 316 "jucompiler.l"
 ECHO;
 	YY_BREAK
-#line 1530 "lex.yy.c"
+#line 1533 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2531,7 +2534,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 313 "jucompiler.l"
+#line 316 "jucompiler.l"
 
 
 int yywrap() {
