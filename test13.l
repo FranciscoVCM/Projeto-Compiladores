@@ -1,9 +1,6 @@
 %{
 #include <stdio.h>
 #include <string.h>
-#include "y.tab.h"
-
-extern YYSTYPE yylval;
 
 int line = 1;
 int column = 1;
@@ -25,7 +22,7 @@ int print_tokens = 0;
 
 %}
 
-%X COMMENT STRING_STATE
+%X COMMENT STRING
 
 digit      [0-9]
 nonzero    [1-9]
@@ -84,11 +81,11 @@ alnum      [a-zA-Z0-9_$]
     str_index = 0;
     str_error = 0;
     str_buffer[str_index++] = '"';
-    BEGIN(STRING_STATE);
+    BEGIN(STRING);
     column += yyleng;
 }
 
-<STRING_STATE>\\(\r\n|\n|\r) {
+<STRING>\\(\r\n|\n|\r) {
     printf("Line %d, col %d: invalid escape sequence (\\)\n",
            line, column);
     printf("Line %d, col %d: unterminated string literal\n",
@@ -98,7 +95,7 @@ alnum      [a-zA-Z0-9_$]
     BEGIN(INITIAL);
 }
 
-<STRING_STATE>\\[fnrt\\\"] {
+<STRING>\\[fnrt\\\"] {
     if(!str_error) {
         for(int i = 0; i < yyleng; i++)
             str_buffer[str_index++] = yytext[i];
@@ -106,14 +103,14 @@ alnum      [a-zA-Z0-9_$]
     column += yyleng;
 }
 
-<STRING_STATE>\\[^fnrt\\\"\r\n] {
+<STRING>\\[^fnrt\\\"\r\n] {
     printf("Line %d, col %d: invalid escape sequence (%s)\n",
            line, column, yytext);
     str_error = 1;
     column += yyleng;
 }
 
-<STRING_STATE>[^\\\"\r\n]+ {
+<STRING>[^\\\"\r\n]+ {
     if(!str_error) {
         for(int i = 0; i < yyleng; i++)
             str_buffer[str_index++] = yytext[i];
@@ -121,22 +118,14 @@ alnum      [a-zA-Z0-9_$]
     column += yyleng;
 }
 
-<STRING_STATE>\r\n {
+<STRING>\r\n {
     printf("Line %d, col %d: unterminated string literal\n",
            str_start_line, str_start_column);
     line++;
     column = 1;
     BEGIN(INITIAL);
 }
-<STRING_STATE>\r {
-    printf("Line %d, col %d: unterminated string literal\n",
-           str_start_line, str_start_column);
-    line++;
-    column = 1;
-    BEGIN(INITIAL);
-}
-
-<STRING_STATE>\n {
+<STRING>\r {
     printf("Line %d, col %d: unterminated string literal\n",
            str_start_line, str_start_column);
     line++;
@@ -144,7 +133,15 @@ alnum      [a-zA-Z0-9_$]
     BEGIN(INITIAL);
 }
 
-<STRING_STATE>\" {
+<STRING>\n {
+    printf("Line %d, col %d: unterminated string literal\n",
+           str_start_line, str_start_column);
+    line++;
+    column = 1;
+    BEGIN(INITIAL);
+}
+
+<STRING>\" {
     if(!str_error && print_tokens) {
         str_buffer[str_index++] = '"';
         str_buffer[str_index] = '\0';
@@ -152,89 +149,86 @@ alnum      [a-zA-Z0-9_$]
     }
     column += yyleng;
     BEGIN(INITIAL);
-    return STRLIT;
 }
 
-<STRING_STATE><<EOF>> {
+<STRING><<EOF>> {
     printf("Line %d, col %d: unterminated string literal\n",
            str_start_line, str_start_column);
     BEGIN(INITIAL);
     return 0;
 }
 
-"true"  { if(print_tokens) printf("BOOLLIT(true)\n"); column += yyleng; return BOOLLIT; }
-"false" { if(print_tokens) printf("BOOLLIT(false)\n"); column += yyleng; return BOOLLIT; }
+"true"  { if(print_tokens) printf("BOOLLIT(true)\n"); column += yyleng; }
+"false" { if(print_tokens) printf("BOOLLIT(false)\n"); column += yyleng; }
 
 ({nat}"."{frac}?{exp}?|"."{frac}{exp}?|{nat}{exp}) {
     if(print_tokens) printf("DECIMAL(%s)\n", yytext);
     column += yyleng;
-    return DECIMAL;
 }
+
 
 {nonzero}(_*{digit})* {
     if(print_tokens) printf("NATURAL(%s)\n", yytext);
     column += yyleng;
-    return NATURAL;
 }
 
 "0" {
     if(print_tokens) printf("NATURAL(0)\n");
     column += yyleng;
-    return NATURAL;
 }
 
-"++" { if(print_tokens) printf("RESERVED(++)\n"); column += yyleng; return INC; }
-"--" { if(print_tokens) printf("RESERVED(--)\n"); column += yyleng; return DEC; }
+"++" { if(print_tokens) printf("RESERVED(++)\n"); column += yyleng; }
+"--" { if(print_tokens) printf("RESERVED(--)\n"); column += yyleng; }
 
-"System.out.print" { TOKEN("PRINT"); column += yyleng; return PRINT; }
-"Integer.parseInt" { TOKEN("PARSEINT"); column += yyleng; return PARSEINT; }
-".length"          { TOKEN("DOTLENGTH"); column += yyleng; return DOTLENGTH; }
+"System.out.print" { TOKEN("PRINT"); column += yyleng; }
+"Integer.parseInt" { TOKEN("PARSEINT"); column += yyleng; }
+".length"          { TOKEN("DOTLENGTH"); column += yyleng; }
 
-"==" { TOKEN("EQ"); column += yyleng; return EQ; }
-"!=" { TOKEN("NE"); column += yyleng; return NE; }
-">=" { TOKEN("GE"); column += yyleng; return GE; }
-"<=" { TOKEN("LE"); column += yyleng; return LE; }
-"&&" { TOKEN("AND"); column += yyleng; return AND; }
-"||" { TOKEN("OR"); column += yyleng; return OR; }
-"^"  { TOKEN("XOR"); column += yyleng; return XOR; }
-"->" { TOKEN("ARROW"); column += yyleng; return ARROW; }
+"==" { TOKEN("EQ"); column += yyleng; }
+"!=" { TOKEN("NE"); column += yyleng; }
+">=" { TOKEN("GE"); column += yyleng; }
+"<=" { TOKEN("LE"); column += yyleng; }
+"&&" { TOKEN("AND"); column += yyleng; }
+"||" { TOKEN("OR"); column += yyleng; }
+"^"  { TOKEN("XOR"); column += yyleng; }
+"->" { TOKEN("ARROW"); column += yyleng; }
 
-"="  { TOKEN("ASSIGN"); column += yyleng; return ASSIGN; }
-">>" { TOKEN("RSHIFT"); column += yyleng; return RSHIFT; }
-"<<" { TOKEN("LSHIFT"); column += yyleng; return LSHIFT; }
-">"  { TOKEN("GT"); column += yyleng; return GT; }
-"<"  { TOKEN("LT"); column += yyleng; return LT; }
+"="  { TOKEN("ASSIGN"); column += yyleng; }
+">>" { TOKEN("RSHIFT"); column += yyleng; }
+"<<" { TOKEN("LSHIFT"); column += yyleng; }
+">"  { TOKEN("GT"); column += yyleng; }
+"<"  { TOKEN("LT"); column += yyleng; }
 
-"+"  { TOKEN("PLUS"); column += yyleng; return PLUS; }
-"-"  { TOKEN("MINUS"); column += yyleng; return MINUS; }
+"+"  { TOKEN("PLUS"); column += yyleng; }
+"-"  { TOKEN("MINUS"); column += yyleng; }
 
-"*"  { TOKEN("STAR"); column += yyleng; return STAR; }
-"/"  { TOKEN("DIV"); column += yyleng; return DIV; }
-"%"  { TOKEN("MOD"); column += yyleng; return MOD; }
+"*"  { TOKEN("STAR"); column += yyleng; }
+"/"  { TOKEN("DIV"); column += yyleng; }
+"%"  { TOKEN("MOD"); column += yyleng; }
 
-"!"  { TOKEN("NOT"); column += yyleng; return NOT; }
+"!"  { TOKEN("NOT"); column += yyleng; }
 
-"{"  { TOKEN("LBRACE"); column += yyleng; return LBRACE; }
-"}"  { TOKEN("RBRACE"); column += yyleng; return RBRACE; }
-"("  { TOKEN("LPAR"); column += yyleng; return LPAR; }
-")"  { TOKEN("RPAR"); column += yyleng; return RPAR; }
-"["  { TOKEN("LSQ"); column += yyleng; return LSQ; }
-"]"  { TOKEN("RSQ"); column += yyleng; return RSQ; }
-";"  { TOKEN("SEMICOLON"); column += yyleng; return SEMICOLON; }
-","  { TOKEN("COMMA"); column += yyleng; return COMMA; }
+"{"  { TOKEN("LBRACE"); column += yyleng; }
+"}"  { TOKEN("RBRACE"); column += yyleng; }
+"("  { TOKEN("LPAR"); column += yyleng; }
+")"  { TOKEN("RPAR"); column += yyleng; }
+"["  { TOKEN("LSQ"); column += yyleng; }
+"]"  { TOKEN("RSQ"); column += yyleng; }
+";"  { TOKEN("SEMICOLON"); column += yyleng; }
+","  { TOKEN("COMMA"); column += yyleng; }
 
-"class"   { if(print_tokens) printf("CLASS\n"); column += yyleng; return CLASS; }
-"public"  { if(print_tokens) printf("PUBLIC\n"); column += yyleng; return PUBLIC; }
-"static"  { if(print_tokens) printf("STATIC\n"); column += yyleng; return STATIC; }
-"int"     { if(print_tokens) printf("INT\n"); column += yyleng; return INT; }
-"double"  { if(print_tokens) printf("DOUBLE\n"); column += yyleng; return DOUBLE; }
-"boolean" { if(print_tokens) printf("BOOL\n"); column += yyleng; return BOOL; }
-"void"    { if(print_tokens) printf("VOID\n"); column += yyleng; return VOID; }
-"if"      { if(print_tokens) printf("IF\n"); column += yyleng; return IF; }
-"else"    { if(print_tokens) printf("ELSE\n"); column += yyleng; return ELSE; }
-"while"   { if(print_tokens) printf("WHILE\n"); column += yyleng; return WHILE; }
-"return"  { if(print_tokens) printf("RETURN\n"); column += yyleng; return RETURN; }
-"String"  { if(print_tokens) printf("STRING\n"); column += yyleng; return STRING; }
+"class"   { if(print_tokens) printf("CLASS\n"); column += yyleng; }
+"public"  { if(print_tokens) printf("PUBLIC\n"); column += yyleng; }
+"static"  { if(print_tokens) printf("STATIC\n"); column += yyleng; }
+"int"     { if(print_tokens) printf("INT\n"); column += yyleng; }
+"double"  { if(print_tokens) printf("DOUBLE\n"); column += yyleng; }
+"boolean" { if(print_tokens) printf("BOOL\n"); column += yyleng; }
+"void"    { if(print_tokens) printf("VOID\n"); column += yyleng; }
+"if"      { if(print_tokens) printf("IF\n"); column += yyleng; }
+"else"    { if(print_tokens) printf("ELSE\n"); column += yyleng; }
+"while"   { if(print_tokens) printf("WHILE\n"); column += yyleng; }
+"return"  { if(print_tokens) printf("RETURN\n"); column += yyleng; }
+"String"  { if(print_tokens) printf("STRING\n"); column += yyleng; }
 
 "abstract"|"assert"|"break"|"byte"|"case"|"catch"|"char"|"const"|"continue"|"default"|"do"|"enum"|"extends"|"final"|"finally"|"float"|"for"|"goto"|"implements"|"import"|"instanceof"|"interface"|"long"|"native"|"new"|"package"|"private"|"protected"|"short"|"strictfp"|"super"|"switch"|"synchronized"|"this"|"throw"|"throws"|"transient"|"try"|"volatile"|"null"|"Integer"|"System" {
     if(print_tokens) printf("RESERVED(%s)\n", yytext);
@@ -244,7 +238,6 @@ alnum      [a-zA-Z0-9_$]
 {letter}{alnum}* {
     if(print_tokens) printf("IDENTIFIER(%s)\n", yytext);
     column += yyleng;
-    return IDENTIFIER;
 }
 
 <INITIAL>\r\n { line++; column = 1; }
@@ -260,6 +253,13 @@ alnum      [a-zA-Z0-9_$]
 }
 
 %%
+
+int main(int argc, char **argv) {
+    if(argc > 1 && strcmp(argv[1], "-l") == 0)
+        print_tokens = 1;
+    yylex();
+    return 0;
+}
 
 int yywrap() {
     if(YY_START == COMMENT) {

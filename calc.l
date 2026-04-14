@@ -1,13 +1,18 @@
 %{
 #include "y.tab.h"
 int yyparse(void);
+int line = 1;
+int column = 1;
 %}
 digit   [0-9]
 %%
-{digit}+                { yylval = atoi(yytext); return NATURAL; }
-[()=,*/+-]              { return yytext[0]; }
-[\t ]+                  {;}
-\n                      { return 0; }
+"if"    { return IF; }
+"then"  { return THEN; }
+"else"  { return ELSE; }
+{digit}+                { yylval = atoi(yytext); column += yyleng; return NATURAL; }
+[()=,*/+-]              { column += yyleng; return yytext[0]; }
+[\t ]+                  { column += yyleng;}
+\n                      { line++; column=1; return 0; }
 .                       { printf("Unrecognized character\n"); }
 %%
 int main() {
