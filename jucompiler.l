@@ -23,6 +23,7 @@ char str_buffer[10000];
 int str_index;
 
 char token_text[10000] = "";
+int last_lex_error_line = 0;
 
 int print_tokens = 0;
 
@@ -83,6 +84,7 @@ alnum      [a-zA-Z0-9_$]
 <COMMENT><<EOF>> {
     printf("Line %d, col %d: unterminated comment\n",
            comment_start_line, comment_start_column);
+    last_lex_error_line = comment_start_line;
     token_line = line;
     token_column = column;
     SET_TOKEN_TEXT("");
@@ -107,8 +109,10 @@ alnum      [a-zA-Z0-9_$]
 <STRING_STATE>\\(\r\n|\n|\r) {
     printf("Line %d, col %d: invalid escape sequence (\\)\n",
            line, column);
+    last_lex_error_line = line;
     printf("Line %d, col %d: unterminated string literal\n",
            str_start_line, str_start_column);
+    last_lex_error_line = str_start_line;
     line++;
     column = 1;
     BEGIN(INITIAL);
@@ -125,6 +129,7 @@ alnum      [a-zA-Z0-9_$]
 <STRING_STATE>\\[^fnrt\\\"\r\n] {
     printf("Line %d, col %d: invalid escape sequence (%s)\n",
            line, column, yytext);
+    last_lex_error_line = line;
     str_error = 1;
     column += yyleng;
 }
@@ -140,6 +145,7 @@ alnum      [a-zA-Z0-9_$]
 <STRING_STATE>\r\n {
     printf("Line %d, col %d: unterminated string literal\n",
            str_start_line, str_start_column);
+    last_lex_error_line = str_start_line;
     line++;
     column = 1;
     BEGIN(INITIAL);
@@ -148,6 +154,7 @@ alnum      [a-zA-Z0-9_$]
 <STRING_STATE>\r {
     printf("Line %d, col %d: unterminated string literal\n",
            str_start_line, str_start_column);
+    last_lex_error_line = str_start_line;
     line++;
     column = 1;
     BEGIN(INITIAL);
@@ -156,6 +163,7 @@ alnum      [a-zA-Z0-9_$]
 <STRING_STATE>\n {
     printf("Line %d, col %d: unterminated string literal\n",
            str_start_line, str_start_column);
+    last_lex_error_line = str_start_line;
     line++;
     column = 1;
     BEGIN(INITIAL);
@@ -185,6 +193,7 @@ alnum      [a-zA-Z0-9_$]
 <STRING_STATE><<EOF>> {
     printf("Line %d, col %d: unterminated string literal\n",
            str_start_line, str_start_column);
+    last_lex_error_line = str_start_line;
     token_line = line;
     token_column = column;
     SET_TOKEN_TEXT("");
@@ -323,11 +332,15 @@ alnum      [a-zA-Z0-9_$]
 . {
     printf("Line %d, col %d: illegal character (%s)\n",
            line, column, yytext);
+    last_lex_error_line = line;
     column += yyleng;
 }
 
 %%
 
 int yywrap() {
+    token_line = line;
+    token_column = column;
+    token_text[0] = '\0';
     return 1;
 }

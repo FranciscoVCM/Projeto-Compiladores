@@ -12,12 +12,15 @@ extern int token_column;
 extern int print_tokens;
 extern char *yytext;
 extern char token_text[];
+extern int last_lex_error_line;
+extern int yychar;
 
 struct node *ast = NULL;
 
 int print_tree = 0;
 int only_errors = 0;
 int syntax_errors = 0;
+int syntax_error_count = 0;
 
 static struct node *clone_type_node(struct node *node) {
     if (!node)
@@ -113,11 +116,44 @@ static void free_holder_only(struct node *node) {
     free(node);
 }
 
+static struct node *build_block_from_holder(struct node *holder) {
+    int meaningful = meaningful_child_count(holder);
+    struct node *result;
+
+    if (meaningful == 0) {
+        result = newnode(Block, NULL);
+        free_holder_only(holder);
+        return result;
+    }
+
+    if (meaningful == 1) {
+        result = first_meaningful_child(holder);
+        holder->children->next = NULL;
+        free_holder_only(holder);
+        return result;
+    }
+
+    result = newnode(Block, NULL);
+    append_meaningful_children(result, holder);
+    free_holder_only(holder);
+    return result;
+}
 void yyerror(char *s) {
     syntax_errors = 1;
-    if (!only_errors)
-        printf("Line %d, col %d: syntax error: %s\n", token_line, token_column, token_text);
+
+    if (only_errors)
+        return;
+
+    if (token_line == last_lex_error_line)
+        return;
+
+    if (yychar == 0 && syntax_error_count > 0)
+        return;
+
+    printf("Line %d, col %d: syntax error: %s\n", token_line, token_column, token_text);
+    syntax_error_count++;
 }
+
 %}
 
 %union {
@@ -253,6 +289,22 @@ method_header:
         addchild($$, newnode(Identifier, $2));
         addchild($$, $4);
     }
+|   type IDENTIFIER LPAR error RPAR
+    {
+        yyerrok;
+        $$ = newnode(MethodHeader, NULL);
+        addchild($$, $1);
+        addchild($$, newnode(Identifier, $2));
+        addchild($$, newnode(MethodParams, NULL));
+    }
+|   VOID IDENTIFIER LPAR error RPAR
+    {
+        yyerrok;
+        $$ = newnode(MethodHeader, NULL);
+        addchild($$, newnode(Void, NULL));
+        addchild($$, newnode(Identifier, $2));
+        addchild($$, newnode(MethodParams, NULL));
+    }
 ;
 
 formal_params:
@@ -293,6 +345,13 @@ param_decl:
 method_body:
     LBRACE method_body_items RBRACE
     {
+        $$ = newnode(MethodBody, NULL);
+        append_holder($$, $2);
+        free_holder_only($2);
+    }
+|   LBRACE method_body_items error RBRACE
+    {
+        yyerrok;
         $$ = newnode(MethodBody, NULL);
         append_holder($$, $2);
         free_holder_only($2);
@@ -361,19 +420,12 @@ var_ids:
 stmt:
     LBRACE stmt_list RBRACE
     {
-        int meaningful = meaningful_child_count($2);
-
-        if (meaningful == 0) {
-            $$ = newnode(Block, NULL);
-        } else if (meaningful == 1) {
-            $$ = first_meaningful_child($2);
-            $2->children->next = NULL;
-            free_holder_only($2);
-        } else {
-            $$ = newnode(Block, NULL);
-            append_meaningful_children($$, $2);
-            free_holder_only($2);
-        }
+        $$ = build_block_from_holder($2);
+    }
+|   LBRACE stmt_list error RBRACE
+    {
+        yyerrok;
+        $$ = build_block_from_holder($2);
     }
 |   LBRACE error RBRACE
     {
@@ -710,11 +762,6 @@ parse_args:
         $$ = newnode(ParseArgs, NULL);
         addchild($$, newnode(Identifier, $3));
         addchild($$, $5);
-    }
-|   PARSEINT LPAR error RPAR
-    {
-        yyerrok;
-        $$ = newnode(ParseArgs, NULL);
     }
 ;
 
