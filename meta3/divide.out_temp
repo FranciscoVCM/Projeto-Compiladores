@@ -1,0 +1,99 @@
+===== Class divide Symbol Table =====
+num	int
+den	int
+main	(String[])	void
+
+===== Method main (String[]) Symbol Table =====
+return	void
+args	String[]	param
+quo	int
+q	int
+r	int
+check	boolean
+
+
+Program
+..Identifier(divide)
+..FieldDecl
+....Int
+....Identifier(num)
+..FieldDecl
+....Int
+....Identifier(den)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(quo)
+......VarDecl
+........Int
+........Identifier(q)
+......VarDecl
+........Int
+........Identifier(r)
+......Assign
+........Identifier(num)
+........ParseArgs
+..........Identifier(args)
+..........Natural(0)
+......Assign
+........Identifier(den)
+........ParseArgs
+..........Identifier(args)
+..........Natural(1)
+......Assign
+........Identifier(q)
+........Div
+..........Identifier(num)
+..........Identifier(den)
+......Assign
+........Identifier(r)
+........Mod
+..........Identifier(num)
+..........Identifier(den)
+......Assign
+........Identifier(quo)
+........Natural(0)
+......While
+........Le
+..........Identifier(den)
+..........Identifier(num)
+........Block
+..........Assign
+............Identifier(num)
+............Sub
+..............Identifier(num)
+..............Identifier(den)
+..........Assign
+............Identifier(quo)
+............Add
+..............Identifier(quo)
+..............Natural(1)
+......VarDecl
+........Bool
+........Identifier(check)
+......Assign
+........Identifier(check)
+........And
+..........Eq
+............Identifier(quo)
+............Identifier(q)
+..........Eq
+............Identifier(num)
+............Identifier(r)
+......If
+........Identifier(check)
+........Block
+..........Print
+............Identifier(quo)
+..........Print
+............Identifier(num)
+........Print
+..........Identifier(check)

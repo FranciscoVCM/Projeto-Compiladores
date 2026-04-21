@@ -1,0 +1,79 @@
+===== Class ifwhile Symbol Table =====
+b	boolean
+i	int
+d	double
+main	(String[])	void
+
+===== Method main (String[]) Symbol Table =====
+return	void
+args	String[]	param
+bl	boolean
+t	boolean
+f	boolean
+
+
+Program
+..Identifier(ifwhile)
+..FieldDecl
+....Bool
+....Identifier(b)
+..FieldDecl
+....Int
+....Identifier(i)
+..FieldDecl
+....Double
+....Identifier(d)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......VarDecl
+........Bool
+........Identifier(bl)
+......VarDecl
+........Bool
+........Identifier(t)
+......VarDecl
+........Bool
+........Identifier(f)
+......If
+........Identifier(t)
+........Block
+..........While
+............Identifier(b)
+............While
+..............BoolLit(true)
+..............Block
+................Print
+..................Identifier(i)
+................Print
+..................Identifier(b)
+................Print
+..................Identifier(d)
+..........Print
+............StrLit("Gotcha!")
+..........While
+............BoolLit(true)
+............Block
+..............If
+................Identifier(f)
+................Block
+................Block
+..................While
+....................Identifier(f)
+....................Print
+......................Identifier(d)
+..................Print
+....................StrLit("Twice!")
+..............Print
+................StrLit("Thrice!")
+........Block
+......While
+........BoolLit(false)
+........Print
+..........Identifier(b)

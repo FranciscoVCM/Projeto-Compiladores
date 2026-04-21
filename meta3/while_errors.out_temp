@@ -1,0 +1,74 @@
+===== Class while_errors Symbol Table =====
+main	(String[])	void
+
+===== Method main (String[]) Symbol Table =====
+return	void
+args	String[]	param
+i	int
+b	boolean
+d	double
+
+
+Program
+..Identifier(while_errors)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(i)
+......VarDecl
+........Bool
+........Identifier(b)
+......VarDecl
+........Double
+........Identifier(d)
+......While
+........Identifier(b)
+........Block
+......While
+........BoolLit(true)
+........Block
+......While
+........Identifier(i)
+........Block
+......While
+........Natural(1)
+........Block
+......While
+........Identifier(d)
+........Block
+......While
+........Decimal(1.1)
+........Block
+......While
+........Lshift
+..........Natural(1)
+..........Natural(1)
+........Block
+......While
+........Lshift
+..........BoolLit(true)
+..........BoolLit(true)
+........Block
+......While
+........Lshift
+..........Identifier(b)
+..........Identifier(b)
+........Block
+......While
+........Xor
+..........Natural(1)
+..........Natural(1)
+........Block
+......While
+........Xor
+..........BoolLit(true)
+..........BoolLit(false)
+........Block

@@ -1,0 +1,47 @@
+===== Class ClassTeste Symbol Table =====
+teste0	int
+teste1	int
+teste2	int
+main	(String[])	void
+
+===== Method main (String[]) Symbol Table =====
+return	void
+args	String[]	param
+argument	int
+
+
+Program
+..Identifier(ClassTeste)
+..FieldDecl
+....Int
+....Identifier(teste0)
+..FieldDecl
+....Int
+....Identifier(teste1)
+..FieldDecl
+....Int
+....Identifier(teste2)
+..FieldDecl
+....Int
+....Identifier(teste2)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(argument)
+......Assign
+........Identifier(argument)
+........ParseArgs
+..........Identifier(args)
+..........Natural(0)
+......Print
+........Call
+..........Identifier(factorial)
+..........Identifier(argument)

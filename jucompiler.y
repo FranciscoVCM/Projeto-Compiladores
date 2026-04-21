@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "ast.h"
+#include "semantics.h"
 
 extern int yylex();
 extern int line;
@@ -21,6 +22,10 @@ int print_tree = 0;
 int only_errors = 0;
 int syntax_errors = 0;
 int syntax_error_count = 0;
+
+/* Meta 3 */
+int semantic_mode = 0;      /* -s */
+int semantic_errors_only = 0; /* -e3 */
 
 static struct node *clone_type_node(struct node *node) {
     if (!node)
@@ -272,6 +277,32 @@ method_decl:
         addchild($$, $3);
         addchild($$, $4);
     }
+|   PUBLIC STATIC type IDENTIFIER LPAR error RPAR method_body
+    {
+        yyerrok;
+        $$ = newnode(MethodDecl, NULL);
+
+        struct node *header = newnode(MethodHeader, NULL);
+        addchild(header, $3);
+        addchild(header, newnode(Identifier, $4));
+        addchild(header, newnode(MethodParams, NULL));
+
+        addchild($$, header);
+        addchild($$, $8);
+    }
+|   PUBLIC STATIC VOID IDENTIFIER LPAR error RPAR method_body
+    {
+        yyerrok;
+        $$ = newnode(MethodDecl, NULL);
+
+        struct node *header = newnode(MethodHeader, NULL);
+        addchild(header, newnode(Void, NULL));
+        addchild(header, newnode(Identifier, $4));
+        addchild(header, newnode(MethodParams, NULL));
+
+        addchild($$, header);
+        addchild($$, $8);
+    }
 ;
 
 method_header:
@@ -288,22 +319,6 @@ method_header:
         addchild($$, newnode(Void, NULL));
         addchild($$, newnode(Identifier, $2));
         addchild($$, $4);
-    }
-|   type IDENTIFIER LPAR error RPAR
-    {
-        yyerrok;
-        $$ = newnode(MethodHeader, NULL);
-        addchild($$, $1);
-        addchild($$, newnode(Identifier, $2));
-        addchild($$, newnode(MethodParams, NULL));
-    }
-|   VOID IDENTIFIER LPAR error RPAR
-    {
-        yyerrok;
-        $$ = newnode(MethodHeader, NULL);
-        addchild($$, newnode(Void, NULL));
-        addchild($$, newnode(Identifier, $2));
-        addchild($$, newnode(MethodParams, NULL));
     }
 ;
 
@@ -349,13 +364,6 @@ method_body:
         append_holder($$, $2);
         free_holder_only($2);
     }
-|   LBRACE method_body_items error RBRACE
-    {
-        yyerrok;
-        $$ = newnode(MethodBody, NULL);
-        append_holder($$, $2);
-        free_holder_only($2);
-    }
 ;
 
 method_body_items:
@@ -372,11 +380,6 @@ method_body_items:
     {
         if (!is_empty_block($2))
             addchild($1, $2);
-        $$ = $1;
-    }
-|   method_body_items error SEMICOLON
-    {
-        yyerrok;
         $$ = $1;
     }
 ;
@@ -492,7 +495,6 @@ stmt:
     }
 |   error SEMICOLON
     {
-        yyerrok;
         $$ = newnode(Block, NULL);
     }
 ;
@@ -774,17 +776,16 @@ int main(int argc, char **argv) {
         if (strcmp(argv[1], "-l") == 0) {
             lex_only = 1;
             print_tokens = 1;
-        }
-
-        if (strcmp(argv[1], "-e1") == 0) {
+        } else if (strcmp(argv[1], "-e1") == 0) {
             lex_only = 1;
-        }
-
-        if (strcmp(argv[1], "-t") == 0) {
+        } else if (strcmp(argv[1], "-t") == 0) {
             print_tree = 1;
-        }
-
-        if (strcmp(argv[1], "-e2") == 0) {
+        } else if (strcmp(argv[1], "-e2") == 0) {
+            only_errors = 1;
+        } else if (strcmp(argv[1], "-s") == 0) {
+            semantic_mode = 1;
+        } else if (strcmp(argv[1], "-e3") == 0) {
+            semantic_errors_only = 1;
             only_errors = 1;
         }
     }
@@ -797,8 +798,19 @@ int main(int argc, char **argv) {
 
     yyparse();
 
-    if (!syntax_errors && print_tree && ast)
-        print_ast(ast, 0);
+    if (!syntax_errors && ast) {
+        if (semantic_mode || semantic_errors_only) {
+            check_program(ast);
+
+            if (semantic_mode) {
+                show_symbol_tables();
+                printf("\n\n");
+                print_ast(ast, 0);
+            }
+        } else if (print_tree) {
+            print_ast(ast, 0);
+        }
+    }
 
     if (ast)
         free_ast(ast);

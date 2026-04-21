@@ -1,0 +1,203 @@
+===== Class newClass Symbol Table =====
+i	int
+b	boolean
+main	(int, int, double)	int
+pI	int
+a	(int, int, boolean)	void
+a	void
+test	(int, int, double, boolean, boolean)	double
+sum	(int, int)	int
+
+===== Method main (int, int, double) Symbol Table =====
+return	int
+a	int	param
+c	int	param
+d	double	param
+b	boolean
+i1	int
+
+===== Method a (int, int, boolean) Symbol Table =====
+return	void
+a	int	param
+b	int	param
+c	boolean	param
+d	int
+i	int
+f	double
+
+===== Method a () Symbol Table =====
+return	void
+
+===== Method test (int, int, double, boolean, boolean) Symbol Table =====
+return	double
+a	int	param
+b	int	param
+s	double	param
+e	boolean	param
+e	boolean	param
+c	int
+d	int
+finalI	int
+
+===== Method sum (int, int) Symbol Table =====
+return	int
+k	int	param
+j	int	param
+
+
+Program
+..Identifier(newClass)
+..FieldDecl
+....Int
+....Identifier(i)
+..FieldDecl
+....Bool
+....Identifier(b)
+..MethodDecl
+....MethodHeader
+......Int
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........Int
+..........Identifier(a)
+........ParamDecl
+..........Int
+..........Identifier(c)
+........ParamDecl
+..........Double
+..........Identifier(d)
+....MethodBody
+......VarDecl
+........Bool
+........Identifier(b)
+......VarDecl
+........Int
+........Identifier(i1)
+......Return
+........Natural(0)
+..FieldDecl
+....Int
+....Identifier(pI)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(a)
+......MethodParams
+........ParamDecl
+..........Int
+..........Identifier(a)
+........ParamDecl
+..........Int
+..........Identifier(b)
+........ParamDecl
+..........Bool
+..........Identifier(c)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(d)
+......Assign
+........Identifier(d)
+........Identifier(b)
+......VarDecl
+........Int
+........Identifier(i)
+......VarDecl
+........Bool
+........Identifier(b)
+......Assign
+........Identifier(b)
+........BoolLit(true)
+......VarDecl
+........Double
+........Identifier(f)
+......Assign
+........Identifier(f)
+........Decimal(0.03)
+......Return
+........Identifier(d)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(a)
+......MethodParams
+....MethodBody
+..MethodDecl
+....MethodHeader
+......Double
+......Identifier(test)
+......MethodParams
+........ParamDecl
+..........Int
+..........Identifier(a)
+........ParamDecl
+..........Int
+..........Identifier(b)
+........ParamDecl
+..........Double
+..........Identifier(s)
+........ParamDecl
+..........Bool
+..........Identifier(e)
+........ParamDecl
+..........Bool
+..........Identifier(e)
+....MethodBody
+......Call
+........Identifier(a)
+........Natural(2)
+........Natural(3)
+........BoolLit(true)
+......VarDecl
+........Int
+........Identifier(a)
+......VarDecl
+........Int
+........Identifier(b)
+......VarDecl
+........Int
+........Identifier(c)
+......VarDecl
+........Int
+........Identifier(d)
+......VarDecl
+........Int
+........Identifier(e)
+......VarDecl
+........Int
+........Identifier(finalI)
+......Assign
+........Identifier(finalI)
+........Add
+..........Natural(2)
+..........Natural(3)
+......Return
+........Div
+..........Mul
+............Decimal(0.02)
+............Decimal(0.03)
+..........Natural(5)
+..MethodDecl
+....MethodHeader
+......Int
+......Identifier(sum)
+......MethodParams
+........ParamDecl
+..........Int
+..........Identifier(k)
+........ParamDecl
+..........Int
+..........Identifier(j)
+....MethodBody
+......Call
+........Identifier(test)
+........Natural(2)
+........Natural(2)
+........Decimal(2.0)
+........BoolLit(true)
+........BoolLit(false)
+......Return
+........Add
+..........Identifier(k)
+..........Identifier(j)

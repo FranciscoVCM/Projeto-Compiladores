@@ -1,0 +1,126 @@
+===== Class operator_single Symbol Table =====
+main	(String[])	void
+f	(int, double)	void
+f	(double, int)	void
+
+===== Method main (String[]) Symbol Table =====
+return	void
+args	String[]	param
+i	int
+d	double
+b	boolean
+tamanho	int
+
+===== Method f (int, double) Symbol Table =====
+return	void
+a	int	param
+b	double	param
+
+===== Method f (double, int) Symbol Table =====
+return	void
+a	double	param
+b	int	param
+
+
+Program
+..Identifier(operator_single)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(i)
+......VarDecl
+........Double
+........Identifier(d)
+......VarDecl
+........Bool
+........Identifier(b)
+......Assign
+........Identifier(b)
+........BoolLit(false)
+......Assign
+........Identifier(i)
+........Plus
+..........Natural(5)
+......Assign
+........Identifier(i)
+........Plus
+..........Decimal(2.0)
+......Assign
+........Identifier(d)
+........Plus
+..........Natural(1)
+......Assign
+........Identifier(d)
+........Plus
+..........Decimal(2.0)
+......Assign
+........Identifier(b)
+........Plus
+..........BoolLit(false)
+......Assign
+........Identifier(b)
+........Plus
+..........BoolLit(true)
+......VarDecl
+........Int
+........Identifier(tamanho)
+......Assign
+........Identifier(tamanho)
+........Length
+..........Identifier(args)
+......Assign
+........Identifier(i)
+........Length
+..........Identifier(i)
+......Assign
+........Identifier(i)
+........Length
+..........Identifier(d)
+......Assign
+........Identifier(i)
+........Not
+..........Identifier(i)
+......Assign
+........Identifier(d)
+........Not
+..........Identifier(d)
+......Assign
+........Identifier(b)
+........Not
+..........Identifier(b)
+......Call
+........Identifier(f)
+........Natural(1)
+........Natural(1)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(f)
+......MethodParams
+........ParamDecl
+..........Int
+..........Identifier(a)
+........ParamDecl
+..........Double
+..........Identifier(b)
+....MethodBody
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(f)
+......MethodParams
+........ParamDecl
+..........Double
+..........Identifier(a)
+........ParamDecl
+..........Int
+..........Identifier(b)
+....MethodBody

@@ -1,0 +1,48 @@
+===== Class Sum Symbol Table =====
+operators	(int)	int
+main	(String[])	void
+
+===== Method operators (int) Symbol Table =====
+return	int
+n	int	param
+
+===== Method main (String[]) Symbol Table =====
+return	void
+args	String[]	param
+
+
+Program
+..Identifier(Sum)
+..MethodDecl
+....MethodHeader
+......Int
+......Identifier(operators)
+......MethodParams
+........ParamDecl
+..........Int
+..........Identifier(n)
+....MethodBody
+......Return
+........Add
+..........Identifier(n)
+..........Natural(1)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......Call
+........Identifier(operators)
+........Call
+..........Identifier(operators)
+..........Call
+............Identifier(operators)
+............Call
+..............Identifier(operators)
+..............Call
+................Identifier(operators)
+................Natural(1)

@@ -1,0 +1,140 @@
+===== Class shift_errors Symbol Table =====
+valid	(String[])	void
+main	(String[])	void
+
+===== Method valid (String[]) Symbol Table =====
+return	void
+args	String[]	param
+x	int
+b	int
+
+===== Method main (String[]) Symbol Table =====
+return	void
+args	String[]	param
+i	int
+d	double
+b	boolean
+
+
+Program
+..Identifier(shift_errors)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(valid)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(x)
+......VarDecl
+........Int
+........Identifier(b)
+......Assign
+........Identifier(x)
+........Lshift
+..........Natural(1)
+..........Mul
+............Identifier(x)
+............Natural(1)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(i)
+......VarDecl
+........Double
+........Identifier(d)
+......VarDecl
+........Bool
+........Identifier(b)
+......Assign
+........Identifier(i)
+........Lshift
+..........Identifier(i)
+..........Natural(1)
+......Assign
+........Identifier(d)
+........Lshift
+..........Identifier(i)
+..........Natural(1)
+......Assign
+........Identifier(i)
+........Lshift
+..........Identifier(i)
+..........Decimal(1.1)
+......Assign
+........Identifier(i)
+........Lshift
+..........Identifier(i)
+..........BoolLit(true)
+......Assign
+........Identifier(d)
+........Lshift
+..........Identifier(d)
+..........Natural(1)
+......Assign
+........Identifier(i)
+........Lshift
+..........Identifier(d)
+..........Natural(1)
+......Assign
+........Identifier(d)
+........Lshift
+..........Identifier(d)
+..........Decimal(1.1)
+......Assign
+........Identifier(i)
+........Lshift
+..........Identifier(d)
+..........Decimal(1.1)
+......Assign
+........Identifier(d)
+........Lshift
+..........Identifier(d)
+..........BoolLit(true)
+......Assign
+........Identifier(i)
+........Lshift
+..........Identifier(d)
+..........BoolLit(true)
+......Assign
+........Identifier(b)
+........Lshift
+..........Identifier(b)
+..........Natural(1)
+......Assign
+........Identifier(i)
+........Lshift
+..........Identifier(b)
+..........Natural(1)
+......Assign
+........Identifier(b)
+........Lshift
+..........Identifier(b)
+..........Decimal(1.1)
+......Assign
+........Identifier(i)
+........Lshift
+..........Identifier(b)
+..........Decimal(1.1)
+......Assign
+........Identifier(b)
+........Lshift
+..........Identifier(b)
+..........BoolLit(true)
+......Assign
+........Identifier(i)
+........Lshift
+..........Identifier(b)
+..........BoolLit(true)

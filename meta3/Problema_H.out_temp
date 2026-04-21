@@ -1,0 +1,57 @@
+===== Class teste Symbol Table =====
+xd	(String[])	void
+
+===== Method xd (String[]) Symbol Table =====
+return	void
+args	String[]	param
+d	int
+
+
+Program
+..Identifier(teste)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(xd)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(d)
+......Print
+........Identifier(args)
+......Print
+........Length
+..........Identifier(d)
+......Print
+........Length
+..........Identifier(args)
+......Print
+........ParseArgs
+..........Identifier(args)
+..........Decimal(2.0)
+......Print
+........ParseArgs
+..........Identifier(args)
+..........Natural(2)
+......Print
+........ParseArgs
+..........Identifier(args)
+..........Identifier(e)
+......Return
+........Identifier(args)
+......Return
+........ParseArgs
+..........Identifier(args)
+..........Decimal(2.0)
+......Return
+........Call
+..........Identifier(xd)
+..........Identifier(args)
+......Return
+........Identifier(d)
+......Return
+........Decimal(2.0)

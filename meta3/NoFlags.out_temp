@@ -1,0 +1,119 @@
+===== Class NoFlags Symbol Table =====
+a	(int)	int
+a	(double)	int
+a	(boolean, int, boolean)	int
+a	(int)	int
+main	(String[])	void
+
+===== Method a (int) Symbol Table =====
+return	int
+n	int	param
+a	int
+
+===== Method a (double) Symbol Table =====
+return	int
+n	double	param
+b	int
+
+===== Method a (boolean, int, boolean) Symbol Table =====
+return	int
+n	boolean	param
+a	int	param
+c	boolean	param
+d	int
+
+===== Method a (int) Symbol Table =====
+return	int
+n	int	param
+d	int
+
+===== Method main (String[]) Symbol Table =====
+return	void
+args	String[]	param
+
+
+Program
+..Identifier(NoFlags)
+..MethodDecl
+....MethodHeader
+......Int
+......Identifier(a)
+......MethodParams
+........ParamDecl
+..........Int
+..........Identifier(n)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(a)
+......Assign
+........Identifier(a)
+........Natural(2147483648)
+..MethodDecl
+....MethodHeader
+......Int
+......Identifier(a)
+......MethodParams
+........ParamDecl
+..........Double
+..........Identifier(n)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(b)
+......Assign
+........Identifier(b)
+........Natural(21474_8_3647)
+..MethodDecl
+....MethodHeader
+......Int
+......Identifier(a)
+......MethodParams
+........ParamDecl
+..........Bool
+..........Identifier(n)
+........ParamDecl
+..........Int
+..........Identifier(a)
+........ParamDecl
+..........Bool
+..........Identifier(c)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(d)
+......Assign
+........Identifier(d)
+........Natural(2147483649)
+......Assign
+........Identifier(d)
+........Identifier(c)
+..MethodDecl
+....MethodHeader
+......Int
+......Identifier(a)
+......MethodParams
+........ParamDecl
+..........Int
+..........Identifier(n)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(d)
+......Assign
+........Identifier(d)
+........Natural(10_0000_00000)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......ParseArgs
+........Identifier(s)
+........Decimal(2.2)
+......Print
+........Decimal(2e2)

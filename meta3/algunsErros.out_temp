@@ -1,0 +1,213 @@
+===== Class Alguns_Erros Symbol Table =====
+main1	int
+main2	double
+main3	int
+cenas	(String[])	int
+main	(String[])	void
+ola	(String[])	void
+
+===== Method main1 () Symbol Table =====
+return	int
+
+===== Method main2 () Symbol Table =====
+return	double
+a	int
+
+===== Method main3 () Symbol Table =====
+return	int
+a	double
+
+===== Method cenas (String[]) Symbol Table =====
+return	int
+args	String[]	param
+x	int
+a	int
+xd	double
+
+===== Method main (String[]) Symbol Table =====
+return	void
+args	String[]	param
+i	int
+i2	int
+d	double
+b	boolean
+x	int
+
+===== Method ola (String[]) Symbol Table =====
+return	void
+args	String[]	param
+a	int
+b	boolean
+c	double
+
+
+Program
+..Identifier(Alguns_Erros)
+..MethodDecl
+....MethodHeader
+......Int
+......Identifier(main1)
+......MethodParams
+....MethodBody
+......Return
+..MethodDecl
+....MethodHeader
+......Double
+......Identifier(main2)
+......MethodParams
+....MethodBody
+......VarDecl
+........Int
+........Identifier(a)
+......Return
+........Identifier(a)
+..MethodDecl
+....MethodHeader
+......Int
+......Identifier(main3)
+......MethodParams
+....MethodBody
+......VarDecl
+........Double
+........Identifier(a)
+......Return
+........Identifier(a)
+..MethodDecl
+....MethodHeader
+......Int
+......Identifier(cenas)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......Call
+........Identifier(cenas)
+........Identifier(args)
+......VarDecl
+........Int
+........Identifier(x)
+......Assign
+........Identifier(x)
+........Length
+..........Identifier(x)
+......Assign
+........Identifier(x)
+........ParseArgs
+..........Identifier(args)
+..........Natural(0)
+......Assign
+........Identifier(x)
+........ParseArgs
+..........Identifier(x)
+..........Natural(0)
+......If
+........Add
+..........Natural(2)
+..........Mul
+............BoolLit(true)
+............BoolLit(true)
+........Block
+........Block
+......VarDecl
+........Int
+........Identifier(a)
+......Assign
+........Identifier(a)
+........Add
+..........Identifier(b)
+..........BoolLit(true)
+......Assign
+........Identifier(a)
+........Add
+..........Natural(1)
+..........Identifier(b)
+......Assign
+........Identifier(a)
+........Add
+..........Identifier(b)
+..........Natural(1)
+......Assign
+........Identifier(a)
+........Mul
+..........Identifier(b)
+..........Identifier(c)
+......VarDecl
+........Double
+........Identifier(xd)
+......Assign
+........Identifier(xd)
+........Identifier(a)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(i)
+......VarDecl
+........Int
+........Identifier(i2)
+......VarDecl
+........Double
+........Identifier(d)
+......VarDecl
+........Bool
+........Identifier(b)
+......Assign
+........Identifier(i)
+........Assign
+..........Identifier(d)
+..........Identifier(b)
+......Assign
+........Identifier(i)
+........Natural(123123122121)
+......VarDecl
+........Int
+........Identifier(x)
+......Assign
+........Identifier(i)
+........Assign
+..........Identifier(d)
+..........Identifier(b)
+......Return
+......Call
+........Identifier(factorial)
+........Identifier(i)
+........Identifier(i)
+........Identifier(i)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(ola)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(a)
+......VarDecl
+........Bool
+........Identifier(b)
+......VarDecl
+........Double
+........Identifier(c)
+......Return
+........Identifier(a)
+......Return
+........Identifier(b)
+......Return
+........Identifier(c)
+......Return
+........Identifier(args)
+......Return
+........Call
+..........Identifier(ola)
+..........Identifier(args)

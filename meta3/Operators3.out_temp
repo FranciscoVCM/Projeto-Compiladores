@@ -1,0 +1,84 @@
+===== Class Sum Symbol Table =====
+operator	void
+main	void
+
+===== Method operator () Symbol Table =====
+return	void
+
+===== Method main () Symbol Table =====
+return	void
+a	int
+b	int
+c	int
+d	double
+e	double
+x	boolean
+y	boolean
+
+
+Program
+..Identifier(Sum)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(operator)
+......MethodParams
+....MethodBody
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+....MethodBody
+......VarDecl
+........Int
+........Identifier(a)
+......VarDecl
+........Int
+........Identifier(b)
+......VarDecl
+........Int
+........Identifier(c)
+......VarDecl
+........Double
+........Identifier(d)
+......VarDecl
+........Double
+........Identifier(e)
+......VarDecl
+........Bool
+........Identifier(x)
+......VarDecl
+........Bool
+........Identifier(y)
+......If
+........Eq
+..........Identifier(x)
+..........Identifier(y)
+........If
+..........Eq
+............Identifier(a)
+............Identifier(b)
+..........If
+............Eq
+..............Identifier(d)
+..............Identifier(b)
+............Assign
+..............Identifier(x)
+..............Or
+................Le
+..................Mul
+....................Identifier(d)
+....................Identifier(e)
+..................Rshift
+....................Identifier(a)
+....................Identifier(c)
+................Eq
+..................Identifier(x)
+..................Not
+....................Identifier(y)
+............Block
+..........Block
+........Block
+......Call
+........Identifier(operator)

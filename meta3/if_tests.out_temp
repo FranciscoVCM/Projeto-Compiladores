@@ -1,0 +1,55 @@
+===== Class if_tests Symbol Table =====
+main	(String[])	void
+
+===== Method main (String[]) Symbol Table =====
+return	void
+args	String[]	param
+a	int
+
+
+Program
+..Identifier(if_tests)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(a)
+......If
+........BoolLit(true)
+........Assign
+..........Identifier(a)
+..........Natural(0)
+........Block
+......If
+........Natural(1)
+........Assign
+..........Identifier(a)
+..........Natural(0)
+........Block
+......If
+........Decimal(1.0)
+........Assign
+..........Identifier(a)
+..........Natural(0)
+........Block
+......If
+........Identifier(args)
+........Assign
+..........Identifier(a)
+..........Natural(0)
+........Block
+......If
+........Lshift
+..........Identifier(a)
+..........Natural(1)
+........Assign
+..........Identifier(a)
+..........Natural(0)
+........Block

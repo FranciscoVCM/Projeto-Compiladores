@@ -1,0 +1,79 @@
+===== Class Factorial Symbol Table =====
+operators	(int)	int
+main	(String[])	void
+
+===== Method operators (int) Symbol Table =====
+return	int
+n	int	param
+x	int
+b	int
+a	int
+y	double
+z	boolean
+t	boolean
+
+===== Method main (String[]) Symbol Table =====
+return	void
+args	String[]	param
+
+
+Program
+..Identifier(Factorial)
+..MethodDecl
+....MethodHeader
+......Int
+......Identifier(operators)
+......MethodParams
+........ParamDecl
+..........Int
+..........Identifier(n)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(x)
+......VarDecl
+........Int
+........Identifier(b)
+......VarDecl
+........Int
+........Identifier(a)
+......VarDecl
+........Double
+........Identifier(y)
+......VarDecl
+........Bool
+........Identifier(z)
+......VarDecl
+........Bool
+........Identifier(t)
+......If
+........And
+..........Eq
+............Identifier(x)
+............Identifier(b)
+..........Eq
+............Identifier(z)
+............Identifier(t)
+........Assign
+..........Identifier(y)
+..........Mul
+............Lshift
+..............Identifier(a)
+..............Identifier(b)
+............Decimal(1.0)
+........Assign
+..........Identifier(y)
+..........Mod
+............Identifier(a)
+............Identifier(y)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......Call
+........Identifier(operators)
