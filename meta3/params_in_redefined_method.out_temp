@@ -1,22 +1,22 @@
-Line 0, col 0: Symbol a already defined
-Line 0, col 0: Symbol a already defined
+Line 4, col 24: Symbol a already defined
+Line 4, col 37: Symbol a already defined
 ===== Class test Symbol Table =====
-a	(int, int)	void
-a	(int, int)	void
+a	(int,int)	void
+a	(int,int)	void
 main	(String[])	void
 
-===== Method a(int, int) Symbol Table =====
-return	void
-a	int	param
-b	int	param
+===== Method a(int,int) Symbol Table =====
+return		void
+a		int	param
+b		int	param
 
-===== Method a(int, int) Symbol Table =====
-return	void
-a	int	param
+===== Method a(int,int) Symbol Table =====
+return		void
+a		int	param
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
+return		void
+args		String[]	param
 
 
 Program

@@ -1,19 +1,19 @@
 ===== Class Sum Symbol Table =====
-operator	void
-main	void
+operator		void
+main		void
 
 ===== Method operator() Symbol Table =====
-return	void
+return		void
 
 ===== Method main() Symbol Table =====
-return	void
-a	int
-b	int
-c	int
-d	double
-e	double
-x	boolean
-y	boolean
+return		void
+a		int
+b		int
+c		int
+d		double
+e		double
+x		boolean
+y		boolean
 
 
 Program
@@ -81,4 +81,4 @@ Program
 ..........Block
 ........Block
 ......Call - void
-........Identifier(operator) - void
+........Identifier(operator)

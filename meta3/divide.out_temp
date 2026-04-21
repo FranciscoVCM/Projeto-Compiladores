@@ -1,15 +1,15 @@
 ===== Class divide Symbol Table =====
-num	int
-den	int
+num		int
+den		int
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
-quo	int
-q	int
-r	int
-check	boolean
+return		void
+args		String[]	param
+quo		int
+q		int
+r		int
+check		boolean
 
 
 Program

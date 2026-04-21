@@ -77,19 +77,34 @@ if [[ -d meta3 ]]; then
         tmp=${inp%.java}.out_temp
         flag="-s"
 
-        if [[ "$inp" == *_e3.java ]]; then
+        if [[ "$inp" == *NoFlags.java ]]; then
+            flag=""
+        elif [[ "$inp" == *_e3.java ]]; then
             flag="-e3"
         fi
 
-        if $exe $flag < "$inp" > "$tmp"; then
-            lines=$(diff "$out" "$tmp" | wc -l)
-            if [[ $lines -gt 0 ]]; then
-                echo " Wrong Answer, run 'diff $out $tmp' to see the differences"
+        if [[ -z "$flag" ]]; then
+            if $exe < "$inp" > "$tmp"; then
+                lines=$(diff "$out" "$tmp" | wc -l)
+                if [[ $lines -gt 0 ]]; then
+                    echo " Wrong Answer, run 'diff $out $tmp' to see the differences"
+                else
+                    accepted=$((accepted + 1))
+                fi
             else
-                accepted=$((accepted + 1))
+                echo " Runtime Error, failed to execute '$exe'"
             fi
         else
-            echo " Runtime Error, failed to execute '$exe'"
+            if $exe $flag < "$inp" > "$tmp"; then
+                lines=$(diff "$out" "$tmp" | wc -l)
+                if [[ $lines -gt 0 ]]; then
+                    echo " Wrong Answer, run 'diff $out $tmp' to see the differences"
+                else
+                    accepted=$((accepted + 1))
+                fi
+            else
+                echo " Runtime Error, failed to execute '$exe'"
+            fi
         fi
     done
 fi

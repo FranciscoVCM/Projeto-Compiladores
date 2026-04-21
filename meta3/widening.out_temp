@@ -1,37 +1,43 @@
-Line 0, col 0: Operator = cannot be applied to types double, boolean
-Line 0, col 0: Operator * cannot be applied to types int, boolean
-Line 0, col 0: Cannot find symbol fun_di
-Line 0, col 0: Cannot find symbol fun_di
-Line 0, col 0: Cannot find symbol fun_ii
-Line 0, col 0: Cannot find symbol fun_ii
-Line 0, col 0: Cannot find symbol fun_ii
+Line 10, col 11: Operator = cannot be applied to types double, boolean
+Line 15, col 15: Operator * cannot be applied to types int, boolean
+Line 15, col 11: Operator = cannot be applied to types double, undef
+Line 23, col 13: Cannot find symbol fun_di(int,double)
+Line 23, col 11: Operator = cannot be applied to types double, undef
+Line 24, col 13: Cannot find symbol fun_di(double,double)
+Line 24, col 11: Operator = cannot be applied to types double, undef
+Line 27, col 13: Cannot find symbol fun_ii(double,int)
+Line 27, col 11: Operator = cannot be applied to types double, undef
+Line 28, col 13: Cannot find symbol fun_ii(int,double)
+Line 28, col 11: Operator = cannot be applied to types double, undef
+Line 29, col 13: Cannot find symbol fun_ii(double,double)
+Line 29, col 11: Operator = cannot be applied to types double, undef
 ===== Class Narrow Symbol Table =====
 main	(String[])	void
-fun_dd	(double, double)	int
-fun_di	(double, int)	int
-fun_ii	(int, int)	int
+fun_dd	(double,double)	int
+fun_di	(double,int)	int
+fun_ii	(int,int)	int
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
-i	int
-d	double
-b	boolean
+return		void
+args		String[]	param
+i		int
+d		double
+b		boolean
 
-===== Method fun_dd(double, double) Symbol Table =====
-return	int
-a	double	param
-b	double	param
+===== Method fun_dd(double,double) Symbol Table =====
+return		int
+a		double	param
+b		double	param
 
-===== Method fun_di(double, int) Symbol Table =====
-return	int
-a	double	param
-b	int	param
+===== Method fun_di(double,int) Symbol Table =====
+return		int
+a		double	param
+b		int	param
 
-===== Method fun_ii(int, int) Symbol Table =====
-return	int
-a	int	param
-b	int	param
+===== Method fun_ii(int,int) Symbol Table =====
+return		int
+a		int	param
+b		int	param
 
 
 Program
@@ -89,31 +95,31 @@ Program
 ......Assign - double
 ........Identifier(d) - double
 ........Call - int
-..........Identifier(fun_dd) - int
+..........Identifier(fun_dd)
 ..........Natural(1) - int
 ..........Natural(2) - int
 ......Assign - double
 ........Identifier(d) - double
 ........Call - int
-..........Identifier(fun_dd) - int
+..........Identifier(fun_dd)
 ..........Decimal(3.0) - double
 ..........Natural(4) - int
 ......Assign - double
 ........Identifier(d) - double
 ........Call - int
-..........Identifier(fun_dd) - int
+..........Identifier(fun_dd)
 ..........Decimal(5.0) - double
 ..........Decimal(6.0) - double
 ......Assign - double
 ........Identifier(d) - double
 ........Call - int
-..........Identifier(fun_di) - int
+..........Identifier(fun_di)
 ..........Natural(1) - int
 ..........Natural(1) - int
 ......Assign - double
 ........Identifier(d) - double
 ........Call - int
-..........Identifier(fun_di) - int
+..........Identifier(fun_di)
 ..........Decimal(1.0) - double
 ..........Natural(1) - int
 ......Assign - double
@@ -131,7 +137,7 @@ Program
 ......Assign - double
 ........Identifier(d) - double
 ........Call - int
-..........Identifier(fun_ii) - int
+..........Identifier(fun_ii)
 ..........Natural(1) - int
 ..........Natural(1) - int
 ......Assign - double

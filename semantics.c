@@ -70,7 +70,7 @@ static int is_compatible_type(enum type formal, enum type actual) {
     if (formal == actual)
         return 1;
     if (formal == double_type && actual == integer_type)
-        return 1; /* widening simples */
+        return 1;
     return 0;
 }
 
@@ -219,6 +219,39 @@ static struct parameter_list *build_method_param_types(struct node *method_param
     return params;
 }
 
+static char *param_list_to_string(struct parameter_list *params) {
+    char buffer[512];
+    buffer[0] = '\0';
+    strcat(buffer, "(");
+
+    while (params != NULL) {
+        strcat(buffer, type_name(params->type));
+        if (params->next != NULL)
+            strcat(buffer, ",");
+        params = params->next;
+    }
+
+    strcat(buffer, ")");
+    return strdup(buffer);
+}
+
+static char *call_signature_string(char *name, struct parameter_list *params) {
+    char buffer[512];
+    char *plist = param_list_to_string(params);
+    snprintf(buffer, sizeof(buffer), "%s%s", name, plist);
+    free(plist);
+    return strdup(buffer);
+}
+
+static void set_annotation_string(struct node *node, const char *text) {
+    if (!node) return;
+    if (node->annotation) {
+        free(node->annotation);
+        node->annotation = NULL;
+    }
+    node->annotation = strdup(text);
+}
+
 /* =========================================================
  * Recolha de símbolos
  * ========================================================= */
@@ -236,19 +269,6 @@ static void collect_field_decl(struct node *field_decl) {
     append_symbol(&global_table, new_symbol(id->token, type, 0, field_decl));
 }
 
-static void collect_var_decl(struct method_scope *scope, struct node *var_decl) {
-    struct node *id = get_child(var_decl, 1);
-    struct node *type_node = get_child(var_decl, 0);
-    enum type type = category_to_type(type_node->category);
-
-    if (search_symbol(scope->symbols, id->token) != NULL) {
-        semantic_error_symbol(id, "Symbol %s already defined", id->token);
-        return;
-    }
-
-    append_symbol(&scope->symbols, new_symbol(id->token, type, 0, var_decl));
-}
-
 static void collect_method_decl(struct node *method_decl) {
     struct node *header = get_child(method_decl, 0);
     struct node *body = get_child(method_decl, 1);
@@ -260,10 +280,11 @@ static void collect_method_decl(struct node *method_decl) {
     enum type return_type = category_to_type(return_type_node->category);
     struct parameter_list *params = build_method_param_types(params_node);
 
-    /* nesta fase ainda usamos duplicado simples: mesmo nome+params = redefinição */
     struct symbol_list *cur = global_table;
     while (cur != NULL) {
-        if (strcmp(cur->name, id->token) == 0 && cur->params != NULL && params_exact_match(cur->params, params)) {
+        if (strcmp(cur->name, id->token) == 0 &&
+            cur->params != NULL &&
+            params_exact_match(cur->params, params)) {
             semantic_error_symbol(id, "Symbol %s already defined", id->token);
             break;
         }
@@ -295,16 +316,20 @@ static void collect_method_decl(struct node *method_decl) {
         }
     }
 
-    if (body && body->children) {
-        struct node_list *child = body->children->next;
-        while (child != NULL) {
-            if (child->node->category == VarDecl)
-                collect_var_decl(scope, child->node);
-            child = child->next;
-        }
+    append_method_scope(&method_scopes, scope);
+}
+
+static void declare_local_var(struct method_scope *scope, struct node *var_decl) {
+    struct node *id = get_child(var_decl, 1);
+    struct node *type_node = get_child(var_decl, 0);
+    enum type type = category_to_type(type_node->category);
+
+    if (search_symbol(scope->symbols, id->token) != NULL) {
+        semantic_error_symbol(id, "Symbol %s already defined", id->token);
+        return;
     }
 
-    append_method_scope(&method_scopes, scope);
+    append_symbol(&scope->symbols, new_symbol(id->token, type, 0, var_decl));
 }
 
 /* =========================================================
@@ -386,7 +411,9 @@ static enum type check_call(struct node *expr, struct method_scope *scope) {
 
     struct method_scope *exact = resolve_exact_method(id->token, arg_types);
     if (exact != NULL) {
-        id->type = exact->return_type;
+        char *sig = param_list_to_string(exact->params);
+        set_annotation_string(id, sig);
+        free(sig);
         expr->type = exact->return_type;
         return expr->type;
     }
@@ -401,12 +428,17 @@ static enum type check_call(struct node *expr, struct method_scope *scope) {
     }
 
     if (compat != NULL) {
-        id->type = compat->return_type;
+        char *sig = param_list_to_string(compat->params);
+        set_annotation_string(id, sig);
+        free(sig);
         expr->type = compat->return_type;
         return expr->type;
     }
 
-    semantic_error_symbol(id, "Cannot find symbol %s", id->token);
+    char *call_sig = call_signature_string(id->token, arg_types);
+    semantic_error_symbol(id, "Cannot find symbol %s", call_sig);
+    free(call_sig);
+
     id->type = undef_type;
     expr->type = undef_type;
     return expr->type;
@@ -415,11 +447,6 @@ static enum type check_call(struct node *expr, struct method_scope *scope) {
 static enum type check_binary_numeric(struct node *expr, struct method_scope *scope, const char *op, int allow_double) {
     enum type left = check_expression(get_child(expr, 0), scope);
     enum type right = check_expression(get_child(expr, 1), scope);
-
-    if (left == undef_type || right == undef_type) {
-        expr->type = undef_type;
-        return expr->type;
-    }
 
     if (left == integer_type && right == integer_type) {
         expr->type = integer_type;
@@ -446,12 +473,9 @@ static enum type check_expression(struct node *expr, struct method_scope *scope)
 
     switch (expr->category) {
         case Natural:
-            if (expr->token && natural_out_of_bounds(expr->token)) {
+            if (expr->token && natural_out_of_bounds(expr->token))
                 semantic_error_symbol(expr, "Number %s out of bounds", expr->token);
-                expr->type = undef_type;
-            } else {
-                expr->type = integer_type;
-            }
+            expr->type = integer_type;
             return expr->type;
 
         case Decimal:
@@ -468,14 +492,9 @@ static enum type check_expression(struct node *expr, struct method_scope *scope)
         case Length: {
             struct node *base = get_child(expr, 0);
             enum type t = check_expression(base, scope);
-            if (t == string_array_type) {
-                expr->type = integer_type;
-            } else if (t == undef_type) {
-                expr->type = undef_type;
-            } else {
+            if (t != string_array_type)
                 semantic_error_op1(expr, ".length", t);
-                expr->type = undef_type;
-            }
+            expr->type = integer_type;
             return expr->type;
         }
 
@@ -485,14 +504,10 @@ static enum type check_expression(struct node *expr, struct method_scope *scope)
             enum type t1 = check_expression(id, scope);
             enum type t2 = check_expression(index, scope);
 
-            if (t1 == string_array_type && t2 == integer_type) {
-                expr->type = integer_type;
-            } else if (t1 == undef_type || t2 == undef_type) {
-                expr->type = undef_type;
-            } else {
+            if (!(t1 == string_array_type && t2 == integer_type))
                 semantic_error_op2(expr, "Integer.parseInt", t1, t2);
-                expr->type = undef_type;
-            }
+
+            expr->type = integer_type;
             return expr->type;
         }
 
@@ -505,25 +520,12 @@ static enum type check_expression(struct node *expr, struct method_scope *scope)
             enum type ltype = check_expression(lhs, scope);
             enum type rtype = check_expression(rhs, scope);
 
-            if (ltype == undef_type) {
-                expr->type = undef_type;
-                return expr->type;
-            }
+            if (!(ltype == rtype || (ltype == double_type && rtype == integer_type)))
+                semantic_error_op2(expr, "=", ltype, rtype);
 
-            if (rtype == undef_type) {
-                expr->type = ltype;
-                return expr->type;
-            }
-
-            if (ltype == rtype || (ltype == double_type && rtype == integer_type)) {
-                expr->type = ltype;
-                return expr->type;
-            }
-        
-            semantic_error_op2(expr, "=", ltype, rtype);
             expr->type = ltype;
             return expr->type;
-}
+        }
 
         case Add:
             return check_binary_numeric(expr, scope, "+", 1);
@@ -535,52 +537,47 @@ static enum type check_expression(struct node *expr, struct method_scope *scope)
             return check_binary_numeric(expr, scope, "/", 1);
         case Mod:
             return check_binary_numeric(expr, scope, "%", 0);
-
         case Lshift:
             return check_binary_numeric(expr, scope, "<<", 0);
         case Rshift:
             return check_binary_numeric(expr, scope, ">>", 0);
 
         case Lt:
-case Gt:
-case Le:
-case Ge: {
-    enum type left = check_expression(get_child(expr, 0), scope);
-    enum type right = check_expression(get_child(expr, 1), scope);
+        case Gt:
+        case Le:
+        case Ge: {
+            enum type left = check_expression(get_child(expr, 0), scope);
+            enum type right = check_expression(get_child(expr, 1), scope);
 
-    if (left == undef_type || right == undef_type) {
-        expr->type = undef_type;
-    } else if ((left == integer_type || left == double_type) &&
-               (right == integer_type || right == double_type)) {
-        expr->type = bool_type;
-    } else {
-        const char *op =
-            expr->category == Lt ? "<" :
-            expr->category == Gt ? ">" :
-            expr->category == Le ? "<=" : ">=";
-        semantic_error_op2(expr, op, left, right);
-        expr->type = undef_type;
-    }
-    return expr->type;
-}
+            if ((left == integer_type || left == double_type) &&
+                (right == integer_type || right == double_type)) {
+                expr->type = bool_type;
+            } else {
+                const char *op =
+                    expr->category == Lt ? "<" :
+                    expr->category == Gt ? ">" :
+                    expr->category == Le ? "<=" : ">=";
+                semantic_error_op2(expr, op, left, right);
+                expr->type = undef_type;
+            }
+            return expr->type;
+        }
 
         case Eq:
-case Ne: {
-    enum type left = check_expression(get_child(expr, 0), scope);
-    enum type right = check_expression(get_child(expr, 1), scope);
+        case Ne: {
+            enum type left = check_expression(get_child(expr, 0), scope);
+            enum type right = check_expression(get_child(expr, 1), scope);
 
-    if (left == undef_type || right == undef_type) {
-        expr->type = undef_type;
-    } else if (left == right ||
-               ((left == integer_type || left == double_type) &&
-                (right == integer_type || right == double_type))) {
-        expr->type = bool_type;
-    } else {
-        semantic_error_op2(expr, expr->category == Eq ? "==" : "!=", left, right);
-        expr->type = undef_type;
-    }
-    return expr->type;
-}
+            if (left == right ||
+                ((left == integer_type || left == double_type) &&
+                 (right == integer_type || right == double_type))) {
+                expr->type = bool_type;
+            } else {
+                semantic_error_op2(expr, expr->category == Eq ? "==" : "!=", left, right);
+                expr->type = undef_type;
+            }
+            return expr->type;
+        }
 
         case And:
         case Or:
@@ -588,9 +585,7 @@ case Ne: {
             enum type left = check_expression(get_child(expr, 0), scope);
             enum type right = check_expression(get_child(expr, 1), scope);
 
-            if (left == undef_type || right == undef_type) {
-                expr->type = undef_type;
-            } else if (left == bool_type && right == bool_type) {
+            if (left == bool_type && right == bool_type) {
                 expr->type = bool_type;
             } else {
                 const char *op =
@@ -604,9 +599,7 @@ case Ne: {
 
         case Not: {
             enum type t = check_expression(get_child(expr, 0), scope);
-            if (t == undef_type) {
-                expr->type = undef_type;
-            } else if (t == bool_type) {
+            if (t == bool_type) {
                 expr->type = bool_type;
             } else {
                 semantic_error_op1(expr, "!", t);
@@ -618,9 +611,7 @@ case Ne: {
         case Minus:
         case Plus: {
             enum type t = check_expression(get_child(expr, 0), scope);
-            if (t == undef_type) {
-                expr->type = undef_type;
-            } else if (t == integer_type || t == double_type) {
+            if (t == integer_type || t == double_type) {
                 expr->type = t;
             } else {
                 semantic_error_op1(expr, expr->category == Minus ? "-" : "+", t);
@@ -647,6 +638,7 @@ static void annotate_statement_or_decl(struct node *node, struct method_scope *s
 
     switch (node->category) {
         case VarDecl:
+            declare_local_var(scope, node);
             return;
 
         case Return: {
@@ -658,10 +650,8 @@ static void annotate_statement_or_decl(struct node *node, struct method_scope *s
             }
 
             enum type t = check_expression(value, scope);
-            if (t != undef_type &&
-                !(t == scope->return_type || (scope->return_type == double_type && t == integer_type))) {
+            if (!(t == scope->return_type || (scope->return_type == double_type && t == integer_type)))
                 semantic_error_stmt(value, t, "return");
-            }
             return;
         }
 
@@ -669,19 +659,15 @@ static void annotate_statement_or_decl(struct node *node, struct method_scope *s
             struct node *value = get_child(node, 0);
             if (value != NULL && value->category != StrLit) {
                 enum type t = check_expression(value, scope);
-                if (t != undef_type &&
-                    t != integer_type &&
-                    t != double_type &&
-                    t != bool_type) {
+                if (!(t == integer_type || t == double_type || t == bool_type))
                     semantic_error_stmt(value, t, "print");
-                }
             }
             return;
         }
 
         case If: {
             enum type t = check_expression(get_child(node, 0), scope);
-            if (t != undef_type && t != bool_type)
+            if (t != bool_type)
                 semantic_error_stmt(get_child(node, 0), t, "if");
             annotate_statement_or_decl(get_child(node, 1), scope);
             annotate_statement_or_decl(get_child(node, 2), scope);
@@ -690,7 +676,7 @@ static void annotate_statement_or_decl(struct node *node, struct method_scope *s
 
         case While: {
             enum type t = check_expression(get_child(node, 0), scope);
-            if (t != undef_type && t != bool_type)
+            if (t != bool_type)
                 semantic_error_stmt(get_child(node, 0), t, "while");
             annotate_statement_or_decl(get_child(node, 1), scope);
             return;
@@ -748,7 +734,6 @@ int check_program(struct node *program) {
     }
 
     annotate_all_methods();
-
     return semantic_errors;
 }
 
@@ -763,8 +748,6 @@ static void print_param_list(struct parameter_list *params) {
         if (params->next != NULL)
             printf(",");
         params = params->next;
-        if (params != NULL)
-            printf(" ");
     }
     printf(")");
 }
@@ -780,6 +763,8 @@ static void print_global_table(void) {
         if (s->params != NULL) {
             printf("\t");
             print_param_list(s->params);
+        } else {
+            printf("\t");
         }
 
         printf("\t%s\n", type_name(s->type));
@@ -796,7 +781,7 @@ static void print_method_table(struct method_scope *scope) {
 
     s = scope->symbols;
     while (s != NULL) {
-        printf("%s\t%s", s->name, type_name(s->type));
+        printf("%s\t\t%s", s->name, type_name(s->type));
         if (s->is_parameter)
             printf("\tparam");
         printf("\n");

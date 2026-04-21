@@ -1,18 +1,20 @@
-Line 0, col 0: Incompatible type String[] in print statement
-Line 0, col 0: Operator .length cannot be applied to type int
-Line 0, col 0: Operator Integer.parseInt cannot be applied to types String[], double
-Line 0, col 0: Cannot find symbol e
-Line 0, col 0: Incompatible type String[] in return statement
-Line 0, col 0: Operator Integer.parseInt cannot be applied to types String[], double
-Line 0, col 0: Incompatible type int in return statement
-Line 0, col 0: Incompatible type double in return statement
+Line 4, col 26: Incompatible type String[] in print statement
+Line 5, col 27: Operator .length cannot be applied to type int
+Line 7, col 26: Operator Integer.parseInt cannot be applied to types String[], double
+Line 9, col 48: Cannot find symbol e
+Line 9, col 26: Operator Integer.parseInt cannot be applied to types String[], undef
+Line 10, col 16: Incompatible type String[] in return statement
+Line 11, col 16: Operator Integer.parseInt cannot be applied to types String[], double
+Line 11, col 16: Incompatible type int in return statement
+Line 13, col 16: Incompatible type int in return statement
+Line 14, col 16: Incompatible type double in return statement
 ===== Class teste Symbol Table =====
 xd	(String[])	void
 
 ===== Method xd(String[]) Symbol Table =====
-return	void
-args	String[]	param
-d	int
+return		void
+args		String[]	param
+d		int
 
 
 Program
@@ -32,13 +34,13 @@ Program
 ......Print
 ........Identifier(args) - String[]
 ......Print
-........Length - undef
+........Length - int
 ..........Identifier(d) - int
 ......Print
 ........Length - int
 ..........Identifier(args) - String[]
 ......Print
-........ParseArgs - undef
+........ParseArgs - int
 ..........Identifier(args) - String[]
 ..........Decimal(2.0) - double
 ......Print
@@ -46,18 +48,18 @@ Program
 ..........Identifier(args) - String[]
 ..........Natural(2) - int
 ......Print
-........ParseArgs - undef
+........ParseArgs - int
 ..........Identifier(args) - String[]
 ..........Identifier(e) - undef
 ......Return
 ........Identifier(args) - String[]
 ......Return
-........ParseArgs - undef
+........ParseArgs - int
 ..........Identifier(args) - String[]
 ..........Decimal(2.0) - double
 ......Return
 ........Call - void
-..........Identifier(xd) - void
+..........Identifier(xd)
 ..........Identifier(args) - String[]
 ......Return
 ........Identifier(d) - int

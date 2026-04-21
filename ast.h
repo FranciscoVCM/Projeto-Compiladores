@@ -73,6 +73,7 @@ struct node {
     enum category category;
     char *token;
     enum type type;
+    char *annotation;
     int line;
     int column;
     struct node_list *children;
@@ -83,11 +84,9 @@ struct node_list {
     struct node_list *next;
 };
 
-/* Implementações reais */
 struct node *newnode2(enum category category, char *token);
 struct node *newnode4(enum category category, char *token, int line, int column);
 
-/* Macro para aceitar newnode(cat, tok) e newnode(cat, tok, line, col) */
 #define GET_NEWNODE_MACRO(_1,_2,_3,_4,NAME,...) NAME
 #define newnode(...) GET_NEWNODE_MACRO(__VA_ARGS__, newnode4, unused, newnode2)(__VA_ARGS__)
 

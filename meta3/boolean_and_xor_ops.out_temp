@@ -1,15 +1,17 @@
-Line 0, col 0: Operator ^ cannot be applied to types int, int
-Line 0, col 0: Operator = cannot be applied to types int, boolean
-Line 0, col 0: Operator ^ cannot be applied to types double, double
+Line 26, col 16: Operator ^ cannot be applied to types int, int
+Line 26, col 11: Operator = cannot be applied to types int, undef
+Line 27, col 11: Operator = cannot be applied to types int, boolean
+Line 28, col 18: Operator ^ cannot be applied to types double, double
+Line 28, col 11: Operator = cannot be applied to types int, undef
 ===== Class ClassTeste Symbol Table =====
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
-b	boolean
-i	int
-d	double
+return		void
+args		String[]	param
+b		boolean
+i		int
+d		double
 
 
 Program

@@ -1,17 +1,22 @@
-Line 0, col 0: Operator == cannot be applied to types int, boolean
-Line 0, col 0: Operator == cannot be applied to types double, boolean
-Line 0, col 0: Operator != cannot be applied to types int, boolean
-Line 0, col 0: Operator != cannot be applied to types double, boolean
-Line 0, col 0: Operator != cannot be applied to types String[], int
+Line 21, col 15: Operator == cannot be applied to types int, boolean
+Line 21, col 15: Incompatible type undef in if statement
+Line 22, col 15: Operator == cannot be applied to types double, boolean
+Line 22, col 15: Incompatible type undef in if statement
+Line 35, col 15: Operator != cannot be applied to types int, boolean
+Line 35, col 15: Incompatible type undef in if statement
+Line 36, col 15: Operator != cannot be applied to types double, boolean
+Line 36, col 15: Incompatible type undef in if statement
+Line 39, col 18: Operator != cannot be applied to types String[], int
+Line 39, col 18: Incompatible type undef in if statement
 ===== Class equality_or_equity_question_mark Symbol Table =====
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
-i	int
-d	double
-b	boolean
+return		void
+args		String[]	param
+i		int
+d		double
+b		boolean
 
 
 Program

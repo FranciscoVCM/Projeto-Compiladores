@@ -1,37 +1,37 @@
-Line 0, col 0: Symbol c already defined
-Line 0, col 0: Symbol a already defined
-Line 0, col 0: Symbol b already defined
-Line 0, col 0: Symbol ola already defined
-Line 0, col 0: Symbol i already defined
-Line 0, col 0: Symbol i already defined
-Line 0, col 0: Symbol argument already defined
-Line 0, col 0: Symbol i already defined
-Line 0, col 0: Symbol i already defined
-Line 0, col 0: Incompatible type int in if statement
+Line 4, col 23: Symbol c already defined
+Line 4, col 26: Symbol a already defined
+Line 4, col 29: Symbol b already defined
+Line 15, col 45: Symbol i already defined
+Line 23, col 45: Symbol i already defined
+Line 8, col 11: Incompatible type int in if statement
+Line 13, col 11: Symbol ola already defined
+Line 17, col 13: Symbol i already defined
+Line 18, col 13: Symbol argument already defined
+Line 20, col 16: Symbol i already defined
 ===== Class errors Symbol Table =====
-a	int
-b	int
-c	int
-_	double
+a		int
+b		int
+c		int
+_		double
 underscore	(int)	int
-factorial	(int, int)	void
-factorial	(int, int, int)	void
+factorial	(int,int)	void
+factorial	(int,int,int)	void
 
 ===== Method underscore(int) Symbol Table =====
-return	int
-ola	int	param
+return		int
+ola		int	param
 
-===== Method factorial(int, int) Symbol Table =====
-return	void
-i	int	param
-argument	int
-a	int
-_	double
+===== Method factorial(int,int) Symbol Table =====
+return		void
+i		int	param
+argument		int
+a		int
+_		double
 
-===== Method factorial(int, int, int) Symbol Table =====
-return	void
-i	int	param
-_	int	param
+===== Method factorial(int,int,int) Symbol Table =====
+return		void
+i		int	param
+_		int	param
 
 
 Program

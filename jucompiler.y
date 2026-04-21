@@ -5,16 +5,12 @@
 #include "ast.h"
 #include "semantics.h"
 
-#define NODE(cat, tok) newnode(cat, tok, token_line, token_column)
-#define NODE_AT(cat, tok, ln, col) newnode(cat, tok, ln, col)
-
 extern int yylex();
 extern int line;
 extern int column;
 extern int token_line;
 extern int token_column;
 extern int print_tokens;
-extern char *yytext;
 extern char token_text[];
 extern int last_lex_error_line;
 extern int yychar;
@@ -25,19 +21,18 @@ int print_tree = 0;
 int only_errors = 0;
 int syntax_errors = 0;
 int syntax_error_count = 0;
-
-/* Meta 3 */
-int semantic_mode = 0;      /* -s */
-int semantic_errors_only = 0; /* -e3 */
+int semantic_mode = 0;
+int semantic_errors_only = 0;
+int print_tokens = 0;
 
 static struct node *clone_type_node(struct node *node) {
     if (!node)
         return NULL;
-    return newnode(node->category, node->token);
+    return newnode(node->category, node->token, node->line, node->column);
 }
 
 static struct node *make_holder() {
-    return newnode(Program, NULL);
+    return newnode(Program, NULL, 0, 0);
 }
 
 static void append_holder(struct node *dst, struct node *src) {
@@ -129,7 +124,7 @@ static struct node *build_block_from_holder(struct node *holder) {
     struct node *result;
 
     if (meaningful == 0) {
-        result = newnode(Block, NULL);
+        result = newnode(Block, NULL, 0, 0);
         free_holder_only(holder);
         return result;
     }
@@ -141,7 +136,7 @@ static struct node *build_block_from_holder(struct node *holder) {
         return result;
     }
 
-    result = newnode(Block, NULL);
+    result = newnode(Block, NULL, 0, 0);
     append_meaningful_children(result, holder);
     free_holder_only(holder);
     return result;
@@ -164,21 +159,19 @@ void yyerror(char *s) {
 }
 %}
 
+%locations
+
 %union {
     char *lexeme;
     struct node *node;
 }
 
 %token <lexeme> IDENTIFIER NATURAL DECIMAL STRLIT BOOLLIT
-
 %token CLASS PUBLIC STATIC RESERVED
 %token BOOL INT DOUBLE VOID STRING
 %token IF ELSE WHILE RETURN
 %token PRINT PARSEINT DOTLENGTH
-%token INC
-%token DEC
-%token ARROW
-
+%token INC DEC ARROW
 %token ASSIGN
 %token PLUS MINUS STAR DIV MOD
 %token AND OR XOR LSHIFT RSHIFT
@@ -189,7 +182,6 @@ void yyerror(char *s) {
 
 %nonassoc LOWER_THAN_ELSE
 %nonassoc ELSE
-
 %right ASSIGN
 
 %type <node> program class_body
@@ -208,8 +200,8 @@ void yyerror(char *s) {
 program:
     CLASS IDENTIFIER LBRACE class_body RBRACE
     {
-        $$ = newnode(Program, NULL);
-        addchild($$, newnode(Identifier, $2));
+        $$ = newnode(Program, NULL, 0, 0);
+        addchild($$, newnode(Identifier, $2, @2.first_line, @2.first_column));
         append_holder($$, $4);
         free_holder_only($4);
         ast = $$;
@@ -249,9 +241,9 @@ field_decl:
         $$ = make_holder();
         child = $4->children->next;
         while (child) {
-            struct node *decl = newnode(FieldDecl, NULL);
+            struct node *decl = newnode(FieldDecl, NULL, child->node->line, child->node->column);
             addchild(decl, clone_type_node($3));
-            addchild(decl, newnode(Identifier, child->node->token));
+            addchild(decl, newnode(Identifier, child->node->token, child->node->line, child->node->column));
             addchild($$, decl);
             child = child->next;
         }
@@ -264,11 +256,11 @@ field_ids:
     IDENTIFIER
     {
         $$ = make_holder();
-        addchild($$, newnode(Identifier, $1));
+        addchild($$, newnode(Identifier, $1, @1.first_line, @1.first_column));
     }
 |   field_ids COMMA IDENTIFIER
     {
-        addchild($1, newnode(Identifier, $3));
+        addchild($1, newnode(Identifier, $3, @3.first_line, @3.first_column));
         $$ = $1;
     }
 ;
@@ -276,19 +268,19 @@ field_ids:
 method_decl:
     PUBLIC STATIC method_header method_body
     {
-        $$ = newnode(MethodDecl, NULL);
+        $$ = newnode(MethodDecl, NULL, $3->line, $3->column);
         addchild($$, $3);
         addchild($$, $4);
     }
 |   PUBLIC STATIC type IDENTIFIER LPAR error RPAR method_body
     {
         yyerrok;
-        $$ = newnode(MethodDecl, NULL);
+        $$ = newnode(MethodDecl, NULL, @4.first_line, @4.first_column);
 
-        struct node *header = newnode(MethodHeader, NULL);
+        struct node *header = newnode(MethodHeader, NULL, @4.first_line, @4.first_column);
         addchild(header, $3);
-        addchild(header, newnode(Identifier, $4));
-        addchild(header, newnode(MethodParams, NULL));
+        addchild(header, newnode(Identifier, $4, @4.first_line, @4.first_column));
+        addchild(header, newnode(MethodParams, NULL, @4.first_line, @4.first_column));
 
         addchild($$, header);
         addchild($$, $8);
@@ -296,12 +288,12 @@ method_decl:
 |   PUBLIC STATIC VOID IDENTIFIER LPAR error RPAR method_body
     {
         yyerrok;
-        $$ = newnode(MethodDecl, NULL);
+        $$ = newnode(MethodDecl, NULL, @4.first_line, @4.first_column);
 
-        struct node *header = newnode(MethodHeader, NULL);
-        addchild(header, newnode(Void, NULL));
-        addchild(header, newnode(Identifier, $4));
-        addchild(header, newnode(MethodParams, NULL));
+        struct node *header = newnode(MethodHeader, NULL, @4.first_line, @4.first_column);
+        addchild(header, newnode(Void, NULL, @3.first_line, @3.first_column));
+        addchild(header, newnode(Identifier, $4, @4.first_line, @4.first_column));
+        addchild(header, newnode(MethodParams, NULL, @4.first_line, @4.first_column));
 
         addchild($$, header);
         addchild($$, $8);
@@ -311,23 +303,23 @@ method_decl:
 method_header:
     type IDENTIFIER LPAR formal_params RPAR
     {
-        $$ = newnode(MethodHeader, NULL);
+        $$ = newnode(MethodHeader, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
-        addchild($$, newnode(Identifier, $2));
+        addchild($$, newnode(Identifier, $2, @2.first_line, @2.first_column));
         addchild($$, $4);
     }
 |   VOID IDENTIFIER LPAR formal_params RPAR
     {
-        $$ = newnode(MethodHeader, NULL);
-        addchild($$, newnode(Void, NULL));
-        addchild($$, newnode(Identifier, $2));
+        $$ = newnode(MethodHeader, NULL, @2.first_line, @2.first_column);
+        addchild($$, newnode(Void, NULL, @1.first_line, @1.first_column));
+        addchild($$, newnode(Identifier, $2, @2.first_line, @2.first_column));
         addchild($$, $4);
     }
 ;
 
 formal_params:
     {
-        $$ = newnode(MethodParams, NULL);
+        $$ = newnode(MethodParams, NULL, 0, 0);
     }
 |   param_list
 ;
@@ -335,7 +327,7 @@ formal_params:
 param_list:
     param_decl
     {
-        $$ = newnode(MethodParams, NULL);
+        $$ = newnode(MethodParams, NULL, $1->line, $1->column);
         addchild($$, $1);
     }
 |   param_list COMMA param_decl
@@ -348,22 +340,22 @@ param_list:
 param_decl:
     type IDENTIFIER
     {
-        $$ = newnode(ParamDecl, NULL);
+        $$ = newnode(ParamDecl, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
-        addchild($$, newnode(Identifier, $2));
+        addchild($$, newnode(Identifier, $2, @2.first_line, @2.first_column));
     }
 |   STRING LSQ RSQ IDENTIFIER
     {
-        $$ = newnode(ParamDecl, NULL);
-        addchild($$, newnode(StringArray, NULL));
-        addchild($$, newnode(Identifier, $4));
+        $$ = newnode(ParamDecl, NULL, @4.first_line, @4.first_column);
+        addchild($$, newnode(StringArray, NULL, @1.first_line, @1.first_column));
+        addchild($$, newnode(Identifier, $4, @4.first_line, @4.first_column));
     }
 ;
 
 method_body:
     LBRACE method_body_items RBRACE
     {
-        $$ = newnode(MethodBody, NULL);
+        $$ = newnode(MethodBody, NULL, @1.first_line, @1.first_column);
         append_holder($$, $2);
         free_holder_only($2);
     }
@@ -394,9 +386,9 @@ var_decl:
         $$ = make_holder();
         child = $2->children->next;
         while (child) {
-            struct node *decl = newnode(VarDecl, NULL);
+            struct node *decl = newnode(VarDecl, NULL, child->node->line, child->node->column);
             addchild(decl, clone_type_node($1));
-            addchild(decl, newnode(Identifier, child->node->token));
+            addchild(decl, newnode(Identifier, child->node->token, child->node->line, child->node->column));
             addchild($$, decl);
             child = child->next;
         }
@@ -409,11 +401,11 @@ var_ids:
     IDENTIFIER
     {
         $$ = make_holder();
-        addchild($$, newnode(Identifier, $1));
+        addchild($$, newnode(Identifier, $1, @1.first_line, @1.first_column));
     }
 |   var_ids COMMA IDENTIFIER
     {
-        addchild($1, newnode(Identifier, $3));
+        addchild($1, newnode(Identifier, $3, @3.first_line, @3.first_column));
         $$ = $1;
     }
 ;
@@ -422,17 +414,21 @@ stmt:
     LBRACE stmt_list RBRACE
     {
         $$ = build_block_from_holder($2);
+        if ($$->line == 0 && $$->column == 0) {
+            $$->line = @1.first_line;
+            $$->column = @1.first_column;
+        }
     }
 |   IF LPAR expr RPAR stmt %prec LOWER_THAN_ELSE
     {
-        $$ = newnode(If, NULL);
+        $$ = newnode(If, NULL, @1.first_line, @1.first_column);
         addchild($$, $3);
         addchild($$, $5);
-        addchild($$, newnode(Block, NULL));
+        addchild($$, newnode(Block, NULL, @1.first_line, @1.first_column));
     }
 |   IF LPAR expr RPAR stmt ELSE stmt
     {
-        $$ = newnode(If, NULL);
+        $$ = newnode(If, NULL, @1.first_line, @1.first_column);
         addchild($$, $3);
         addchild($$, $5);
         addchild($$, $7);
@@ -440,49 +436,49 @@ stmt:
 |   IF LPAR expr error stmt %prec LOWER_THAN_ELSE
     {
         yyerrok;
-        $$ = newnode(If, NULL);
+        $$ = newnode(If, NULL, @1.first_line, @1.first_column);
         addchild($$, $3);
         addchild($$, $5);
-        addchild($$, newnode(Block, NULL));
+        addchild($$, newnode(Block, NULL, @1.first_line, @1.first_column));
     }
 |   IF LPAR expr error stmt ELSE stmt
     {
         yyerrok;
-        $$ = newnode(If, NULL);
+        $$ = newnode(If, NULL, @1.first_line, @1.first_column);
         addchild($$, $3);
         addchild($$, $5);
         addchild($$, $7);
     }
 |   WHILE LPAR expr RPAR stmt
     {
-        $$ = newnode(While, NULL);
+        $$ = newnode(While, NULL, @1.first_line, @1.first_column);
         addchild($$, $3);
         addchild($$, $5);
     }
 |   RETURN expr SEMICOLON
     {
-        $$ = newnode(Return, NULL);
+        $$ = newnode(Return, NULL, @1.first_line, @1.first_column);
         addchild($$, $2);
     }
 |   RETURN SEMICOLON
     {
-        $$ = newnode(Return, NULL);
+        $$ = newnode(Return, NULL, @1.first_line, @1.first_column);
     }
 |   IDENTIFIER ASSIGN expr SEMICOLON
     {
-        $$ = newnode(Assign, NULL);
-        addchild($$, newnode(Identifier, $1));
+        $$ = newnode(Assign, NULL, @2.first_line, @2.first_column);
+        addchild($$, newnode(Identifier, $1, @1.first_line, @1.first_column));
         addchild($$, $3);
     }
 |   PRINT LPAR expr RPAR SEMICOLON
     {
-        $$ = newnode(Print, NULL);
+        $$ = newnode(Print, NULL, @1.first_line, @1.first_column);
         addchild($$, $3);
     }
 |   PRINT LPAR STRLIT RPAR SEMICOLON
     {
-        $$ = newnode(Print, NULL);
-        addchild($$, newnode(StrLit, $3));
+        $$ = newnode(Print, NULL, @1.first_line, @1.first_column);
+        addchild($$, newnode(StrLit, $3, @3.first_line, @3.first_column));
     }
 |   method_invocation SEMICOLON
     {
@@ -494,11 +490,11 @@ stmt:
     }
 |   SEMICOLON
     {
-        $$ = newnode(Block, NULL);
+        $$ = newnode(Block, NULL, @1.first_line, @1.first_column);
     }
 |   error SEMICOLON
     {
-        $$ = newnode(Block, NULL);
+        $$ = newnode(Block, NULL, @2.first_line, @2.first_column);
     }
 ;
 
@@ -521,8 +517,8 @@ expr:
 assign_expr:
     IDENTIFIER ASSIGN assign_expr
     {
-        $$ = newnode(Assign, NULL);
-        addchild($$, newnode(Identifier, $1));
+        $$ = newnode(Assign, NULL, @2.first_line, @2.first_column);
+        addchild($$, newnode(Identifier, $1, @1.first_line, @1.first_column));
         addchild($$, $3);
     }
 |   or_expr
@@ -531,7 +527,7 @@ assign_expr:
 or_expr:
     or_expr OR and_expr
     {
-        $$ = newnode(Or, NULL);
+        $$ = newnode(Or, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
         addchild($$, $3);
     }
@@ -541,7 +537,7 @@ or_expr:
 and_expr:
     and_expr AND xor_expr
     {
-        $$ = newnode(And, NULL);
+        $$ = newnode(And, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
         addchild($$, $3);
     }
@@ -551,7 +547,7 @@ and_expr:
 xor_expr:
     xor_expr XOR eq_expr
     {
-        $$ = newnode(Xor, NULL);
+        $$ = newnode(Xor, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
         addchild($$, $3);
     }
@@ -561,13 +557,13 @@ xor_expr:
 eq_expr:
     eq_expr EQ rel_expr
     {
-        $$ = newnode(Eq, NULL);
+        $$ = newnode(Eq, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
         addchild($$, $3);
     }
 |   eq_expr NE rel_expr
     {
-        $$ = newnode(Ne, NULL);
+        $$ = newnode(Ne, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
         addchild($$, $3);
     }
@@ -577,25 +573,25 @@ eq_expr:
 rel_expr:
     rel_expr LT shift_expr
     {
-        $$ = newnode(Lt, NULL);
+        $$ = newnode(Lt, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
         addchild($$, $3);
     }
 |   rel_expr GT shift_expr
     {
-        $$ = newnode(Gt, NULL);
+        $$ = newnode(Gt, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
         addchild($$, $3);
     }
 |   rel_expr LE shift_expr
     {
-        $$ = newnode(Le, NULL);
+        $$ = newnode(Le, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
         addchild($$, $3);
     }
 |   rel_expr GE shift_expr
     {
-        $$ = newnode(Ge, NULL);
+        $$ = newnode(Ge, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
         addchild($$, $3);
     }
@@ -605,13 +601,13 @@ rel_expr:
 shift_expr:
     shift_expr LSHIFT add_expr
     {
-        $$ = newnode(Lshift, NULL);
+        $$ = newnode(Lshift, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
         addchild($$, $3);
     }
 |   shift_expr RSHIFT add_expr
     {
-        $$ = newnode(Rshift, NULL);
+        $$ = newnode(Rshift, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
         addchild($$, $3);
     }
@@ -621,13 +617,13 @@ shift_expr:
 add_expr:
     add_expr PLUS mul_expr
     {
-        $$ = newnode(Add, NULL);
+        $$ = newnode(Add, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
         addchild($$, $3);
     }
 |   add_expr MINUS mul_expr
     {
-        $$ = newnode(Sub, NULL);
+        $$ = newnode(Sub, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
         addchild($$, $3);
     }
@@ -637,19 +633,19 @@ add_expr:
 mul_expr:
     mul_expr STAR unary_expr
     {
-        $$ = newnode(Mul, NULL);
+        $$ = newnode(Mul, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
         addchild($$, $3);
     }
 |   mul_expr DIV unary_expr
     {
-        $$ = newnode(Div, NULL);
+        $$ = newnode(Div, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
         addchild($$, $3);
     }
 |   mul_expr MOD unary_expr
     {
-        $$ = newnode(Mod, NULL);
+        $$ = newnode(Mod, NULL, @2.first_line, @2.first_column);
         addchild($$, $1);
         addchild($$, $3);
     }
@@ -659,17 +655,17 @@ mul_expr:
 unary_expr:
     NOT unary_expr
     {
-        $$ = newnode(Not, NULL);
+        $$ = newnode(Not, NULL, @1.first_line, @1.first_column);
         addchild($$, $2);
     }
 |   MINUS unary_expr
     {
-        $$ = newnode(Minus, NULL);
+        $$ = newnode(Minus, NULL, @1.first_line, @1.first_column);
         addchild($$, $2);
     }
 |   PLUS unary_expr
     {
-        $$ = newnode(Plus, NULL);
+        $$ = newnode(Plus, NULL, @1.first_line, @1.first_column);
         addchild($$, $2);
     }
 |   primary_expr
@@ -678,24 +674,24 @@ unary_expr:
 primary_expr:
     IDENTIFIER
     {
-        $$ = newnode(Identifier, $1);
+        $$ = newnode(Identifier, $1, @1.first_line, @1.first_column);
     }
 |   IDENTIFIER DOTLENGTH
     {
-        $$ = newnode(Length, NULL);
-        addchild($$, newnode(Identifier, $1));
+        $$ = newnode(Length, NULL, @2.first_line, @2.first_column);
+        addchild($$, newnode(Identifier, $1, @1.first_line, @1.first_column));
     }
 |   NATURAL
     {
-        $$ = newnode(Natural, $1);
+        $$ = newnode(Natural, $1, @1.first_line, @1.first_column);
     }
 |   DECIMAL
     {
-        $$ = newnode(Decimal, $1);
+        $$ = newnode(Decimal, $1, @1.first_line, @1.first_column);
     }
 |   BOOLLIT
     {
-        $$ = newnode(BoolLit, $1);
+        $$ = newnode(BoolLit, $1, @1.first_line, @1.first_column);
     }
 |   method_invocation
 |   parse_args
@@ -713,16 +709,16 @@ primary_expr:
 method_invocation:
     IDENTIFIER LPAR args_opt RPAR
     {
-        $$ = newnode(Call, NULL);
-        addchild($$, newnode(Identifier, $1));
+        $$ = newnode(Call, NULL, @1.first_line, @1.first_column);
+        addchild($$, newnode(Identifier, $1, @1.first_line, @1.first_column));
         append_holder($$, $3);
         free_holder_only($3);
     }
 |   IDENTIFIER LPAR error RPAR
     {
         yyerrok;
-        $$ = newnode(Call, NULL);
-        addchild($$, newnode(Identifier, $1));
+        $$ = newnode(Call, NULL, @1.first_line, @1.first_column);
+        addchild($$, newnode(Identifier, $1, @1.first_line, @1.first_column));
     }
 ;
 
@@ -749,8 +745,8 @@ expr_list:
 parse_args:
     PARSEINT LPAR IDENTIFIER LSQ expr RSQ RPAR
     {
-        $$ = newnode(ParseArgs, NULL);
-        addchild($$, newnode(Identifier, $3));
+        $$ = newnode(ParseArgs, NULL, @1.first_line, @1.first_column);
+        addchild($$, newnode(Identifier, $3, @3.first_line, @3.first_column));
         addchild($$, $5);
     }
 ;
@@ -758,15 +754,15 @@ parse_args:
 type:
     INT
     {
-        $$ = newnode(Int, NULL);
+        $$ = newnode(Int, NULL, @1.first_line, @1.first_column);
     }
 |   DOUBLE
     {
-        $$ = newnode(Double, NULL);
+        $$ = newnode(Double, NULL, @1.first_line, @1.first_column);
     }
 |   BOOL
     {
-        $$ = newnode(Bool, NULL);
+        $$ = newnode(Bool, NULL, @1.first_line, @1.first_column);
     }
 ;
 

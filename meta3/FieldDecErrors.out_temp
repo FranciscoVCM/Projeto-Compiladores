@@ -1,15 +1,16 @@
-Line 0, col 0: Symbol teste2 already defined
-Line 0, col 0: Cannot find symbol factorial
+Line 5, col 23: Symbol teste2 already defined
+Line 11, col 26: Cannot find symbol factorial(int)
+Line 11, col 26: Incompatible type undef in print statement
 ===== Class ClassTeste Symbol Table =====
-teste0	int
-teste1	int
-teste2	int
+teste0		int
+teste1		int
+teste2		int
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
-argument	int
+return		void
+args		String[]	param
+argument		int
 
 
 Program

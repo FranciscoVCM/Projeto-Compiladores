@@ -1,41 +1,42 @@
-Line 0, col 0: Symbol a already defined
-Line 0, col 0: Number 2147483648 out of bounds
-Line 0, col 0: Number 2147483649 out of bounds
-Line 0, col 0: Operator = cannot be applied to types int, boolean
-Line 0, col 0: Number 10_0000_00000 out of bounds
-Line 0, col 0: Cannot find symbol s
+Line 19, col 20: Symbol a already defined
+Line 5, col 8: Number 2147483648 out of bounds
+Line 15, col 8: Number 2147483649 out of bounds
+Line 16, col 6: Operator = cannot be applied to types int, boolean
+Line 21, col 8: Number 10_0000_00000 out of bounds
+Line 25, col 26: Cannot find symbol s
+Line 25, col 9: Operator Integer.parseInt cannot be applied to types undef, double
 ===== Class NoFlags Symbol Table =====
 a	(int)	int
 a	(double)	int
-a	(boolean, int, boolean)	int
+a	(boolean,int,boolean)	int
 a	(int)	int
 main	(String[])	void
 
 ===== Method a(int) Symbol Table =====
-return	int
-n	int	param
-a	int
+return		int
+n		int	param
+a		int
 
 ===== Method a(double) Symbol Table =====
-return	int
-n	double	param
-b	int
+return		int
+n		double	param
+b		int
 
-===== Method a(boolean, int, boolean) Symbol Table =====
-return	int
-n	boolean	param
-a	int	param
-c	boolean	param
-d	int
+===== Method a(boolean,int,boolean) Symbol Table =====
+return		int
+n		boolean	param
+a		int	param
+c		boolean	param
+d		int
 
 ===== Method a(int) Symbol Table =====
-return	int
-n	int	param
-d	int
+return		int
+n		int	param
+d		int
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
+return		void
+args		String[]	param
 
 
 Program
@@ -54,7 +55,7 @@ Program
 ........Identifier(a)
 ......Assign - int
 ........Identifier(a) - int
-........Natural(2147483648) - undef
+........Natural(2147483648) - int
 ..MethodDecl
 ....MethodHeader
 ......Int
@@ -90,7 +91,7 @@ Program
 ........Identifier(d)
 ......Assign - int
 ........Identifier(d) - int
-........Natural(2147483649) - undef
+........Natural(2147483649) - int
 ......Assign - int
 ........Identifier(d) - int
 ........Identifier(c) - boolean
@@ -108,7 +109,7 @@ Program
 ........Identifier(d)
 ......Assign - int
 ........Identifier(d) - int
-........Natural(10_0000_00000) - undef
+........Natural(10_0000_00000) - int
 ..MethodDecl
 ....MethodHeader
 ......Void
@@ -118,7 +119,7 @@ Program
 ..........StringArray
 ..........Identifier(args)
 ....MethodBody
-......ParseArgs - undef
+......ParseArgs - int
 ........Identifier(s) - undef
 ........Decimal(2.2) - double
 ......Print

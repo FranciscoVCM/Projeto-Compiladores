@@ -1,107 +1,197 @@
-// This file is part of the Petit compiler.
-// SPDX-License-Identifier: BSD-3-Clause
-
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "ast.h"
 
-// create a node of a given category with a given lexical symbol
-struct node *newnode(enum category category, char *token) {
+struct node *newnode4(enum category category, char *token, int line, int column) {
     struct node *new = malloc(sizeof(struct node));
     new->category = category;
-    new->token = token;
-    new->type = no_type;
-    new->children = newlist();
+    new->token = token ? strdup(token) : NULL;
+    new->type = none_type;
+    new->annotation = NULL;
+    new->line = line;
+    new->column = column;
+
+    new->children = malloc(sizeof(struct node_list));
+    new->children->node = NULL;
+    new->children->next = NULL;
+
     return new;
 }
 
-// append a node to the list of children of the parent node
+struct node *newnode2(enum category category, char *token) {
+    return newnode4(category, token, 0, 0);
+}
+
 void addchild(struct node *parent, struct node *child) {
+    if (!parent || !child) return;
+
     struct node_list *new = malloc(sizeof(struct node_list));
     new->node = child;
     new->next = NULL;
+
     struct node_list *children = parent->children;
-    while(children->next != NULL)
+    while (children->next != NULL)
         children = children->next;
+
     children->next = new;
 }
 
-// get a pointer to a specific child, numbered 0, 1, 2, ...
-struct node *getchild(struct node *parent, int position) {
-    struct node_list *children = parent->children;
-    while((children = children->next) != NULL)
-        if(position-- == 0)
-            return children->node;
-    return NULL;
+static const char *category_name[] = {
+    "Program",
+    "FieldDecl",
+    "VarDecl",
+    "MethodDecl",
+    "MethodHeader",
+    "MethodParams",
+    "ParamDecl",
+    "MethodBody",
+    "Block",
+    "If",
+    "While",
+    "Return",
+    "Call",
+    "Print",
+    "ParseArgs",
+    "Assign",
+    "Or",
+    "And",
+    "Eq",
+    "Ne",
+    "Lt",
+    "Gt",
+    "Le",
+    "Ge",
+    "Add",
+    "Sub",
+    "Mul",
+    "Div",
+    "Mod",
+    "Lshift",
+    "Rshift",
+    "Xor",
+    "Not",
+    "Minus",
+    "Plus",
+    "Length",
+    "Bool",
+    "BoolLit",
+    "Double",
+    "Decimal",
+    "Identifier",
+    "Int",
+    "Natural",
+    "StrLit",
+    "StringArray",
+    "Void"
+};
+
+const char *type_name(enum type type) {
+    switch (type) {
+        case integer_type: return "int";
+        case double_type: return "double";
+        case bool_type: return "boolean";
+        case string_array_type: return "String[]";
+        case void_type: return "void";
+        case undef_type: return "undef";
+        default: return "none";
+    }
 }
 
-// count the children of a node
-int countchildren(struct node *node) {
-    int i = 0;
-    while(getchild(node, i) != NULL)
-        i++;
-    return i;
+enum type category_to_type(enum category category) {
+    switch (category) {
+        case Int: return integer_type;
+        case Double: return double_type;
+        case Bool: return bool_type;
+        case StringArray: return string_array_type;
+        case Void: return void_type;
+        default: return none_type;
+    }
 }
 
-// create an empty list
-struct node_list *newlist() {
-    struct node_list *new = malloc(sizeof(struct node_list));
-    new->node = NULL;
-    new->next = NULL;
-    return new;
+int is_expression_node(enum category category) {
+    switch (category) {
+        case Call:
+        case ParseArgs:
+        case Assign:
+        case Or:
+        case And:
+        case Eq:
+        case Ne:
+        case Lt:
+        case Gt:
+        case Le:
+        case Ge:
+        case Add:
+        case Sub:
+        case Mul:
+        case Div:
+        case Mod:
+        case Lshift:
+        case Rshift:
+        case Xor:
+        case Not:
+        case Minus:
+        case Plus:
+        case Length:
+        case BoolLit:
+        case Decimal:
+        case Identifier:
+        case Natural:
+            return 1;
+        default:
+            return 0;
+    }
 }
 
-// append a node to a list of nodes
-void append(struct node_list *list, struct node *node) {
-    struct node_list *new = malloc(sizeof(struct node_list));
-    new->node = node;
-    new->next = NULL;
-    while(list->next != NULL)
-        list = list->next;
-    list->next = new;
-}
+static void print_annotation(struct node *node) {
+    if (!is_expression_node(node->category))
+        return;
 
-// append a list of nodes as children of the given node
-void addchildren(struct node *node, struct node_list *list) {
-    struct node_list *children = node->children;
-    while(children->next != NULL)
-        children = children->next;
-    children->next = list->next;
-    free(list);
-}
-
-// category names #defined in ast.h
-char *category_name[] = names;
-
-static int is_expression_node(enum category category) {
-    return category == Identifier ||
-           category == Natural ||
-           category == Decimal ||
-           category == Call ||
-           category == If ||
-           category == Add ||
-           category == Sub ||
-           category == Mul ||
-           category == Div;
-}
-
-// traverse the AST and print its content
-void show(struct node *node, int depth) {
-    int i;
-    for(i = 0; i < depth; i++)
-        printf("__");
-
-    if(node->token == NULL)
-        printf("%s", category_name[node->category]);
-    else
-        printf("%s(%s)", category_name[node->category], node->token);
-
-    if(is_expression_node(node->category))
+    if (node->annotation != NULL) {
+        printf(" - %s", node->annotation);
+    } else if (node->type != none_type) {
         printf(" - %s", type_name(node->type));
+    }
+}
 
+void print_ast(struct node *node, int depth) {
+    if (!node) return;
+
+    for (int i = 0; i < depth; i++)
+        printf("..");
+
+    if (node->token)
+        printf("%s(%s)", category_name[node->category], node->token);
+    else
+        printf("%s", category_name[node->category]);
+
+    print_annotation(node);
     printf("\n");
 
+    struct node_list *child = node->children->next;
+    while (child) {
+        print_ast(child->node, depth + 1);
+        child = child->next;
+    }
+}
+
+void free_ast(struct node *node) {
+    if (!node) return;
+
     struct node_list *child = node->children;
-    while((child = child->next) != NULL)
-        show(child->node, depth+1);
+    while (child) {
+        if (child->node)
+            free_ast(child->node);
+        struct node_list *tmp = child;
+        child = child->next;
+        free(tmp);
+    }
+
+    if (node->token)
+        free(node->token);
+    if (node->annotation)
+        free(node->annotation);
+
+    free(node);
 }

@@ -3,12 +3,12 @@ operators	(int)	int
 main	(String[])	void
 
 ===== Method operators(int) Symbol Table =====
-return	int
-n	int	param
+return		int
+n		int	param
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
+return		void
+args		String[]	param
 
 
 Program
@@ -36,13 +36,13 @@ Program
 ..........Identifier(args)
 ....MethodBody
 ......Call - int
-........Identifier(operators) - int
+........Identifier(operators)
 ........Call - int
-..........Identifier(operators) - int
+..........Identifier(operators)
 ..........Call - int
-............Identifier(operators) - int
+............Identifier(operators)
 ............Call - int
-..............Identifier(operators) - int
+..............Identifier(operators)
 ..............Call - int
-................Identifier(operators) - int
+................Identifier(operators)
 ................Natural(1) - int

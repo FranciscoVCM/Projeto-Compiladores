@@ -1,17 +1,19 @@
-Line 0, col 0: Cannot find symbol factorial
-Line 0, col 0: Cannot find symbol factorial
+Line 5, col 20: Cannot find symbol factorial(int)
+Line 5, col 18: Operator * cannot be applied to types int, undef
+Line 5, col 18: Incompatible type undef in return statement
+Line 10, col 3: Cannot find symbol factorial(int)
 ===== Class Factorial Symbol Table =====
-factorial	(int, int)	int
+factorial	(int,int)	int
 main	(String[])	void
 
-===== Method factorial(int, int) Symbol Table =====
-return	int
-n	int	param
-i	int	param
+===== Method factorial(int,int) Symbol Table =====
+return		int
+n		int	param
+i		int	param
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
+return		void
+args		String[]	param
 
 
 Program
@@ -53,7 +55,7 @@ Program
 ..........Identifier(args)
 ....MethodBody
 ......Call - int
-........Identifier(factorial) - int
+........Identifier(factorial)
 ........Natural(1) - int
 ........Natural(2) - int
 ......Call - undef

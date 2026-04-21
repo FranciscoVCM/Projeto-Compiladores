@@ -1,17 +1,19 @@
-Line 0, col 0: Operator .length cannot be applied to type int
-Line 0, col 0: Operator .length cannot be applied to type boolean
-Line 0, col 0: Operator .length cannot be applied to type double
-Line 0, col 0: Cannot find symbol undef
-Line 0, col 0: Operator .length cannot be applied to type int
+Line 8, col 14: Operator .length cannot be applied to type int
+Line 9, col 14: Operator .length cannot be applied to type boolean
+Line 10, col 14: Operator .length cannot be applied to type double
+Line 12, col 13: Cannot find symbol undef
+Line 12, col 18: Operator .length cannot be applied to type undef
+Line 14, col 14: Operator .length cannot be applied to type int
+Line 14, col 11: Operator = cannot be applied to types boolean, int
 ===== Class ClassTeste Symbol Table =====
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
-b	boolean
-i	int
-d	double
+return		void
+args		String[]	param
+b		boolean
+i		int
+d		double
 
 
 Program
@@ -36,15 +38,15 @@ Program
 ........Identifier(d)
 ......Assign - int
 ........Identifier(i) - int
-........Length - undef
+........Length - int
 ..........Identifier(i) - int
 ......Assign - int
 ........Identifier(i) - int
-........Length - undef
+........Length - int
 ..........Identifier(b) - boolean
 ......Assign - int
 ........Identifier(i) - int
-........Length - undef
+........Length - int
 ..........Identifier(d) - double
 ......Assign - int
 ........Identifier(i) - int
@@ -52,9 +54,9 @@ Program
 ..........Identifier(args) - String[]
 ......Assign - int
 ........Identifier(i) - int
-........Length - undef
+........Length - int
 ..........Identifier(undef) - undef
 ......Assign - boolean
 ........Identifier(b) - boolean
-........Length - undef
+........Length - int
 ..........Identifier(i) - int

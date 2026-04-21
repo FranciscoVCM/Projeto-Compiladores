@@ -1,15 +1,15 @@
-Line 0, col 0: Incompatible type void in print statement
+Line 7, col 26: Incompatible type void in print statement
 ===== Class Error Symbol Table =====
 a	(int)	void
 main	(String[])	void
 
 ===== Method a(int) Symbol Table =====
-return	void
-b	int	param
+return		void
+b		int	param
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
+return		void
+args		String[]	param
 
 
 Program
@@ -40,5 +40,5 @@ Program
 ....MethodBody
 ......Print
 ........Call - void
-..........Identifier(a) - void
+..........Identifier(a)
 ..........Natural(3) - int

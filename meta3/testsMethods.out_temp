@@ -1,51 +1,51 @@
-Line 0, col 0: Cannot find symbol W
-Line 0, col 0: Cannot find symbol f
-Line 0, col 0: Cannot find symbol f
-Line 0, col 0: Reference to method f is ambiguous
+Line 15, col 29: Cannot find symbol W
+Line 15, col 27: Cannot find symbol f(undef)
+Line 15, col 5: Cannot find symbol f(void,String[],int,undef)
+Line 16, col 5: Reference to method f is ambiguous
 ===== Class Alguns_Erros Symbol Table =====
-f	(int, double, double, double)	double
-f	(double, double, double, int)	double
+f	(int,double,double,double)	double
+f	(double,double,double,int)	double
 f	(double)	double
 f	(int)	double
-f	(double, int)	double
-f	(double, double)	double
+f	(double,int)	double
+f	(double,double)	double
 main	(String[])	void
 
-===== Method f(int, double, double, double) Symbol Table =====
-return	double
-a	int	param
-b	double	param
-c	double	param
-d	double	param
+===== Method f(int,double,double,double) Symbol Table =====
+return		double
+a		int	param
+b		double	param
+c		double	param
+d		double	param
 
-===== Method f(double, double, double, int) Symbol Table =====
-return	double
-b	double	param
-c	double	param
-d	double	param
-a	int	param
+===== Method f(double,double,double,int) Symbol Table =====
+return		double
+b		double	param
+c		double	param
+d		double	param
+a		int	param
 
 ===== Method f(double) Symbol Table =====
-return	double
-b	double	param
+return		double
+b		double	param
 
 ===== Method f(int) Symbol Table =====
-return	double
-b	int	param
+return		double
+b		int	param
 
-===== Method f(double, int) Symbol Table =====
-return	double
-b	double	param
-c	int	param
+===== Method f(double,int) Symbol Table =====
+return		double
+b		double	param
+c		int	param
 
-===== Method f(double, double) Symbol Table =====
-return	double
-b	double	param
-c	double	param
+===== Method f(double,double) Symbol Table =====
+return		double
+b		double	param
+c		double	param
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
+return		void
+args		String[]	param
 
 
 Program
@@ -140,7 +140,7 @@ Program
 ......Call - undef
 ........Identifier(f) - undef
 ........Call - void
-..........Identifier(main) - void
+..........Identifier(main)
 ..........Identifier(args) - String[]
 ........Identifier(args) - String[]
 ........Natural(1) - int

@@ -1,22 +1,23 @@
-Line 0, col 0: Operator % cannot be applied to types int, double
-Line 0, col 0: Cannot find symbol operators
+Line 10, col 12: Operator % cannot be applied to types int, double
+Line 10, col 10: Operator = cannot be applied to types double, undef
+Line 16, col 9: Cannot find symbol operators()
 ===== Class Factorial Symbol Table =====
 operators	(int)	int
 main	(String[])	void
 
 ===== Method operators(int) Symbol Table =====
-return	int
-n	int	param
-x	int
-b	int
-a	int
-y	double
-z	boolean
-t	boolean
+return		int
+n		int	param
+x		int
+b		int
+a		int
+y		double
+z		boolean
+t		boolean
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
+return		void
+args		String[]	param
 
 
 Program

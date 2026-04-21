@@ -1,22 +1,30 @@
-Line 0, col 0: Operator = cannot be applied to types int, double
-Line 0, col 0: Operator = cannot be applied to types int, double
-Line 0, col 0: Operator + cannot be applied to types int, boolean
-Line 0, col 0: Operator - cannot be applied to types int, boolean
-Line 0, col 0: Operator + cannot be applied to types int, String[]
-Line 0, col 0: Operator - cannot be applied to types int, String[]
-Line 0, col 0: Operator + cannot be applied to types int, boolean
-Line 0, col 0: Operator - cannot be applied to types int, boolean
-Line 0, col 0: Operator + cannot be applied to types int, String[]
-Line 0, col 0: Operator - cannot be applied to types int, String[]
+Line 14, col 11: Operator = cannot be applied to types int, double
+Line 15, col 11: Operator = cannot be applied to types int, double
+Line 17, col 15: Operator + cannot be applied to types int, boolean
+Line 17, col 11: Operator = cannot be applied to types int, undef
+Line 18, col 15: Operator - cannot be applied to types int, boolean
+Line 18, col 11: Operator = cannot be applied to types int, undef
+Line 20, col 15: Operator + cannot be applied to types int, String[]
+Line 20, col 11: Operator = cannot be applied to types int, undef
+Line 21, col 15: Operator - cannot be applied to types int, String[]
+Line 21, col 11: Operator = cannot be applied to types int, undef
+Line 29, col 15: Operator + cannot be applied to types int, boolean
+Line 29, col 11: Operator = cannot be applied to types double, undef
+Line 30, col 15: Operator - cannot be applied to types int, boolean
+Line 30, col 11: Operator = cannot be applied to types double, undef
+Line 32, col 15: Operator + cannot be applied to types int, String[]
+Line 32, col 11: Operator = cannot be applied to types double, undef
+Line 33, col 15: Operator - cannot be applied to types int, String[]
+Line 33, col 11: Operator = cannot be applied to types double, undef
 ===== Class sub_2_pewdiepie Symbol Table =====
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
-i	int
-d	double
-b	boolean
+return		void
+args		String[]	param
+i		int
+d		double
+b		boolean
 
 
 Program
