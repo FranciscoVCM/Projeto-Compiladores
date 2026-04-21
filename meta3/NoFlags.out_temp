@@ -11,29 +11,29 @@ a	(boolean, int, boolean)	int
 a	(int)	int
 main	(String[])	void
 
-===== Method a (int) Symbol Table =====
+===== Method a(int) Symbol Table =====
 return	int
 n	int	param
 a	int
 
-===== Method a (double) Symbol Table =====
+===== Method a(double) Symbol Table =====
 return	int
 n	double	param
 b	int
 
-===== Method a (boolean, int, boolean) Symbol Table =====
+===== Method a(boolean, int, boolean) Symbol Table =====
 return	int
 n	boolean	param
 a	int	param
 c	boolean	param
 d	int
 
-===== Method a (int) Symbol Table =====
+===== Method a(int) Symbol Table =====
 return	int
 n	int	param
 d	int
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 
@@ -52,7 +52,7 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(a)
-......Assign - undef
+......Assign - int
 ........Identifier(a) - int
 ........Natural(2147483648) - undef
 ..MethodDecl
@@ -88,10 +88,10 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(d)
-......Assign - undef
+......Assign - int
 ........Identifier(d) - int
 ........Natural(2147483649) - undef
-......Assign - undef
+......Assign - int
 ........Identifier(d) - int
 ........Identifier(c) - boolean
 ..MethodDecl
@@ -106,7 +106,7 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(d)
-......Assign - undef
+......Assign - int
 ........Identifier(d) - int
 ........Natural(10_0000_00000) - undef
 ..MethodDecl

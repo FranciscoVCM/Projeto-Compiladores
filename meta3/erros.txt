@@ -1,0 +1,13 @@
+ativar yydebug=1 no main
+ter a flag dyydebug ativar
+#define YYDEBUG
+tem um teste que depois do string args tem um parantese ) que da erro e nao devia
+parece que no debug da print 2 vezes
+ 
+
+segundo erro nao temos o identificador depois da virgula e depois nao fechamos o } no in2
+entao da o syntax error na ,
+isto para a funcao localvar_error
+int a,   b,;;
+no nosso caso ele mostra o primeiro erro depois do ponto e vírgula e nao esta a recuperar, por exemplo com duas virgulas depois da ;; errada nao recupera o erro para na chaveta } algumas linhas abaixo reparar e dizer esse erro
+no class_body error semicolon 

@@ -5,18 +5,18 @@ factorial	(int, int, double)	int
 main	(String[])	void
 noArguments	void
 
-===== Method factorial (int, int, double) Symbol Table =====
+===== Method factorial(int, int, double) Symbol Table =====
 return	int
 n	int	param
 x	int	param
 y	double	param
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 argument	int
 
-===== Method noArguments () Symbol Table =====
+===== Method noArguments() Symbol Table =====
 return	void
 
 

@@ -3,11 +3,11 @@ Line 0, col 0: Incompatible type void in print statement
 a	(int)	void
 main	(String[])	void
 
-===== Method a (int) Symbol Table =====
+===== Method a(int) Symbol Table =====
 return	void
 b	int	param
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 

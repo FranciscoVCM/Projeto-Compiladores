@@ -1,11 +1,9 @@
-Line 0, col 0: Operator + cannot be applied to types int, double
-Line 0, col 0: Operator - cannot be applied to types int, double
+Line 0, col 0: Operator = cannot be applied to types int, double
+Line 0, col 0: Operator = cannot be applied to types int, double
 Line 0, col 0: Operator + cannot be applied to types int, boolean
 Line 0, col 0: Operator - cannot be applied to types int, boolean
 Line 0, col 0: Operator + cannot be applied to types int, String[]
 Line 0, col 0: Operator - cannot be applied to types int, String[]
-Line 0, col 0: Operator + cannot be applied to types int, double
-Line 0, col 0: Operator - cannot be applied to types int, double
 Line 0, col 0: Operator + cannot be applied to types int, boolean
 Line 0, col 0: Operator - cannot be applied to types int, boolean
 Line 0, col 0: Operator + cannot be applied to types int, String[]
@@ -13,7 +11,7 @@ Line 0, col 0: Operator - cannot be applied to types int, String[]
 ===== Class sub_2_pewdiepie Symbol Table =====
 main	(String[])	void
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 i	int
@@ -60,32 +58,32 @@ Program
 ........Sub - int
 ..........Identifier(i) - int
 ..........Identifier(i) - int
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
-........Add - undef
+........Add - double
 ..........Identifier(i) - int
 ..........Identifier(d) - double
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
-........Sub - undef
+........Sub - double
 ..........Identifier(i) - int
 ..........Identifier(d) - double
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Add - undef
 ..........Identifier(i) - int
 ..........Identifier(b) - boolean
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Sub - undef
 ..........Identifier(i) - int
 ..........Identifier(b) - boolean
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Add - undef
 ..........Identifier(i) - int
 ..........Identifier(args) - String[]
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Sub - undef
 ..........Identifier(i) - int
@@ -100,32 +98,32 @@ Program
 ........Sub - int
 ..........Identifier(i) - int
 ..........Identifier(i) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
-........Add - undef
+........Add - double
 ..........Identifier(i) - int
 ..........Identifier(d) - double
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
-........Sub - undef
+........Sub - double
 ..........Identifier(i) - int
 ..........Identifier(d) - double
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Add - undef
 ..........Identifier(i) - int
 ..........Identifier(b) - boolean
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Sub - undef
 ..........Identifier(i) - int
 ..........Identifier(b) - boolean
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Add - undef
 ..........Identifier(i) - int
 ..........Identifier(args) - String[]
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Sub - undef
 ..........Identifier(i) - int

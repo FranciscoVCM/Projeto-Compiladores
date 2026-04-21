@@ -9,7 +9,7 @@ Line 0, col 0: Incompatible type double in return statement
 ===== Class teste Symbol Table =====
 xd	(String[])	void
 
-===== Method xd (String[]) Symbol Table =====
+===== Method xd(String[]) Symbol Table =====
 return	void
 args	String[]	param
 d	int

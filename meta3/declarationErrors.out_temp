@@ -17,18 +17,18 @@ underscore	(int)	int
 factorial	(int, int)	void
 factorial	(int, int, int)	void
 
-===== Method underscore (int) Symbol Table =====
+===== Method underscore(int) Symbol Table =====
 return	int
 ola	int	param
 
-===== Method factorial (int, int) Symbol Table =====
+===== Method factorial(int, int) Symbol Table =====
 return	void
 i	int	param
 argument	int
 a	int
 _	double
 
-===== Method factorial (int, int, int) Symbol Table =====
+===== Method factorial(int, int, int) Symbol Table =====
 return	void
 i	int	param
 _	int	param

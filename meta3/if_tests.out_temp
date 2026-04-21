@@ -5,7 +5,7 @@ Line 0, col 0: Incompatible type int in if statement
 ===== Class if_tests Symbol Table =====
 main	(String[])	void
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 a	int

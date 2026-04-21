@@ -1,9 +1,9 @@
 Line 0, col 0: Operator + cannot be applied to types int, boolean
-Line 0, col 0: Operator + cannot be applied to types int, double
+Line 0, col 0: Operator = cannot be applied to types int, double
 ===== Class Java Symbol Table =====
 a	int
 
-===== Method a () Symbol Table =====
+===== Method a() Symbol Table =====
 return	int
 a	int
 b	int
@@ -21,14 +21,14 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(a)
-......Assign - undef
+......Assign - int
 ........Identifier(a) - int
 ........Add - undef
 ..........Identifier(b) - int
 ..........BoolLit(true) - boolean
-......Assign - undef
+......Assign - int
 ........Identifier(a) - int
-........Add - undef
+........Add - double
 ..........Identifier(b) - int
 ..........Decimal(1.0_43443) - double
 ......Assign - int

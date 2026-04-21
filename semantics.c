@@ -426,9 +426,13 @@ static enum type check_binary_numeric(struct node *expr, struct method_scope *sc
         return expr->type;
     }
 
-    if (allow_double && left == double_type && right == double_type) {
-        expr->type = double_type;
-        return expr->type;
+    if (allow_double) {
+        if ((left == double_type && right == double_type) ||
+            (left == double_type && right == integer_type) ||
+            (left == integer_type && right == double_type)) {
+            expr->type = double_type;
+            return expr->type;
+        }
     }
 
     semantic_error_op2(expr, op, left, right);
@@ -501,8 +505,13 @@ static enum type check_expression(struct node *expr, struct method_scope *scope)
             enum type ltype = check_expression(lhs, scope);
             enum type rtype = check_expression(rhs, scope);
 
-            if (ltype == undef_type || rtype == undef_type) {
+            if (ltype == undef_type) {
                 expr->type = undef_type;
+                return expr->type;
+            }
+
+            if (rtype == undef_type) {
+                expr->type = ltype;
                 return expr->type;
             }
 
@@ -510,11 +519,11 @@ static enum type check_expression(struct node *expr, struct method_scope *scope)
                 expr->type = ltype;
                 return expr->type;
             }
-
+        
             semantic_error_op2(expr, "=", ltype, rtype);
-            expr->type = undef_type;
+            expr->type = ltype;
             return expr->type;
-        }
+}
 
         case Add:
             return check_binary_numeric(expr, scope, "+", 1);
@@ -533,43 +542,45 @@ static enum type check_expression(struct node *expr, struct method_scope *scope)
             return check_binary_numeric(expr, scope, ">>", 0);
 
         case Lt:
-        case Gt:
-        case Le:
-        case Ge: {
-            enum type left = check_expression(get_child(expr, 0), scope);
-            enum type right = check_expression(get_child(expr, 1), scope);
+case Gt:
+case Le:
+case Ge: {
+    enum type left = check_expression(get_child(expr, 0), scope);
+    enum type right = check_expression(get_child(expr, 1), scope);
 
-            if (left == undef_type || right == undef_type) {
-                expr->type = undef_type;
-            } else if ((left == integer_type && right == integer_type) ||
-                       (left == double_type && right == double_type)) {
-                expr->type = bool_type;
-            } else {
-                const char *op =
-                    expr->category == Lt ? "<" :
-                    expr->category == Gt ? ">" :
-                    expr->category == Le ? "<=" : ">=";
-                semantic_error_op2(expr, op, left, right);
-                expr->type = undef_type;
-            }
-            return expr->type;
-        }
+    if (left == undef_type || right == undef_type) {
+        expr->type = undef_type;
+    } else if ((left == integer_type || left == double_type) &&
+               (right == integer_type || right == double_type)) {
+        expr->type = bool_type;
+    } else {
+        const char *op =
+            expr->category == Lt ? "<" :
+            expr->category == Gt ? ">" :
+            expr->category == Le ? "<=" : ">=";
+        semantic_error_op2(expr, op, left, right);
+        expr->type = undef_type;
+    }
+    return expr->type;
+}
 
         case Eq:
-        case Ne: {
-            enum type left = check_expression(get_child(expr, 0), scope);
-            enum type right = check_expression(get_child(expr, 1), scope);
+case Ne: {
+    enum type left = check_expression(get_child(expr, 0), scope);
+    enum type right = check_expression(get_child(expr, 1), scope);
 
-            if (left == undef_type || right == undef_type) {
-                expr->type = undef_type;
-            } else if (left == right) {
-                expr->type = bool_type;
-            } else {
-                semantic_error_op2(expr, expr->category == Eq ? "==" : "!=", left, right);
-                expr->type = undef_type;
-            }
-            return expr->type;
-        }
+    if (left == undef_type || right == undef_type) {
+        expr->type = undef_type;
+    } else if (left == right ||
+               ((left == integer_type || left == double_type) &&
+                (right == integer_type || right == double_type))) {
+        expr->type = bool_type;
+    } else {
+        semantic_error_op2(expr, expr->category == Eq ? "==" : "!=", left, right);
+        expr->type = undef_type;
+    }
+    return expr->type;
+}
 
         case And:
         case Or:
@@ -779,7 +790,7 @@ static void print_global_table(void) {
 static void print_method_table(struct method_scope *scope) {
     struct symbol_list *s;
 
-    printf("===== Method %s ", scope->name);
+    printf("===== Method %s", scope->name);
     print_param_list(scope->params);
     printf(" Symbol Table =====\n");
 

@@ -9,7 +9,7 @@ Line 0, col 0: Operator ^ cannot be applied to types int, int
 ===== Class while_errors Symbol Table =====
 main	(String[])	void
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 i	int

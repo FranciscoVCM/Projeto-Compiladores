@@ -4,7 +4,7 @@ Line 0, col 0: Operator ^ cannot be applied to types double, double
 ===== Class ClassTeste Symbol Table =====
 main	(String[])	void
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 b	boolean
@@ -104,17 +104,17 @@ Program
 ............BoolLit(true) - boolean
 ..........Not - boolean
 ............BoolLit(true) - boolean
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Xor - undef
 ..........Natural(10) - int
 ..........Natural(10) - int
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Xor - boolean
 ..........BoolLit(true) - boolean
 ..........BoolLit(true) - boolean
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Xor - undef
 ..........Decimal(10.0) - double

@@ -1,6 +1,4 @@
 Line 0, col 0: Operator = cannot be applied to types double, boolean
-Line 0, col 0: Operator * cannot be applied to types int, double
-Line 0, col 0: Operator * cannot be applied to types int, double
 Line 0, col 0: Operator * cannot be applied to types int, boolean
 Line 0, col 0: Cannot find symbol fun_di
 Line 0, col 0: Cannot find symbol fun_di
@@ -13,24 +11,24 @@ fun_dd	(double, double)	int
 fun_di	(double, int)	int
 fun_ii	(int, int)	int
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 i	int
 d	double
 b	boolean
 
-===== Method fun_dd (double, double) Symbol Table =====
+===== Method fun_dd(double, double) Symbol Table =====
 return	int
 a	double	param
 b	double	param
 
-===== Method fun_di (double, int) Symbol Table =====
+===== Method fun_di(double, int) Symbol Table =====
 return	int
 a	double	param
 b	int	param
 
-===== Method fun_ii (int, int) Symbol Table =====
+===== Method fun_ii(int, int) Symbol Table =====
 return	int
 a	int	param
 b	int	param
@@ -65,7 +63,7 @@ Program
 ......Assign - double
 ........Identifier(d) - double
 ........Identifier(i) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Identifier(b) - boolean
 ......Assign - double
@@ -73,17 +71,17 @@ Program
 ........Mul - int
 ..........Identifier(i) - int
 ..........Natural(1) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
-........Mul - undef
+........Mul - double
 ..........Identifier(i) - int
 ..........Decimal(1.1) - double
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
-........Mul - undef
+........Mul - double
 ..........Identifier(i) - int
 ..........Identifier(d) - double
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Mul - undef
 ..........Identifier(i) - int
@@ -118,13 +116,13 @@ Program
 ..........Identifier(fun_di) - int
 ..........Decimal(1.0) - double
 ..........Natural(1) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Call - undef
 ..........Identifier(fun_di) - undef
 ..........Natural(1) - int
 ..........Decimal(1.0) - double
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Call - undef
 ..........Identifier(fun_di) - undef
@@ -136,19 +134,19 @@ Program
 ..........Identifier(fun_ii) - int
 ..........Natural(1) - int
 ..........Natural(1) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Call - undef
 ..........Identifier(fun_ii) - undef
 ..........Decimal(1.0) - double
 ..........Natural(1) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Call - undef
 ..........Identifier(fun_ii) - undef
 ..........Natural(1) - int
 ..........Decimal(1.0) - double
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Call - undef
 ..........Identifier(fun_ii) - undef

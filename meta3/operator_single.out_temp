@@ -11,7 +11,7 @@ main	(String[])	void
 f	(int, double)	void
 f	(double, int)	void
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 i	int
@@ -19,12 +19,12 @@ d	double
 b	boolean
 tamanho	int
 
-===== Method f (int, double) Symbol Table =====
+===== Method f(int, double) Symbol Table =====
 return	void
 a	int	param
 b	double	param
 
-===== Method f (double, int) Symbol Table =====
+===== Method f(double, int) Symbol Table =====
 return	void
 a	double	param
 b	int	param
@@ -57,7 +57,7 @@ Program
 ........Identifier(i) - int
 ........Plus - int
 ..........Natural(5) - int
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Plus - double
 ..........Decimal(2.0) - double
@@ -69,11 +69,11 @@ Program
 ........Identifier(d) - double
 ........Plus - double
 ..........Decimal(2.0) - double
-......Assign - undef
+......Assign - boolean
 ........Identifier(b) - boolean
 ........Plus - undef
 ..........BoolLit(false) - boolean
-......Assign - undef
+......Assign - boolean
 ........Identifier(b) - boolean
 ........Plus - undef
 ..........BoolLit(true) - boolean
@@ -84,19 +84,19 @@ Program
 ........Identifier(tamanho) - int
 ........Length - int
 ..........Identifier(args) - String[]
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Length - undef
 ..........Identifier(i) - int
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Length - undef
 ..........Identifier(d) - double
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Not - undef
 ..........Identifier(i) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Not - undef
 ..........Identifier(d) - double

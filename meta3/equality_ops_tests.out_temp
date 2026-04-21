@@ -1,14 +1,12 @@
-Line 0, col 0: Operator == cannot be applied to types int, double
 Line 0, col 0: Operator == cannot be applied to types int, boolean
 Line 0, col 0: Operator == cannot be applied to types double, boolean
-Line 0, col 0: Operator != cannot be applied to types int, double
 Line 0, col 0: Operator != cannot be applied to types int, boolean
 Line 0, col 0: Operator != cannot be applied to types double, boolean
 Line 0, col 0: Operator != cannot be applied to types String[], int
 ===== Class equality_or_equity_question_mark Symbol Table =====
 main	(String[])	void
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 i	int
@@ -82,7 +80,7 @@ Program
 ........Block
 ........Block
 ......If
-........Eq - undef
+........Eq - boolean
 ..........Identifier(i) - int
 ..........Identifier(d) - double
 ........Block
@@ -136,7 +134,7 @@ Program
 ........Block
 ........Block
 ......If
-........Ne - undef
+........Ne - boolean
 ..........Identifier(i) - int
 ..........Identifier(d) - double
 ........Block

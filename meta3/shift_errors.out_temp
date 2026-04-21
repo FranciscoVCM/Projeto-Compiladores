@@ -16,13 +16,13 @@ Line 0, col 0: Operator << cannot be applied to types boolean, boolean
 valid	(String[])	void
 main	(String[])	void
 
-===== Method valid (String[]) Symbol Table =====
+===== Method valid(String[]) Symbol Table =====
 return	void
 args	String[]	param
 x	int
 b	int
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 i	int
@@ -82,72 +82,72 @@ Program
 ........Lshift - int
 ..........Identifier(i) - int
 ..........Natural(1) - int
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Lshift - undef
 ..........Identifier(i) - int
 ..........Decimal(1.1) - double
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Lshift - undef
 ..........Identifier(i) - int
 ..........BoolLit(true) - boolean
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Lshift - undef
 ..........Identifier(d) - double
 ..........Natural(1) - int
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Lshift - undef
 ..........Identifier(d) - double
 ..........Natural(1) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Lshift - undef
 ..........Identifier(d) - double
 ..........Decimal(1.1) - double
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Lshift - undef
 ..........Identifier(d) - double
 ..........Decimal(1.1) - double
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Lshift - undef
 ..........Identifier(d) - double
 ..........BoolLit(true) - boolean
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Lshift - undef
 ..........Identifier(d) - double
 ..........BoolLit(true) - boolean
-......Assign - undef
+......Assign - boolean
 ........Identifier(b) - boolean
 ........Lshift - undef
 ..........Identifier(b) - boolean
 ..........Natural(1) - int
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Lshift - undef
 ..........Identifier(b) - boolean
 ..........Natural(1) - int
-......Assign - undef
+......Assign - boolean
 ........Identifier(b) - boolean
 ........Lshift - undef
 ..........Identifier(b) - boolean
 ..........Decimal(1.1) - double
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Lshift - undef
 ..........Identifier(b) - boolean
 ..........Decimal(1.1) - double
-......Assign - undef
+......Assign - boolean
 ........Identifier(b) - boolean
 ........Lshift - undef
 ..........Identifier(b) - boolean
 ..........BoolLit(true) - boolean
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Lshift - undef
 ..........Identifier(b) - boolean

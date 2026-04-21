@@ -5,16 +5,16 @@ a	(int, int)	void
 a	(int, int)	void
 main	(String[])	void
 
-===== Method a (int, int) Symbol Table =====
+===== Method a(int, int) Symbol Table =====
 return	void
 a	int	param
 b	int	param
 
-===== Method a (int, int) Symbol Table =====
+===== Method a(int, int) Symbol Table =====
 return	void
 a	int	param
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 

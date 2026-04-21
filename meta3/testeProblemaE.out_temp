@@ -8,10 +8,10 @@ Line 0, col 0: Symbol ola56 already defined
 Line 0, col 0: Operator + cannot be applied to types boolean, boolean
 Line 0, col 0: Operator = cannot be applied to types boolean, int
 Line 0, col 0: Operator = cannot be applied to types boolean, int
-Line 0, col 0: Operator / cannot be applied to types double, int
-Line 0, col 0: Operator / cannot be applied to types double, int
-Line 0, col 0: Operator / cannot be applied to types double, int
-Line 0, col 0: Operator + cannot be applied to types int, double
+Line 0, col 0: Operator % cannot be applied to types double, int
+Line 0, col 0: Operator % cannot be applied to types double, int
+Line 0, col 0: Operator % cannot be applied to types double, int
+Line 0, col 0: Operator Integer.parseInt cannot be applied to types boolean, double
 ===== Class Java Symbol Table =====
 funcao2	(String[])	void
 x	(double, int)	double
@@ -30,7 +30,7 @@ funcao	(int, int)	int
 maine	void
 ola56	(int)	int
 
-===== Method funcao2 (String[]) Symbol Table =====
+===== Method funcao2(String[]) Symbol Table =====
 return	void
 args	String[]	param
 a	boolean
@@ -38,41 +38,41 @@ b	boolean
 c	int
 d	int
 
-===== Method x (double, int) Symbol Table =====
+===== Method x(double, int) Symbol Table =====
 return	double
 x	double	param
 a	int	param
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 x	int
 b	int
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 x	int
 
-===== Method funcao3 (int, int, double) Symbol Table =====
+===== Method funcao3(int, int, double) Symbol Table =====
 return	int
 a	int	param
 b	int	param
 c	double	param
 
-===== Method funcao3 (int, int, double) Symbol Table =====
+===== Method funcao3(int, int, double) Symbol Table =====
 return	int
 a	int	param
 b	int	param
 c	double	param
 
-===== Method funcao3 (int, int, double) Symbol Table =====
+===== Method funcao3(int, int, double) Symbol Table =====
 return	int
 a	int	param
 b	int	param
 c	double	param
 
-===== Method funcao3 (int, int, boolean) Symbol Table =====
+===== Method funcao3(int, int, boolean) Symbol Table =====
 return	boolean
 a	int	param
 b	int	param
@@ -82,27 +82,27 @@ y	int
 z	int
 w	int
 
-===== Method funcao (int, double) Symbol Table =====
+===== Method funcao(int, double) Symbol Table =====
 return	int
 i	int	param
 
-===== Method funcao (double, int) Symbol Table =====
+===== Method funcao(double, int) Symbol Table =====
 return	void
 i	double	param
 funcao	int	param
 m	boolean
 
-===== Method funcao (double, double) Symbol Table =====
+===== Method funcao(double, double) Symbol Table =====
 return	double
 i	double	param
 funcao	double	param
 m	int
 
-===== Method funcao (int, int) Symbol Table =====
+===== Method funcao(int, int) Symbol Table =====
 return	int
 i	int	param
 
-===== Method maine () Symbol Table =====
+===== Method maine() Symbol Table =====
 return	void
 a	int
 b	int
@@ -117,7 +117,7 @@ j	boolean
 k	boolean
 l	boolean
 
-===== Method ola56 (int) Symbol Table =====
+===== Method ola56(int) Symbol Table =====
 return	int
 x1	int	param
 
@@ -169,7 +169,7 @@ Program
 ........Print
 ..........StrLit("olaaaa\n")
 ........Block
-......Assign - undef
+......Assign - boolean
 ........Identifier(a) - boolean
 ........Length - int
 ..........Identifier(args) - String[]
@@ -219,7 +219,7 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(x)
-......Assign - undef
+......Assign - boolean
 ........Identifier(a) - boolean
 ........Identifier(x) - int
 ..FieldDecl
@@ -408,43 +408,43 @@ Program
 ......VarDecl
 ........Bool
 ........Identifier(l)
-......Assign - undef
+......Assign - boolean
 ........Identifier(k) - boolean
 ........Add - undef
 ..........Add - int
 ............Natural(1) - int
 ............Natural(1) - int
 ..........Mod - undef
-............Mul - undef
-..............Div - undef
+............Mul - double
+..............Div - double
 ................Identifier(e) - double
 ................Natural(4) - int
 ..............Minus - double
 ................Decimal(4.3) - double
 ............Natural(10) - int
-......Assign - undef
+......Assign - int
 ........Identifier(a) - int
 ........Add - undef
 ..........Add - int
 ............Natural(1) - int
 ............Natural(1) - int
 ..........Mod - undef
-............Mul - undef
-..............Div - undef
+............Mul - double
+..............Div - double
 ................Identifier(e) - double
 ................Natural(4) - int
 ..............Minus - double
 ................Decimal(4.3) - double
 ............Natural(10) - int
-......Assign - undef
+......Assign - int
 ........Identifier(b) - int
 ........Add - undef
 ..........Add - int
 ............Natural(1) - int
 ............Natural(1) - int
 ..........Mod - undef
-............Mul - undef
-..............Div - undef
+............Mul - double
+..............Div - double
 ................Identifier(e) - double
 ................Natural(4) - int
 ..............Minus - double
@@ -460,12 +460,12 @@ Program
 ..................Not - boolean
 ....................Not - boolean
 ......................Identifier(l) - boolean
-......Assign - undef
+......Assign - double
 ........Identifier(f) - double
 ........ParseArgs - undef
 ..........Identifier(i) - boolean
-..........Add - undef
-............Add - undef
+..........Add - double
+............Add - double
 ..............Natural(1) - int
 ..............Decimal(1.0) - double
 ............Natural(2) - int

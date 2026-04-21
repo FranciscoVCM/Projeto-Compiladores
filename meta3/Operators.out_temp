@@ -1,10 +1,9 @@
-Line 0, col 0: Operator + cannot be applied to types double, int
 Line 0, col 0: Cannot find symbol operators
 ===== Class Factorial Symbol Table =====
 operators	(int)	int
 main	(String[])	void
 
-===== Method operators (int) Symbol Table =====
+===== Method operators(int) Symbol Table =====
 return	int
 n	int	param
 x	int
@@ -12,7 +11,7 @@ b	int
 a	int
 y	double
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 
@@ -50,11 +49,11 @@ Program
 ........Mul - int
 ..........Identifier(x) - int
 ..........Identifier(a) - int
-......Assign - undef
+......Assign - double
 ........Identifier(y) - double
-........Mul - undef
+........Mul - double
 ..........Identifier(x) - int
-..........Add - undef
+..........Add - double
 ............Decimal(1.0) - double
 ............Identifier(b) - int
 ..MethodDecl

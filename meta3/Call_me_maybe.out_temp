@@ -11,58 +11,58 @@ f	(int, double, boolean, int)	boolean
 f	(double, int, double, int)	int
 f	(int, double, int, double)	double
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 i	int
 d	double
 b	boolean
 
-===== Method f () Symbol Table =====
+===== Method f() Symbol Table =====
 return	void
 
-===== Method f (boolean) Symbol Table =====
+===== Method f(boolean) Symbol Table =====
 return	int
 a	boolean	param
 
-===== Method f (double) Symbol Table =====
+===== Method f(double) Symbol Table =====
 return	boolean
 a	double	param
 
-===== Method f (int) Symbol Table =====
+===== Method f(int) Symbol Table =====
 return	double
 a	int	param
 
-===== Method f (String[]) Symbol Table =====
+===== Method f(String[]) Symbol Table =====
 return	void
 a	String[]	param
 
-===== Method f (int, double) Symbol Table =====
+===== Method f(int, double) Symbol Table =====
 return	boolean
 a	int	param
 b	double	param
 
-===== Method f (int, double, boolean) Symbol Table =====
+===== Method f(int, double, boolean) Symbol Table =====
 return	boolean
 a	int	param
 b	double	param
 c	boolean	param
 
-===== Method f (int, double, boolean, int) Symbol Table =====
+===== Method f(int, double, boolean, int) Symbol Table =====
 return	boolean
 a	int	param
 b	double	param
 c	boolean	param
 d	int	param
 
-===== Method f (double, int, double, int) Symbol Table =====
+===== Method f(double, int, double, int) Symbol Table =====
 return	int
 a	double	param
 b	int	param
 c	double	param
 d	int	param
 
-===== Method f (int, double, int, double) Symbol Table =====
+===== Method f(int, double, int, double) Symbol Table =====
 return	double
 a	int	param
 b	double	param

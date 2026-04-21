@@ -1,9 +1,7 @@
 Line 0, col 0: Operator % cannot be applied to types double, double
-Line 0, col 0: Operator * cannot be applied to types double, int
-Line 0, col 0: Operator / cannot be applied to types double, int
 Line 0, col 0: Operator % cannot be applied to types double, int
-Line 0, col 0: Operator * cannot be applied to types double, int
-Line 0, col 0: Operator / cannot be applied to types double, int
+Line 0, col 0: Operator = cannot be applied to types int, double
+Line 0, col 0: Operator = cannot be applied to types int, double
 Line 0, col 0: Operator % cannot be applied to types double, int
 Line 0, col 0: Operator * cannot be applied to types double, boolean
 Line 0, col 0: Operator / cannot be applied to types double, boolean
@@ -14,7 +12,7 @@ Line 0, col 0: Operator % cannot be applied to types double, String[]
 ===== Class mult Symbol Table =====
 main	(String[])	void
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 i	int
@@ -76,67 +74,67 @@ Program
 ........Div - double
 ..........Identifier(d) - double
 ..........Identifier(d) - double
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Mod - undef
 ..........Identifier(d) - double
 ..........Identifier(d) - double
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
-........Mul - undef
+........Mul - double
 ..........Identifier(d) - double
 ..........Identifier(i) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
-........Div - undef
+........Div - double
 ..........Identifier(d) - double
 ..........Identifier(i) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Mod - undef
 ..........Identifier(d) - double
 ..........Identifier(i) - int
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
-........Mul - undef
+........Mul - double
 ..........Identifier(d) - double
 ..........Identifier(i) - int
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
-........Div - undef
+........Div - double
 ..........Identifier(d) - double
 ..........Identifier(i) - int
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Mod - undef
 ..........Identifier(d) - double
 ..........Identifier(i) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Mul - undef
 ..........Identifier(d) - double
 ..........Identifier(b) - boolean
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Div - undef
 ..........Identifier(d) - double
 ..........Identifier(b) - boolean
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Mod - undef
 ..........Identifier(d) - double
 ..........Identifier(b) - boolean
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Mul - undef
 ..........Identifier(d) - double
 ..........Identifier(args) - String[]
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Div - undef
 ..........Identifier(d) - double
 ..........Identifier(args) - String[]
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Mod - undef
 ..........Identifier(d) - double

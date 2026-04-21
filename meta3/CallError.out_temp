@@ -4,12 +4,12 @@ Line 0, col 0: Cannot find symbol factorial
 factorial	(int, int)	int
 main	(String[])	void
 
-===== Method factorial (int, int) Symbol Table =====
+===== Method factorial(int, int) Symbol Table =====
 return	int
 n	int	param
 i	int	param
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 

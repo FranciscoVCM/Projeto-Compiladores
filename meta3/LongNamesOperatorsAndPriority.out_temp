@@ -1,29 +1,6 @@
-Line 0, col 0: Operator + cannot be applied to types double, int
-Line 0, col 0: Operator - cannot be applied to types double, int
-Line 0, col 0: Operator * cannot be applied to types double, int
-Line 0, col 0: Operator / cannot be applied to types double, int
 Line 0, col 0: Operator % cannot be applied to types double, int
-Line 0, col 0: Operator + cannot be applied to types int, double
-Line 0, col 0: Operator - cannot be applied to types int, double
-Line 0, col 0: Operator * cannot be applied to types int, double
-Line 0, col 0: Operator / cannot be applied to types int, double
 Line 0, col 0: Operator % cannot be applied to types int, double
-Line 0, col 0: Operator > cannot be applied to types int, double
-Line 0, col 0: Operator >= cannot be applied to types int, double
-Line 0, col 0: Operator < cannot be applied to types int, double
-Line 0, col 0: Operator <= cannot be applied to types int, double
-Line 0, col 0: Operator == cannot be applied to types int, double
-Line 0, col 0: Operator != cannot be applied to types int, double
-Line 0, col 0: Operator > cannot be applied to types double, int
-Line 0, col 0: Operator >= cannot be applied to types double, int
-Line 0, col 0: Operator < cannot be applied to types double, int
-Line 0, col 0: Operator <= cannot be applied to types double, int
-Line 0, col 0: Operator == cannot be applied to types double, int
-Line 0, col 0: Operator != cannot be applied to types double, int
-Line 0, col 0: Operator + cannot be applied to types double, int
-Line 0, col 0: Operator - cannot be applied to types int, double
 Line 0, col 0: Operator % cannot be applied to types int, double
-Line 0, col 0: Operator + cannot be applied to types int, double
 ===== Class LocalVariables Symbol Table =====
 factorial_mas_com_muitos_mais_carateres_para_ver_se_a_memoria_esta_bem	int
 factorial_mas_com_muitos_mais_carateres_para_ver_se_a_memoria_esta_bem	(int, int, double)	void
@@ -32,14 +9,14 @@ operators2	(int, int)	int
 n	boolean
 priority	(String[])	void
 
-===== Method factorial_mas_com_muitos_mais_carateres_para_ver_se_a_memoria_esta_bem (int, int, double) Symbol Table =====
+===== Method factorial_mas_com_muitos_mais_carateres_para_ver_se_a_memoria_esta_bem(int, int, double) Symbol Table =====
 return	void
 n	int	param
 x	int	param
 y	double	param
 local_mas_com_muitos_mais_carateres_para_ver_se_a_memoria_esta_bem	int
 
-===== Method operators (int, int) Symbol Table =====
+===== Method operators(int, int) Symbol Table =====
 return	int
 n	int	param
 x	int	param
@@ -50,7 +27,7 @@ d	double
 e	boolean
 f	boolean
 
-===== Method operators2 (int, int) Symbol Table =====
+===== Method operators2(int, int) Symbol Table =====
 return	int
 n	int	param
 x	int	param
@@ -61,7 +38,7 @@ d	double
 e	boolean
 f	boolean
 
-===== Method priority (String[]) Symbol Table =====
+===== Method priority(String[]) Symbol Table =====
 return	void
 args	String[]	param
 n	double
@@ -189,52 +166,52 @@ Program
 ........Mod - int
 ..........Identifier(a) - int
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
-........Add - undef
+........Add - double
 ..........Identifier(c) - double
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
-........Sub - undef
+........Sub - double
 ..........Identifier(c) - double
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
-........Mul - undef
+........Mul - double
 ..........Identifier(c) - double
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
-........Div - undef
+........Div - double
 ..........Identifier(c) - double
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
 ........Mod - undef
 ..........Identifier(c) - double
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
-........Add - undef
+........Add - double
 ..........Identifier(b) - int
 ..........Identifier(c) - double
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
-........Sub - undef
+........Sub - double
 ..........Identifier(b) - int
 ..........Identifier(c) - double
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
-........Mul - undef
+........Mul - double
 ..........Identifier(b) - int
 ..........Identifier(c) - double
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
-........Div - undef
+........Div - double
 ..........Identifier(b) - int
 ..........Identifier(c) - double
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
 ........Mod - undef
 ..........Identifier(b) - int
@@ -264,64 +241,64 @@ Program
 ........Mod - int
 ..........Identifier(a) - int
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - boolean
 ........Identifier(e) - boolean
-........Gt - undef
+........Gt - boolean
 ..........Identifier(a) - int
 ..........Identifier(c) - double
-......Assign - undef
+......Assign - boolean
 ........Identifier(e) - boolean
-........Ge - undef
+........Ge - boolean
 ..........Identifier(a) - int
 ..........Identifier(c) - double
-......Assign - undef
+......Assign - boolean
 ........Identifier(e) - boolean
-........Lt - undef
+........Lt - boolean
 ..........Identifier(a) - int
 ..........Identifier(c) - double
-......Assign - undef
+......Assign - boolean
 ........Identifier(e) - boolean
-........Le - undef
+........Le - boolean
 ..........Identifier(a) - int
 ..........Identifier(c) - double
-......Assign - undef
+......Assign - boolean
 ........Identifier(e) - boolean
-........Eq - undef
+........Eq - boolean
 ..........Identifier(a) - int
 ..........Identifier(c) - double
-......Assign - undef
+......Assign - boolean
 ........Identifier(e) - boolean
-........Ne - undef
+........Ne - boolean
 ..........Identifier(a) - int
 ..........Identifier(c) - double
-......Assign - undef
+......Assign - boolean
 ........Identifier(e) - boolean
-........Gt - undef
+........Gt - boolean
 ..........Identifier(c) - double
 ..........Identifier(a) - int
-......Assign - undef
+......Assign - boolean
 ........Identifier(e) - boolean
-........Ge - undef
+........Ge - boolean
 ..........Identifier(c) - double
 ..........Identifier(a) - int
-......Assign - undef
+......Assign - boolean
 ........Identifier(e) - boolean
-........Lt - undef
+........Lt - boolean
 ..........Identifier(c) - double
 ..........Identifier(a) - int
-......Assign - undef
+......Assign - boolean
 ........Identifier(e) - boolean
-........Le - undef
+........Le - boolean
 ..........Identifier(c) - double
 ..........Identifier(a) - int
-......Assign - undef
+......Assign - boolean
 ........Identifier(e) - boolean
-........Eq - undef
+........Eq - boolean
 ..........Identifier(c) - double
 ..........Identifier(a) - int
-......Assign - undef
+......Assign - boolean
 ........Identifier(e) - boolean
-........Ne - undef
+........Ne - boolean
 ..........Identifier(c) - double
 ..........Identifier(a) - int
 ......Return
@@ -380,14 +357,14 @@ Program
 ........Mul - int
 ..........Natural(2) - int
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
-........Add - undef
+........Add - double
 ..........Decimal(2.0) - double
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
-........Sub - undef
+........Sub - double
 ..........Identifier(a) - int
 ..........Decimal(2.0) - double
 ......Assign - double
@@ -400,7 +377,7 @@ Program
 ........Div - int
 ..........Identifier(a) - int
 ..........Natural(2) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
 ........Mod - undef
 ..........Natural(2) - int
@@ -441,9 +418,9 @@ Program
 ......Assign - double
 ........Identifier(n) - double
 ........Natural(0) - int
-......Assign - undef
+......Assign - double
 ........Identifier(n) - double
-........Add - undef
+........Add - double
 ..........Identifier(a) - int
 ..........Identifier(n) - double
 ......Assign - double

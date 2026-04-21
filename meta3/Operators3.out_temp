@@ -1,13 +1,11 @@
-Line 0, col 0: Operator == cannot be applied to types double, int
-Line 0, col 0: Operator <= cannot be applied to types double, int
 ===== Class Sum Symbol Table =====
 operator	void
 main	void
 
-===== Method operator () Symbol Table =====
+===== Method operator() Symbol Table =====
 return	void
 
-===== Method main () Symbol Table =====
+===== Method main() Symbol Table =====
 return	void
 a	int
 b	int
@@ -62,13 +60,13 @@ Program
 ............Identifier(a) - int
 ............Identifier(b) - int
 ..........If
-............Eq - undef
+............Eq - boolean
 ..............Identifier(d) - double
 ..............Identifier(b) - int
-............Assign - undef
+............Assign - boolean
 ..............Identifier(x) - boolean
-..............Or - undef
-................Le - undef
+..............Or - boolean
+................Le - boolean
 ..................Mul - double
 ....................Identifier(d) - double
 ....................Identifier(e) - double

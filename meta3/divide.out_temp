@@ -3,7 +3,7 @@ num	int
 den	int
 main	(String[])	void
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 quo	int

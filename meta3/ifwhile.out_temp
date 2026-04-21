@@ -4,7 +4,7 @@ i	int
 d	double
 main	(String[])	void
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 bl	boolean

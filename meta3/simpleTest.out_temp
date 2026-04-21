@@ -1,7 +1,7 @@
 Line 0, col 0: Operator = cannot be applied to types int, double
 Line 0, col 0: Operator = cannot be applied to types int, double
-Line 0, col 0: Operator * cannot be applied to types int, double
-Line 0, col 0: Operator == cannot be applied to types int, double
+Line 0, col 0: Operator = cannot be applied to types int, double
+Line 0, col 0: Operator = cannot be applied to types int, boolean
 Line 0, col 0: Operator * cannot be applied to types String[], String[]
 Line 0, col 0: Operator && cannot be applied to types String[], String[]
 Line 0, col 0: Operator * cannot be applied to types String[], int
@@ -10,11 +10,8 @@ Line 0, col 0: Operator < cannot be applied to types String[], int
 Line 0, col 0: Operator < cannot be applied to types boolean, int
 Line 0, col 0: Operator == cannot be applied to types String[], double
 Line 0, col 0: Operator && cannot be applied to types String[], String[]
-Line 0, col 0: Operator + cannot be applied to types int, double
+Line 0, col 0: Operator = cannot be applied to types int, double
 Line 0, col 0: Operator % cannot be applied to types int, double
-Line 0, col 0: Operator > cannot be applied to types int, double
-Line 0, col 0: Operator == cannot be applied to types int, double
-Line 0, col 0: Operator >= cannot be applied to types int, double
 Line 0, col 0: Operator > cannot be applied to types String[], int
 Line 0, col 0: Cannot find symbol main
 Line 0, col 0: Incompatible type String[] in return statement
@@ -26,21 +23,21 @@ main	(String[])	int
 one	int
 two	double
 
-===== Method main2 () Symbol Table =====
+===== Method main2() Symbol Table =====
 return	double
 a	int
 b	double
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	int
 args	String[]	param
 argument	int
 iterator	double
 
-===== Method one () Symbol Table =====
+===== Method one() Symbol Table =====
 return	int
 
-===== Method two () Symbol Table =====
+===== Method two() Symbol Table =====
 return	double
 
 
@@ -58,22 +55,22 @@ Program
 ......VarDecl
 ........Double
 ........Identifier(b)
-......Assign - undef
+......Assign - int
 ........Identifier(a) - int
 ........Identifier(b) - double
-......Assign - undef
+......Assign - double
 ........Identifier(b) - double
-........Assign - undef
+........Assign - int
 ..........Identifier(a) - int
 ..........Identifier(b) - double
-......Assign - undef
+......Assign - int
 ........Identifier(a) - int
-........Mul - undef
+........Mul - double
 ..........Identifier(a) - int
 ..........Identifier(b) - double
-......Assign - undef
+......Assign - int
 ........Identifier(a) - int
-........Eq - undef
+........Eq - boolean
 ..........Identifier(a) - int
 ..........Identifier(b) - double
 ......Return
@@ -93,7 +90,7 @@ Program
 ......VarDecl
 ........Double
 ........Identifier(iterator)
-......Assign - undef
+......Assign - String[]
 ........Identifier(args) - String[]
 ........Or - undef
 ..........Add - undef
@@ -104,7 +101,7 @@ Program
 ..........And - undef
 ............Identifier(args) - String[]
 ............Identifier(args) - String[]
-......Assign - undef
+......Assign - String[]
 ........Identifier(args) - String[]
 ........Or - undef
 ..........Add - undef
@@ -117,7 +114,7 @@ Program
 ..........And - undef
 ............BoolLit(true) - boolean
 ............Identifier(args) - String[]
-......Assign - undef
+......Assign - String[]
 ........Identifier(args) - String[]
 ........Ne - undef
 ..........Eq - undef
@@ -130,7 +127,7 @@ Program
 ................Identifier(args) - String[]
 ............BoolLit(true) - boolean
 ..........Identifier(args) - String[]
-......Assign - undef
+......Assign - String[]
 ........Identifier(args) - String[]
 ........And - undef
 ..........And - undef
@@ -145,7 +142,7 @@ Program
 ............Call - int
 ..............Identifier(main) - int
 ..............Identifier(args) - String[]
-......Assign - undef
+......Assign - String[]
 ........Identifier(args) - String[]
 ........Or - undef
 ..........And - undef
@@ -155,9 +152,9 @@ Program
 ......Assign - String[]
 ........Identifier(args) - String[]
 ........Identifier(args) - String[]
-......Assign - undef
+......Assign - int
 ........Identifier(argument) - int
-........Add - undef
+........Add - double
 ..........Mul - int
 ............Natural(1) - int
 ............Identifier(argument) - int
@@ -170,7 +167,7 @@ Program
 ............Length - int
 ..............Identifier(args) - String[]
 ............Natural(1) - int
-......Assign - undef
+......Assign - int
 ........Identifier(argument) - int
 ........Add - undef
 ..........Mul - int
@@ -185,19 +182,19 @@ Program
 ........Identifier(iterator) - double
 ........Identifier(argument) - int
 ......If
-........Gt - undef
+........Gt - boolean
 ..........Identifier(argument) - int
 ..........Identifier(iterator) - double
 ........Block
 ........Block
 ......If
-........Eq - undef
+........Eq - boolean
 ..........Identifier(argument) - int
 ..........Identifier(iterator) - double
 ........Block
 ........Block
 ......If
-........Ge - undef
+........Ge - boolean
 ..........Identifier(argument) - int
 ..........Identifier(iterator) - double
 ........Block

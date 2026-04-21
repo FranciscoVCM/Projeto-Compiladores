@@ -6,7 +6,7 @@ Line 0, col 0: Operator .length cannot be applied to type int
 ===== Class ClassTeste Symbol Table =====
 main	(String[])	void
 
-===== Method main (String[]) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return	void
 args	String[]	param
 b	boolean
@@ -34,15 +34,15 @@ Program
 ......VarDecl
 ........Double
 ........Identifier(d)
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Length - undef
 ..........Identifier(i) - int
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Length - undef
 ..........Identifier(b) - boolean
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Length - undef
 ..........Identifier(d) - double
@@ -50,11 +50,11 @@ Program
 ........Identifier(i) - int
 ........Length - int
 ..........Identifier(args) - String[]
-......Assign - undef
+......Assign - int
 ........Identifier(i) - int
 ........Length - undef
 ..........Identifier(undef) - undef
-......Assign - undef
+......Assign - boolean
 ........Identifier(b) - boolean
 ........Length - undef
 ..........Identifier(i) - int

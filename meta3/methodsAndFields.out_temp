@@ -5,7 +5,6 @@ Line 0, col 0: Symbol b already defined
 Line 0, col 0: Symbol e already defined
 Line 0, col 0: Operator = cannot be applied to types int, boolean
 Line 0, col 0: Incompatible type int in return statement
-Line 0, col 0: Operator / cannot be applied to types double, int
 ===== Class newClass Symbol Table =====
 i	int
 b	boolean
@@ -16,7 +15,7 @@ a	void
 test	(int, int, double, boolean, boolean)	double
 sum	(int, int)	int
 
-===== Method main (int, int, double) Symbol Table =====
+===== Method main(int, int, double) Symbol Table =====
 return	int
 a	int	param
 c	int	param
@@ -24,7 +23,7 @@ d	double	param
 b	boolean
 i1	int
 
-===== Method a (int, int, boolean) Symbol Table =====
+===== Method a(int, int, boolean) Symbol Table =====
 return	void
 a	int	param
 b	int	param
@@ -33,10 +32,10 @@ d	int
 i	int
 f	double
 
-===== Method a () Symbol Table =====
+===== Method a() Symbol Table =====
 return	void
 
-===== Method test (int, int, double, boolean, boolean) Symbol Table =====
+===== Method test(int, int, double, boolean, boolean) Symbol Table =====
 return	double
 a	int	param
 b	int	param
@@ -46,7 +45,7 @@ c	int
 d	int
 finalI	int
 
-===== Method sum (int, int) Symbol Table =====
+===== Method sum(int, int) Symbol Table =====
 return	int
 k	int	param
 j	int	param
@@ -113,7 +112,7 @@ Program
 ......VarDecl
 ........Bool
 ........Identifier(b)
-......Assign - undef
+......Assign - int
 ........Identifier(b) - int
 ........BoolLit(true) - boolean
 ......VarDecl
@@ -180,7 +179,7 @@ Program
 ..........Natural(2) - int
 ..........Natural(3) - int
 ......Return
-........Div - undef
+........Div - double
 ..........Mul - double
 ............Decimal(0.02) - double
 ............Decimal(0.03) - double
