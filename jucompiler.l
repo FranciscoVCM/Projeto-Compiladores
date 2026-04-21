@@ -254,6 +254,13 @@ alnum      [a-zA-Z0-9_$]
 "++" { if(print_tokens) printf("RESERVED(++)\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return INC; }
 "--" { if(print_tokens) printf("RESERVED(--)\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return DEC; }
 
+"System.out." {
+    printf("Line %d, col %d: illegal character (.)\n", line, column + 6);
+    last_lex_error_line = line;
+    printf("Line %d, col %d: illegal character (.)\n", line, column + 10);
+    last_lex_error_line = line;
+    column += yyleng;
+}
 "System.out.print" { TOKEN("PRINT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return PRINT; }
 "Integer.parseInt" { TOKEN("PARSEINT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return PARSEINT; }
 ".length"          { TOKEN("DOTLENGTH"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return DOTLENGTH; }

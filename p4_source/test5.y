@@ -138,7 +138,6 @@ static struct node *build_block_from_holder(struct node *holder) {
     free_holder_only(holder);
     return result;
 }
-
 void yyerror(char *s) {
     syntax_errors = 1;
 
@@ -154,6 +153,7 @@ void yyerror(char *s) {
     printf("Line %d, col %d: syntax error: %s\n", token_line, token_column, token_text);
     syntax_error_count++;
 }
+
 %}
 
 %union {
@@ -289,14 +289,6 @@ method_header:
         addchild($$, newnode(Identifier, $2));
         addchild($$, $4);
     }
-|   type IDENTIFIER LPAR error RPAR
-    {
-        yyerrok;
-        $$ = newnode(MethodHeader, NULL);
-        addchild($$, $1);
-        addchild($$, newnode(Identifier, $2));
-        addchild($$, newnode(MethodParams, NULL));
-    }
 |   VOID IDENTIFIER LPAR error RPAR
     {
         yyerrok;
@@ -345,13 +337,6 @@ param_decl:
 method_body:
     LBRACE method_body_items RBRACE
     {
-        $$ = newnode(MethodBody, NULL);
-        append_holder($$, $2);
-        free_holder_only($2);
-    }
-|   LBRACE method_body_items error RBRACE
-    {
-        yyerrok;
         $$ = newnode(MethodBody, NULL);
         append_holder($$, $2);
         free_holder_only($2);
@@ -486,13 +471,16 @@ stmt:
     {
         $$ = $1;
     }
+|   expr SEMICOLON
+    {
+        $$ = $1;
+    }
 |   SEMICOLON
     {
         $$ = newnode(Block, NULL);
     }
 |   error SEMICOLON
     {
-        yyerrok;
         $$ = newnode(Block, NULL);
     }
 ;

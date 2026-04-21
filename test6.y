@@ -289,22 +289,6 @@ method_header:
         addchild($$, newnode(Identifier, $2));
         addchild($$, $4);
     }
-|   type IDENTIFIER LPAR error RPAR
-    {
-        yyerrok;
-        $$ = newnode(MethodHeader, NULL);
-        addchild($$, $1);
-        addchild($$, newnode(Identifier, $2));
-        addchild($$, newnode(MethodParams, NULL));
-    }
-|   VOID IDENTIFIER LPAR error RPAR
-    {
-        yyerrok;
-        $$ = newnode(MethodHeader, NULL);
-        addchild($$, newnode(Void, NULL));
-        addchild($$, newnode(Identifier, $2));
-        addchild($$, newnode(MethodParams, NULL));
-    }
 ;
 
 formal_params:
@@ -356,6 +340,11 @@ method_body:
         append_holder($$, $2);
         free_holder_only($2);
     }
+|   LBRACE error RBRACE
+    {
+        yyerrok;
+        $$ = newnode(MethodBody, NULL);
+    }
 ;
 
 method_body_items:
@@ -372,11 +361,6 @@ method_body_items:
     {
         if (!is_empty_block($2))
             addchild($1, $2);
-        $$ = $1;
-    }
-|   method_body_items error SEMICOLON
-    {
-        yyerrok;
         $$ = $1;
     }
 ;
