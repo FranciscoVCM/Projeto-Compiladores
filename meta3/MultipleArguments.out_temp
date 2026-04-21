@@ -36,20 +36,20 @@ Program
 ..........Identifier(y)
 ....MethodBody
 ......If
-........Eq
-..........Identifier(n)
-..........Natural(0)
+........Eq - boolean
+..........Identifier(n) - int
+..........Natural(0) - int
 ........Return
-..........Natural(1)
+..........Natural(1) - int
 ........Block
 ......Return
-........Mul
-..........Identifier(n)
-..........Call
-............Identifier(factorial)
-............Sub
-..............Identifier(n)
-..............Natural(1)
+........Mul - undef
+..........Identifier(n) - int
+..........Call - undef
+............Identifier(factorial) - undef
+............Sub - int
+..............Identifier(n) - int
+..............Natural(1) - int
 ..MethodDecl
 ....MethodHeader
 ......Void
@@ -62,15 +62,15 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(argument)
-......Assign
-........Identifier(argument)
-........ParseArgs
-..........Identifier(args)
-..........Natural(0)
+......Assign - int
+........Identifier(argument) - int
+........ParseArgs - int
+..........Identifier(args) - String[]
+..........Natural(0) - int
 ......Print
-........Call
-..........Identifier(factorial)
-..........Identifier(argument)
+........Call - undef
+..........Identifier(factorial) - undef
+..........Identifier(argument) - int
 ..MethodDecl
 ....MethodHeader
 ......Void

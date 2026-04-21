@@ -29,102 +29,102 @@ Program
 ......VarDecl
 ........Bool
 ........Identifier(b)
-......Assign
-........Identifier(i)
-........Natural(1)
-......Assign
-........Identifier(d)
-........Decimal(1.1)
-......Assign
-........Identifier(b)
-........BoolLit(true)
-......Assign
-........Identifier(i)
-........Mul
-..........Identifier(i)
-..........Identifier(i)
-......Assign
-........Identifier(i)
-........Div
-..........Identifier(i)
-..........Identifier(i)
-......Assign
-........Identifier(i)
-........Mod
-..........Identifier(i)
-..........Identifier(i)
-......Assign
-........Identifier(d)
-........Mul
-..........Identifier(d)
-..........Identifier(d)
-......Assign
-........Identifier(d)
-........Div
-..........Identifier(d)
-..........Identifier(d)
-......Assign
-........Identifier(d)
-........Mod
-..........Identifier(d)
-..........Identifier(d)
-......Assign
-........Identifier(d)
-........Mul
-..........Identifier(d)
-..........Identifier(i)
-......Assign
-........Identifier(d)
-........Div
-..........Identifier(d)
-..........Identifier(i)
-......Assign
-........Identifier(d)
-........Mod
-..........Identifier(d)
-..........Identifier(i)
-......Assign
-........Identifier(i)
-........Mul
-..........Identifier(d)
-..........Identifier(i)
-......Assign
-........Identifier(i)
-........Div
-..........Identifier(d)
-..........Identifier(i)
-......Assign
-........Identifier(i)
-........Mod
-..........Identifier(d)
-..........Identifier(i)
-......Assign
-........Identifier(d)
-........Mul
-..........Identifier(d)
-..........Identifier(b)
-......Assign
-........Identifier(d)
-........Div
-..........Identifier(d)
-..........Identifier(b)
-......Assign
-........Identifier(d)
-........Mod
-..........Identifier(d)
-..........Identifier(b)
-......Assign
-........Identifier(d)
-........Mul
-..........Identifier(d)
-..........Identifier(args)
-......Assign
-........Identifier(d)
-........Div
-..........Identifier(d)
-..........Identifier(args)
-......Assign
-........Identifier(d)
-........Mod
-..........Identifier(d)
-..........Identifier(args)
+......Assign - int
+........Identifier(i) - int
+........Natural(1) - int
+......Assign - double
+........Identifier(d) - double
+........Decimal(1.1) - double
+......Assign - boolean
+........Identifier(b) - boolean
+........BoolLit(true) - boolean
+......Assign - int
+........Identifier(i) - int
+........Mul - int
+..........Identifier(i) - int
+..........Identifier(i) - int
+......Assign - int
+........Identifier(i) - int
+........Div - int
+..........Identifier(i) - int
+..........Identifier(i) - int
+......Assign - int
+........Identifier(i) - int
+........Mod - int
+..........Identifier(i) - int
+..........Identifier(i) - int
+......Assign - double
+........Identifier(d) - double
+........Mul - double
+..........Identifier(d) - double
+..........Identifier(d) - double
+......Assign - double
+........Identifier(d) - double
+........Div - double
+..........Identifier(d) - double
+..........Identifier(d) - double
+......Assign - double
+........Identifier(d) - double
+........Mod - double
+..........Identifier(d) - double
+..........Identifier(d) - double
+......Assign - undef
+........Identifier(d) - double
+........Mul - undef
+..........Identifier(d) - double
+..........Identifier(i) - int
+......Assign - undef
+........Identifier(d) - double
+........Div - undef
+..........Identifier(d) - double
+..........Identifier(i) - int
+......Assign - undef
+........Identifier(d) - double
+........Mod - undef
+..........Identifier(d) - double
+..........Identifier(i) - int
+......Assign - undef
+........Identifier(i) - int
+........Mul - undef
+..........Identifier(d) - double
+..........Identifier(i) - int
+......Assign - undef
+........Identifier(i) - int
+........Div - undef
+..........Identifier(d) - double
+..........Identifier(i) - int
+......Assign - undef
+........Identifier(i) - int
+........Mod - undef
+..........Identifier(d) - double
+..........Identifier(i) - int
+......Assign - undef
+........Identifier(d) - double
+........Mul - undef
+..........Identifier(d) - double
+..........Identifier(b) - boolean
+......Assign - undef
+........Identifier(d) - double
+........Div - undef
+..........Identifier(d) - double
+..........Identifier(b) - boolean
+......Assign - undef
+........Identifier(d) - double
+........Mod - undef
+..........Identifier(d) - double
+..........Identifier(b) - boolean
+......Assign - undef
+........Identifier(d) - double
+........Mul - undef
+..........Identifier(d) - double
+..........Identifier(args) - String[]
+......Assign - undef
+........Identifier(d) - double
+........Div - undef
+..........Identifier(d) - double
+..........Identifier(args) - String[]
+......Assign - undef
+........Identifier(d) - double
+........Mod - undef
+..........Identifier(d) - double
+..........Identifier(args) - String[]

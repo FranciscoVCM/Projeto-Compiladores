@@ -19,34 +19,34 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(a)
-......Assign
-........Identifier(a)
-........Add
-..........Identifier(b)
-..........BoolLit(true)
-......Assign
-........Identifier(a)
-........Add
-..........Identifier(b)
-..........Decimal(1.0_43443)
-......Assign
-........Identifier(a)
-........Add
-..........Identifier(b)
-..........Natural(1)
-......Assign
-........Identifier(a)
-........Add
-..........Identifier(b)
-..........Identifier(c)
+......Assign - undef
+........Identifier(a) - int
+........Add - undef
+..........Identifier(b) - int
+..........BoolLit(true) - boolean
+......Assign - undef
+........Identifier(a) - int
+........Add - undef
+..........Identifier(b) - int
+..........Decimal(1.0_43443) - double
+......Assign - int
+........Identifier(a) - int
+........Add - int
+..........Identifier(b) - int
+..........Natural(1) - int
+......Assign - int
+........Identifier(a) - int
+........Add - int
+..........Identifier(b) - int
+..........Identifier(c) - int
 ......VarDecl
 ........Int
 ........Identifier(b)
 ......VarDecl
 ........Int
 ........Identifier(c)
-......Assign
-........Identifier(a)
-........Add
-..........Identifier(b)
-..........Identifier(c)
+......Assign - int
+........Identifier(a) - int
+........Add - int
+..........Identifier(b) - int
+..........Identifier(c) - int

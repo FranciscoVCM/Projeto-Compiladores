@@ -59,11 +59,11 @@ Program
 ..........Identifier(ola)
 ....MethodBody
 ......If
-........Identifier(ola)
+........Identifier(ola) - int
 ........Return
-..........Identifier(ola)
+..........Identifier(ola) - int
 ........Return
-..........Identifier(ola)
+..........Identifier(ola) - int
 ......VarDecl
 ........Int
 ........Identifier(ola)
@@ -112,8 +112,8 @@ Program
 ..........Int
 ..........Identifier(_)
 ....MethodBody
-......Assign
-........Identifier(i)
-........Add
-..........Identifier(i)
-..........Identifier(i)
+......Assign - int
+........Identifier(i) - int
+........Add - int
+..........Identifier(i) - int
+..........Identifier(i) - int

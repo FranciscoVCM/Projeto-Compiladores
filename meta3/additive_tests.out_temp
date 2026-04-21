@@ -29,92 +29,92 @@ Program
 ......VarDecl
 ........Bool
 ........Identifier(b)
-......Assign
-........Identifier(i)
-........Natural(1)
-......Assign
-........Identifier(d)
-........Decimal(1.1)
-......Assign
-........Identifier(b)
-........BoolLit(true)
-......Assign
-........Identifier(i)
-........Add
-..........Identifier(i)
-..........Identifier(i)
-......Assign
-........Identifier(i)
-........Sub
-..........Identifier(i)
-..........Identifier(i)
-......Assign
-........Identifier(i)
-........Add
-..........Identifier(i)
-..........Identifier(d)
-......Assign
-........Identifier(i)
-........Sub
-..........Identifier(i)
-..........Identifier(d)
-......Assign
-........Identifier(i)
-........Add
-..........Identifier(i)
-..........Identifier(b)
-......Assign
-........Identifier(i)
-........Sub
-..........Identifier(i)
-..........Identifier(b)
-......Assign
-........Identifier(i)
-........Add
-..........Identifier(i)
-..........Identifier(args)
-......Assign
-........Identifier(i)
-........Sub
-..........Identifier(i)
-..........Identifier(args)
-......Assign
-........Identifier(d)
-........Add
-..........Identifier(i)
-..........Identifier(i)
-......Assign
-........Identifier(d)
-........Sub
-..........Identifier(i)
-..........Identifier(i)
-......Assign
-........Identifier(d)
-........Add
-..........Identifier(i)
-..........Identifier(d)
-......Assign
-........Identifier(d)
-........Sub
-..........Identifier(i)
-..........Identifier(d)
-......Assign
-........Identifier(d)
-........Add
-..........Identifier(i)
-..........Identifier(b)
-......Assign
-........Identifier(d)
-........Sub
-..........Identifier(i)
-..........Identifier(b)
-......Assign
-........Identifier(d)
-........Add
-..........Identifier(i)
-..........Identifier(args)
-......Assign
-........Identifier(d)
-........Sub
-..........Identifier(i)
-..........Identifier(args)
+......Assign - int
+........Identifier(i) - int
+........Natural(1) - int
+......Assign - double
+........Identifier(d) - double
+........Decimal(1.1) - double
+......Assign - boolean
+........Identifier(b) - boolean
+........BoolLit(true) - boolean
+......Assign - int
+........Identifier(i) - int
+........Add - int
+..........Identifier(i) - int
+..........Identifier(i) - int
+......Assign - int
+........Identifier(i) - int
+........Sub - int
+..........Identifier(i) - int
+..........Identifier(i) - int
+......Assign - undef
+........Identifier(i) - int
+........Add - undef
+..........Identifier(i) - int
+..........Identifier(d) - double
+......Assign - undef
+........Identifier(i) - int
+........Sub - undef
+..........Identifier(i) - int
+..........Identifier(d) - double
+......Assign - undef
+........Identifier(i) - int
+........Add - undef
+..........Identifier(i) - int
+..........Identifier(b) - boolean
+......Assign - undef
+........Identifier(i) - int
+........Sub - undef
+..........Identifier(i) - int
+..........Identifier(b) - boolean
+......Assign - undef
+........Identifier(i) - int
+........Add - undef
+..........Identifier(i) - int
+..........Identifier(args) - String[]
+......Assign - undef
+........Identifier(i) - int
+........Sub - undef
+..........Identifier(i) - int
+..........Identifier(args) - String[]
+......Assign - undef
+........Identifier(d) - double
+........Add - int
+..........Identifier(i) - int
+..........Identifier(i) - int
+......Assign - undef
+........Identifier(d) - double
+........Sub - int
+..........Identifier(i) - int
+..........Identifier(i) - int
+......Assign - undef
+........Identifier(d) - double
+........Add - undef
+..........Identifier(i) - int
+..........Identifier(d) - double
+......Assign - undef
+........Identifier(d) - double
+........Sub - undef
+..........Identifier(i) - int
+..........Identifier(d) - double
+......Assign - undef
+........Identifier(d) - double
+........Add - undef
+..........Identifier(i) - int
+..........Identifier(b) - boolean
+......Assign - undef
+........Identifier(d) - double
+........Sub - undef
+..........Identifier(i) - int
+..........Identifier(b) - boolean
+......Assign - undef
+........Identifier(d) - double
+........Add - undef
+..........Identifier(i) - int
+..........Identifier(args) - String[]
+......Assign - undef
+........Identifier(d) - double
+........Sub - undef
+..........Identifier(i) - int
+..........Identifier(args) - String[]

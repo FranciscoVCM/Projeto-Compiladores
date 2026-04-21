@@ -133,17 +133,17 @@ Program
 ..........StringArray
 ..........Identifier(args)
 ....MethodBody
-......Call
-........Identifier(f)
-........Call
-..........Identifier(main)
-..........Identifier(args)
-........Identifier(args)
-........Natural(1)
-........Call
-..........Identifier(f)
-..........Identifier(W)
-......Call
-........Identifier(f)
-........Natural(1)
-........Natural(1)
+......Call - undef
+........Identifier(f) - undef
+........Call - void
+..........Identifier(main) - void
+..........Identifier(args) - String[]
+........Identifier(args) - String[]
+........Natural(1) - int
+........Call - undef
+..........Identifier(f) - undef
+..........Identifier(W) - undef
+......Call - undef
+........Identifier(f) - undef
+........Natural(1) - int
+........Natural(1) - int

@@ -21,146 +21,146 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(a)
-......Assign
-........Identifier(a)
-........Natural(10_0000_00000)
-......Assign
-........Identifier(a)
-........Natural(100)
-......Assign
-........Identifier(a)
-........Natural(100000)
-......Assign
-........Identifier(a)
-........Natural(2147483647)
-......Assign
-........Identifier(a)
-........Natural(2147483648)
-......Assign
-........Identifier(a)
-........Natural(2147483649)
-......Assign
-........Identifier(a)
-........Natural(12147483649)
-......Assign
-........Identifier(a)
-........Natural(1___0___0)
-......Assign
-........Identifier(a)
-........Natural(10___00____00)
-......Assign
-........Identifier(a)
-........Natural(214__748_3647)
-......Assign
-........Identifier(a)
-........Natural(214__748_3648)
-......Assign
-........Identifier(a)
-........Natural(214__748_3649)
-......Assign
-........Identifier(a)
-........Natural(1214748364__9)
-......Assign
-........Identifier(a)
-........Minus
-..........Natural(10_0000_00000)
-......Assign
-........Identifier(a)
-........Minus
-..........Natural(100)
-......Assign
-........Identifier(a)
-........Minus
-..........Natural(100000)
-......Assign
-........Identifier(a)
-........Minus
-..........Natural(2147483647)
-......Assign
-........Identifier(a)
-........Minus
-..........Natural(2147483648)
-......Assign
-........Identifier(a)
-........Minus
-..........Natural(2147483649)
-......Assign
-........Identifier(a)
-........Minus
-..........Natural(12147483649)
-......Assign
-........Identifier(a)
-........Minus
-..........Natural(1___0___0)
-......Assign
-........Identifier(a)
-........Minus
-..........Natural(10___00____00)
-......Assign
-........Identifier(a)
-........Minus
-..........Natural(214__748_3647)
-......Assign
-........Identifier(a)
-........Minus
-..........Natural(214__748_3648)
-......Assign
-........Identifier(a)
-........Minus
-..........Natural(214__748_3649)
-......Assign
-........Identifier(a)
-........Minus
-..........Natural(1214748364__9)
-......Assign
-........Identifier(a)
-........Plus
-..........Natural(10_0000_00000)
-......Assign
-........Identifier(a)
-........Plus
-..........Natural(100)
-......Assign
-........Identifier(a)
-........Plus
-..........Natural(100000)
-......Assign
-........Identifier(a)
-........Plus
-..........Natural(2147483647)
-......Assign
-........Identifier(a)
-........Plus
-..........Natural(2147483648)
-......Assign
-........Identifier(a)
-........Plus
-..........Natural(2147483649)
-......Assign
-........Identifier(a)
-........Plus
-..........Natural(12147483649)
-......Assign
-........Identifier(a)
-........Plus
-..........Natural(1___0___0)
-......Assign
-........Identifier(a)
-........Plus
-..........Natural(10___00____00)
-......Assign
-........Identifier(a)
-........Plus
-..........Natural(214__748_3647)
-......Assign
-........Identifier(a)
-........Plus
-..........Natural(214__748_3648)
-......Assign
-........Identifier(a)
-........Plus
-..........Natural(214__748_3649)
-......Assign
-........Identifier(a)
-........Plus
-..........Natural(1214748364__9)
+......Assign - int
+........Identifier(a) - int
+........Natural(10_0000_00000) - int
+......Assign - int
+........Identifier(a) - int
+........Natural(100) - int
+......Assign - int
+........Identifier(a) - int
+........Natural(100000) - int
+......Assign - int
+........Identifier(a) - int
+........Natural(2147483647) - int
+......Assign - int
+........Identifier(a) - int
+........Natural(2147483648) - int
+......Assign - int
+........Identifier(a) - int
+........Natural(2147483649) - int
+......Assign - int
+........Identifier(a) - int
+........Natural(12147483649) - int
+......Assign - int
+........Identifier(a) - int
+........Natural(1___0___0) - int
+......Assign - int
+........Identifier(a) - int
+........Natural(10___00____00) - int
+......Assign - int
+........Identifier(a) - int
+........Natural(214__748_3647) - int
+......Assign - int
+........Identifier(a) - int
+........Natural(214__748_3648) - int
+......Assign - int
+........Identifier(a) - int
+........Natural(214__748_3649) - int
+......Assign - int
+........Identifier(a) - int
+........Natural(1214748364__9) - int
+......Assign - int
+........Identifier(a) - int
+........Minus - int
+..........Natural(10_0000_00000) - int
+......Assign - int
+........Identifier(a) - int
+........Minus - int
+..........Natural(100) - int
+......Assign - int
+........Identifier(a) - int
+........Minus - int
+..........Natural(100000) - int
+......Assign - int
+........Identifier(a) - int
+........Minus - int
+..........Natural(2147483647) - int
+......Assign - int
+........Identifier(a) - int
+........Minus - int
+..........Natural(2147483648) - int
+......Assign - int
+........Identifier(a) - int
+........Minus - int
+..........Natural(2147483649) - int
+......Assign - int
+........Identifier(a) - int
+........Minus - int
+..........Natural(12147483649) - int
+......Assign - int
+........Identifier(a) - int
+........Minus - int
+..........Natural(1___0___0) - int
+......Assign - int
+........Identifier(a) - int
+........Minus - int
+..........Natural(10___00____00) - int
+......Assign - int
+........Identifier(a) - int
+........Minus - int
+..........Natural(214__748_3647) - int
+......Assign - int
+........Identifier(a) - int
+........Minus - int
+..........Natural(214__748_3648) - int
+......Assign - int
+........Identifier(a) - int
+........Minus - int
+..........Natural(214__748_3649) - int
+......Assign - int
+........Identifier(a) - int
+........Minus - int
+..........Natural(1214748364__9) - int
+......Assign - int
+........Identifier(a) - int
+........Plus - int
+..........Natural(10_0000_00000) - int
+......Assign - int
+........Identifier(a) - int
+........Plus - int
+..........Natural(100) - int
+......Assign - int
+........Identifier(a) - int
+........Plus - int
+..........Natural(100000) - int
+......Assign - int
+........Identifier(a) - int
+........Plus - int
+..........Natural(2147483647) - int
+......Assign - int
+........Identifier(a) - int
+........Plus - int
+..........Natural(2147483648) - int
+......Assign - int
+........Identifier(a) - int
+........Plus - int
+..........Natural(2147483649) - int
+......Assign - int
+........Identifier(a) - int
+........Plus - int
+..........Natural(12147483649) - int
+......Assign - int
+........Identifier(a) - int
+........Plus - int
+..........Natural(1___0___0) - int
+......Assign - int
+........Identifier(a) - int
+........Plus - int
+..........Natural(10___00____00) - int
+......Assign - int
+........Identifier(a) - int
+........Plus - int
+..........Natural(214__748_3647) - int
+......Assign - int
+........Identifier(a) - int
+........Plus - int
+..........Natural(214__748_3648) - int
+......Assign - int
+........Identifier(a) - int
+........Plus - int
+..........Natural(214__748_3649) - int
+......Assign - int
+........Identifier(a) - int
+........Plus - int
+..........Natural(1214748364__9) - int

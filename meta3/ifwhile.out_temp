@@ -42,38 +42,38 @@ Program
 ........Bool
 ........Identifier(f)
 ......If
-........Identifier(t)
+........Identifier(t) - boolean
 ........Block
 ..........While
-............Identifier(b)
+............Identifier(b) - boolean
 ............While
-..............BoolLit(true)
+..............BoolLit(true) - boolean
 ..............Block
 ................Print
-..................Identifier(i)
+..................Identifier(i) - int
 ................Print
-..................Identifier(b)
+..................Identifier(b) - boolean
 ................Print
-..................Identifier(d)
+..................Identifier(d) - double
 ..........Print
 ............StrLit("Gotcha!")
 ..........While
-............BoolLit(true)
+............BoolLit(true) - boolean
 ............Block
 ..............If
-................Identifier(f)
+................Identifier(f) - boolean
 ................Block
 ................Block
 ..................While
-....................Identifier(f)
+....................Identifier(f) - boolean
 ....................Print
-......................Identifier(d)
+......................Identifier(d) - double
 ..................Print
 ....................StrLit("Twice!")
 ..............Print
 ................StrLit("Thrice!")
 ........Block
 ......While
-........BoolLit(false)
+........BoolLit(false) - boolean
 ........Print
-..........Identifier(b)
+..........Identifier(b) - boolean

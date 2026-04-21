@@ -46,9 +46,9 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(a)
-......Assign
-........Identifier(a)
-........Natural(2147483648)
+......Assign - int
+........Identifier(a) - int
+........Natural(2147483648) - int
 ..MethodDecl
 ....MethodHeader
 ......Int
@@ -61,9 +61,9 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(b)
-......Assign
-........Identifier(b)
-........Natural(21474_8_3647)
+......Assign - int
+........Identifier(b) - int
+........Natural(21474_8_3647) - int
 ..MethodDecl
 ....MethodHeader
 ......Int
@@ -82,12 +82,12 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(d)
-......Assign
-........Identifier(d)
-........Natural(2147483649)
-......Assign
-........Identifier(d)
-........Identifier(c)
+......Assign - int
+........Identifier(d) - int
+........Natural(2147483649) - int
+......Assign - undef
+........Identifier(d) - int
+........Identifier(c) - boolean
 ..MethodDecl
 ....MethodHeader
 ......Int
@@ -100,9 +100,9 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(d)
-......Assign
-........Identifier(d)
-........Natural(10_0000_00000)
+......Assign - int
+........Identifier(d) - int
+........Natural(10_0000_00000) - int
 ..MethodDecl
 ....MethodHeader
 ......Void
@@ -112,8 +112,8 @@ Program
 ..........StringArray
 ..........Identifier(args)
 ....MethodBody
-......ParseArgs
-........Identifier(s)
-........Decimal(2.2)
+......ParseArgs - int
+........Identifier(s) - undef
+........Decimal(2.2) - double
 ......Print
-........Decimal(2e2)
+........Decimal(2e2) - double

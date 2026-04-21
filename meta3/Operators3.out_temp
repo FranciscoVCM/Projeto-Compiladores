@@ -52,33 +52,33 @@ Program
 ........Bool
 ........Identifier(y)
 ......If
-........Eq
-..........Identifier(x)
-..........Identifier(y)
+........Eq - boolean
+..........Identifier(x) - boolean
+..........Identifier(y) - boolean
 ........If
-..........Eq
-............Identifier(a)
-............Identifier(b)
+..........Eq - boolean
+............Identifier(a) - int
+............Identifier(b) - int
 ..........If
-............Eq
-..............Identifier(d)
-..............Identifier(b)
-............Assign
-..............Identifier(x)
-..............Or
-................Le
-..................Mul
-....................Identifier(d)
-....................Identifier(e)
-..................Rshift
-....................Identifier(a)
-....................Identifier(c)
-................Eq
-..................Identifier(x)
-..................Not
-....................Identifier(y)
+............Eq - undef
+..............Identifier(d) - double
+..............Identifier(b) - int
+............Assign - undef
+..............Identifier(x) - boolean
+..............Or - undef
+................Le - undef
+..................Mul - double
+....................Identifier(d) - double
+....................Identifier(e) - double
+..................Rshift - int
+....................Identifier(a) - int
+....................Identifier(c) - int
+................Eq - boolean
+..................Identifier(x) - boolean
+..................Not - boolean
+....................Identifier(y) - boolean
 ............Block
 ..........Block
 ........Block
-......Call
-........Identifier(operator)
+......Call - void
+........Identifier(operator) - void

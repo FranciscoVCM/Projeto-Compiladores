@@ -42,64 +42,64 @@ Program
 ......VarDecl
 ........Bool
 ........Identifier(b)
-......Assign
-........Identifier(b)
-........BoolLit(false)
-......Assign
-........Identifier(i)
-........Plus
-..........Natural(5)
-......Assign
-........Identifier(i)
-........Plus
-..........Decimal(2.0)
-......Assign
-........Identifier(d)
-........Plus
-..........Natural(1)
-......Assign
-........Identifier(d)
-........Plus
-..........Decimal(2.0)
-......Assign
-........Identifier(b)
-........Plus
-..........BoolLit(false)
-......Assign
-........Identifier(b)
-........Plus
-..........BoolLit(true)
+......Assign - boolean
+........Identifier(b) - boolean
+........BoolLit(false) - boolean
+......Assign - int
+........Identifier(i) - int
+........Plus - int
+..........Natural(5) - int
+......Assign - undef
+........Identifier(i) - int
+........Plus - double
+..........Decimal(2.0) - double
+......Assign - undef
+........Identifier(d) - double
+........Plus - int
+..........Natural(1) - int
+......Assign - double
+........Identifier(d) - double
+........Plus - double
+..........Decimal(2.0) - double
+......Assign - undef
+........Identifier(b) - boolean
+........Plus - undef
+..........BoolLit(false) - boolean
+......Assign - undef
+........Identifier(b) - boolean
+........Plus - undef
+..........BoolLit(true) - boolean
 ......VarDecl
 ........Int
 ........Identifier(tamanho)
-......Assign
-........Identifier(tamanho)
-........Length
-..........Identifier(args)
-......Assign
-........Identifier(i)
-........Length
-..........Identifier(i)
-......Assign
-........Identifier(i)
-........Length
-..........Identifier(d)
-......Assign
-........Identifier(i)
-........Not
-..........Identifier(i)
-......Assign
-........Identifier(d)
-........Not
-..........Identifier(d)
-......Assign
-........Identifier(b)
-........Not
-..........Identifier(b)
-......Call
-........Identifier(f)
-........Natural(1)
-........Natural(1)
+......Assign - int
+........Identifier(tamanho) - int
+........Length - int
+..........Identifier(args) - String[]
+......Assign - int
+........Identifier(i) - int
+........Length - int
+..........Identifier(i) - int
+......Assign - int
+........Identifier(i) - int
+........Length - int
+..........Identifier(d) - double
+......Assign - undef
+........Identifier(i) - int
+........Not - undef
+..........Identifier(i) - int
+......Assign - undef
+........Identifier(d) - double
+........Not - undef
+..........Identifier(d) - double
+......Assign - boolean
+........Identifier(b) - boolean
+........Not - boolean
+..........Identifier(b) - boolean
+......Call - undef
+........Identifier(f) - undef
+........Natural(1) - int
+........Natural(1) - int
 ..MethodDecl
 ....MethodHeader
 ......Void

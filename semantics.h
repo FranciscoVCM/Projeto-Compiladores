@@ -19,8 +19,11 @@ struct symbol_list {
 
 struct method_scope {
     char *name;
+    enum type return_type;
     struct parameter_list *params;
     struct symbol_list *symbols;
+    struct node *method_decl;
+    struct node *body;
     struct method_scope *next;
 };
 

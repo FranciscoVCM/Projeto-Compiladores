@@ -22,11 +22,11 @@ Program
 ..........Int
 ..........Identifier(b)
 ....MethodBody
-......Assign
-........Identifier(b)
-........Add
-..........Identifier(b)
-..........Natural(2)
+......Assign - int
+........Identifier(b) - int
+........Add - int
+..........Identifier(b) - int
+..........Natural(2) - int
 ......Return
 ..MethodDecl
 ....MethodHeader
@@ -38,6 +38,6 @@ Program
 ..........Identifier(args)
 ....MethodBody
 ......Print
-........Call
-..........Identifier(a)
-..........Natural(3)
+........Call - void
+..........Identifier(a) - void
+..........Natural(3) - int

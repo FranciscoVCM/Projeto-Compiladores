@@ -29,27 +29,27 @@ Program
 ......VarDecl
 ........Double
 ........Identifier(d)
-......Assign
-........Identifier(i)
-........Length
-..........Identifier(i)
-......Assign
-........Identifier(i)
-........Length
-..........Identifier(b)
-......Assign
-........Identifier(i)
-........Length
-..........Identifier(d)
-......Assign
-........Identifier(i)
-........Length
-..........Identifier(args)
-......Assign
-........Identifier(i)
-........Length
-..........Identifier(undef)
-......Assign
-........Identifier(b)
-........Length
-..........Identifier(i)
+......Assign - int
+........Identifier(i) - int
+........Length - int
+..........Identifier(i) - int
+......Assign - int
+........Identifier(i) - int
+........Length - int
+..........Identifier(b) - boolean
+......Assign - int
+........Identifier(i) - int
+........Length - int
+..........Identifier(d) - double
+......Assign - int
+........Identifier(i) - int
+........Length - int
+..........Identifier(args) - String[]
+......Assign - int
+........Identifier(i) - int
+........Length - int
+..........Identifier(undef) - undef
+......Assign - undef
+........Identifier(b) - boolean
+........Length - int
+..........Identifier(i) - int

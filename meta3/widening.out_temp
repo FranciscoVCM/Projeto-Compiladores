@@ -47,104 +47,104 @@ Program
 ......VarDecl
 ........Bool
 ........Identifier(b)
-......Assign
-........Identifier(d)
-........Decimal(1.1)
-......Assign
-........Identifier(d)
-........Natural(1)
-......Assign
-........Identifier(d)
-........Identifier(i)
-......Assign
-........Identifier(d)
-........Identifier(b)
-......Assign
-........Identifier(d)
-........Mul
-..........Identifier(i)
-..........Natural(1)
-......Assign
-........Identifier(d)
-........Mul
-..........Identifier(i)
-..........Decimal(1.1)
-......Assign
-........Identifier(d)
-........Mul
-..........Identifier(i)
-..........Identifier(d)
-......Assign
-........Identifier(d)
-........Mul
-..........Identifier(i)
-..........Identifier(b)
-......Assign
-........Identifier(d)
-........Call
-..........Identifier(fun_dd)
-..........Natural(1)
-..........Natural(2)
-......Assign
-........Identifier(d)
-........Call
-..........Identifier(fun_dd)
-..........Decimal(3.0)
-..........Natural(4)
-......Assign
-........Identifier(d)
-........Call
-..........Identifier(fun_dd)
-..........Decimal(5.0)
-..........Decimal(6.0)
-......Assign
-........Identifier(d)
-........Call
-..........Identifier(fun_di)
-..........Natural(1)
-..........Natural(1)
-......Assign
-........Identifier(d)
-........Call
-..........Identifier(fun_di)
-..........Decimal(1.0)
-..........Natural(1)
-......Assign
-........Identifier(d)
-........Call
-..........Identifier(fun_di)
-..........Natural(1)
-..........Decimal(1.0)
-......Assign
-........Identifier(d)
-........Call
-..........Identifier(fun_di)
-..........Decimal(1.0)
-..........Decimal(1.0)
-......Assign
-........Identifier(d)
-........Call
-..........Identifier(fun_ii)
-..........Natural(1)
-..........Natural(1)
-......Assign
-........Identifier(d)
-........Call
-..........Identifier(fun_ii)
-..........Decimal(1.0)
-..........Natural(1)
-......Assign
-........Identifier(d)
-........Call
-..........Identifier(fun_ii)
-..........Natural(1)
-..........Decimal(1.0)
-......Assign
-........Identifier(d)
-........Call
-..........Identifier(fun_ii)
-..........Decimal(1.0)
-..........Decimal(1.0)
+......Assign - double
+........Identifier(d) - double
+........Decimal(1.1) - double
+......Assign - undef
+........Identifier(d) - double
+........Natural(1) - int
+......Assign - undef
+........Identifier(d) - double
+........Identifier(i) - int
+......Assign - undef
+........Identifier(d) - double
+........Identifier(b) - boolean
+......Assign - undef
+........Identifier(d) - double
+........Mul - int
+..........Identifier(i) - int
+..........Natural(1) - int
+......Assign - undef
+........Identifier(d) - double
+........Mul - undef
+..........Identifier(i) - int
+..........Decimal(1.1) - double
+......Assign - undef
+........Identifier(d) - double
+........Mul - undef
+..........Identifier(i) - int
+..........Identifier(d) - double
+......Assign - undef
+........Identifier(d) - double
+........Mul - undef
+..........Identifier(i) - int
+..........Identifier(b) - boolean
+......Assign - undef
+........Identifier(d) - double
+........Call - undef
+..........Identifier(fun_dd) - undef
+..........Natural(1) - int
+..........Natural(2) - int
+......Assign - undef
+........Identifier(d) - double
+........Call - undef
+..........Identifier(fun_dd) - undef
+..........Decimal(3.0) - double
+..........Natural(4) - int
+......Assign - undef
+........Identifier(d) - double
+........Call - int
+..........Identifier(fun_dd) - int
+..........Decimal(5.0) - double
+..........Decimal(6.0) - double
+......Assign - undef
+........Identifier(d) - double
+........Call - undef
+..........Identifier(fun_di) - undef
+..........Natural(1) - int
+..........Natural(1) - int
+......Assign - undef
+........Identifier(d) - double
+........Call - int
+..........Identifier(fun_di) - int
+..........Decimal(1.0) - double
+..........Natural(1) - int
+......Assign - undef
+........Identifier(d) - double
+........Call - undef
+..........Identifier(fun_di) - undef
+..........Natural(1) - int
+..........Decimal(1.0) - double
+......Assign - undef
+........Identifier(d) - double
+........Call - undef
+..........Identifier(fun_di) - undef
+..........Decimal(1.0) - double
+..........Decimal(1.0) - double
+......Assign - undef
+........Identifier(d) - double
+........Call - int
+..........Identifier(fun_ii) - int
+..........Natural(1) - int
+..........Natural(1) - int
+......Assign - undef
+........Identifier(d) - double
+........Call - undef
+..........Identifier(fun_ii) - undef
+..........Decimal(1.0) - double
+..........Natural(1) - int
+......Assign - undef
+........Identifier(d) - double
+........Call - undef
+..........Identifier(fun_ii) - undef
+..........Natural(1) - int
+..........Decimal(1.0) - double
+......Assign - undef
+........Identifier(d) - double
+........Call - undef
+..........Identifier(fun_ii) - undef
+..........Decimal(1.0) - double
+..........Decimal(1.0) - double
 ..MethodDecl
 ....MethodHeader
 ......Int
@@ -158,7 +158,7 @@ Program
 ..........Identifier(b)
 ....MethodBody
 ......Return
-........Natural(1)
+........Natural(1) - int
 ..MethodDecl
 ....MethodHeader
 ......Int
@@ -172,7 +172,7 @@ Program
 ..........Identifier(b)
 ....MethodBody
 ......Return
-........Natural(1)
+........Natural(1) - int
 ..MethodDecl
 ....MethodHeader
 ......Int
@@ -186,4 +186,4 @@ Program
 ..........Identifier(b)
 ....MethodBody
 ......Return
-........Natural(1)
+........Natural(1) - int

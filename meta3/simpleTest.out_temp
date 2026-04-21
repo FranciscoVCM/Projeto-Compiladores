@@ -36,26 +36,26 @@ Program
 ......VarDecl
 ........Double
 ........Identifier(b)
-......Assign
-........Identifier(a)
-........Identifier(b)
-......Assign
-........Identifier(b)
-........Assign
-..........Identifier(a)
-..........Identifier(b)
-......Assign
-........Identifier(a)
-........Mul
-..........Identifier(a)
-..........Identifier(b)
-......Assign
-........Identifier(a)
-........Eq
-..........Identifier(a)
-..........Identifier(b)
+......Assign - undef
+........Identifier(a) - int
+........Identifier(b) - double
+......Assign - undef
+........Identifier(b) - double
+........Assign - undef
+..........Identifier(a) - int
+..........Identifier(b) - double
+......Assign - undef
+........Identifier(a) - int
+........Mul - undef
+..........Identifier(a) - int
+..........Identifier(b) - double
+......Assign - undef
+........Identifier(a) - int
+........Eq - undef
+..........Identifier(a) - int
+..........Identifier(b) - double
 ......Return
-........Identifier(a)
+........Identifier(a) - int
 ..MethodDecl
 ....MethodHeader
 ......Int
@@ -71,139 +71,139 @@ Program
 ......VarDecl
 ........Double
 ........Identifier(iterator)
-......Assign
-........Identifier(args)
-........Or
-..........Add
-............Mul
-..............Identifier(args)
-..............Identifier(args)
-............Identifier(args)
-..........And
-............Identifier(args)
-............Identifier(args)
-......Assign
-........Identifier(args)
-........Or
-..........Add
-............Mul
-..............Identifier(args)
-..............Natural(1)
-............Call
-..............Identifier(main)
-..............Identifier(args)
-..........And
-............BoolLit(true)
-............Identifier(args)
-......Assign
-........Identifier(args)
-........Ne
-..........Eq
-............Ge
-..............Lt
-................Identifier(args)
-................Natural(1)
-..............Call
-................Identifier(main)
-................Identifier(args)
-............BoolLit(true)
-..........Identifier(args)
-......Assign
-........Identifier(args)
-........And
-..........And
-............Lt
-..............BoolLit(true)
-..............Natural(1)
-............Eq
-..............Identifier(args)
-..............Decimal(1.0)
-..........Ne
-............Natural(2)
-............Call
-..............Identifier(main)
-..............Identifier(args)
-......Assign
-........Identifier(args)
-........Or
-..........And
-............Identifier(args)
-............Identifier(args)
-..........Identifier(args)
-......Assign
-........Identifier(args)
-........Identifier(args)
-......Assign
-........Identifier(argument)
-........Add
-..........Mul
-............Natural(1)
-............Identifier(argument)
-..........Decimal(1.0)
-......Assign
-........Identifier(argument)
-........ParseArgs
-..........Identifier(args)
-..........Sub
-............Length
-..............Identifier(args)
-............Natural(1)
-......Assign
-........Identifier(argument)
-........Add
-..........Mul
-............Identifier(argument)
-............Identifier(argument)
-..........Mod
-............Div
-..............Identifier(argument)
-..............Identifier(argument)
-............Identifier(iterator)
-......Assign
-........Identifier(iterator)
-........Identifier(argument)
+......Assign - undef
+........Identifier(args) - String[]
+........Or - undef
+..........Add - undef
+............Mul - undef
+..............Identifier(args) - String[]
+..............Identifier(args) - String[]
+............Identifier(args) - String[]
+..........And - undef
+............Identifier(args) - String[]
+............Identifier(args) - String[]
+......Assign - undef
+........Identifier(args) - String[]
+........Or - undef
+..........Add - undef
+............Mul - undef
+..............Identifier(args) - String[]
+..............Natural(1) - int
+............Call - int
+..............Identifier(main) - int
+..............Identifier(args) - String[]
+..........And - undef
+............BoolLit(true) - boolean
+............Identifier(args) - String[]
+......Assign - undef
+........Identifier(args) - String[]
+........Ne - undef
+..........Eq - undef
+............Ge - undef
+..............Lt - undef
+................Identifier(args) - String[]
+................Natural(1) - int
+..............Call - int
+................Identifier(main) - int
+................Identifier(args) - String[]
+............BoolLit(true) - boolean
+..........Identifier(args) - String[]
+......Assign - undef
+........Identifier(args) - String[]
+........And - undef
+..........And - undef
+............Lt - undef
+..............BoolLit(true) - boolean
+..............Natural(1) - int
+............Eq - undef
+..............Identifier(args) - String[]
+..............Decimal(1.0) - double
+..........Ne - boolean
+............Natural(2) - int
+............Call - int
+..............Identifier(main) - int
+..............Identifier(args) - String[]
+......Assign - undef
+........Identifier(args) - String[]
+........Or - undef
+..........And - undef
+............Identifier(args) - String[]
+............Identifier(args) - String[]
+..........Identifier(args) - String[]
+......Assign - String[]
+........Identifier(args) - String[]
+........Identifier(args) - String[]
+......Assign - undef
+........Identifier(argument) - int
+........Add - undef
+..........Mul - int
+............Natural(1) - int
+............Identifier(argument) - int
+..........Decimal(1.0) - double
+......Assign - int
+........Identifier(argument) - int
+........ParseArgs - int
+..........Identifier(args) - String[]
+..........Sub - int
+............Length - int
+..............Identifier(args) - String[]
+............Natural(1) - int
+......Assign - undef
+........Identifier(argument) - int
+........Add - undef
+..........Mul - int
+............Identifier(argument) - int
+............Identifier(argument) - int
+..........Mod - undef
+............Div - int
+..............Identifier(argument) - int
+..............Identifier(argument) - int
+............Identifier(iterator) - double
+......Assign - undef
+........Identifier(iterator) - double
+........Identifier(argument) - int
 ......If
-........Gt
-..........Identifier(argument)
-..........Identifier(iterator)
-........Block
-........Block
-......If
-........Eq
-..........Identifier(argument)
-..........Identifier(iterator)
+........Gt - undef
+..........Identifier(argument) - int
+..........Identifier(iterator) - double
 ........Block
 ........Block
 ......If
-........Ge
-..........Identifier(argument)
-..........Identifier(iterator)
+........Eq - undef
+..........Identifier(argument) - int
+..........Identifier(iterator) - double
 ........Block
 ........Block
 ......If
-........Gt
-..........Identifier(argument)
-..........Identifier(argument)
+........Ge - undef
+..........Identifier(argument) - int
+..........Identifier(iterator) - double
 ........Block
 ........Block
 ......If
-........Gt
-..........Identifier(argument)
-..........Identifier(argument)
+........Gt - boolean
+..........Identifier(argument) - int
+..........Identifier(argument) - int
 ........Block
 ........Block
 ......If
-........Gt
-..........Identifier(args)
-..........Identifier(argument)
+........Gt - boolean
+..........Identifier(argument) - int
+..........Identifier(argument) - int
+........Block
+........Block
+......If
+........Gt - undef
+..........Identifier(args) - String[]
+..........Identifier(argument) - int
 ........Block
 ........Block
 ......Return
-........Call
-..........Identifier(main)
-..........Identifier(argument)
+........Call - undef
+..........Identifier(main) - undef
+..........Identifier(argument) - int
 ......Return
-........Identifier(args)
+........Identifier(args) - String[]
 ......Return
 ..MethodDecl
 ....MethodHeader
@@ -212,9 +212,9 @@ Program
 ......MethodParams
 ....MethodBody
 ......Return
-........Natural(1)
+........Natural(1) - int
 ......Return
-........Decimal(1.0)
+........Decimal(1.0) - double
 ..MethodDecl
 ....MethodHeader
 ......Double
@@ -222,6 +222,6 @@ Program
 ......MethodParams
 ....MethodBody
 ......Return
-........Natural(1)
+........Natural(1) - int
 ......Return
-........Decimal(1.0)
+........Decimal(1.0) - double

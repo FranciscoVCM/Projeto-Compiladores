@@ -38,23 +38,23 @@ Program
 ......VarDecl
 ........Double
 ........Identifier(y)
-......Assign
-........Identifier(x)
-........Lshift
-..........Identifier(b)
-..........Identifier(a)
-......Assign
-........Identifier(b)
-........Mul
-..........Identifier(x)
-..........Identifier(a)
-......Assign
-........Identifier(y)
-........Mul
-..........Identifier(x)
-..........Add
-............Decimal(1.0)
-............Identifier(b)
+......Assign - int
+........Identifier(x) - int
+........Lshift - int
+..........Identifier(b) - int
+..........Identifier(a) - int
+......Assign - int
+........Identifier(b) - int
+........Mul - int
+..........Identifier(x) - int
+..........Identifier(a) - int
+......Assign - undef
+........Identifier(y) - double
+........Mul - undef
+..........Identifier(x) - int
+..........Add - undef
+............Decimal(1.0) - double
+............Identifier(b) - int
 ..MethodDecl
 ....MethodHeader
 ......Void
@@ -64,5 +64,5 @@ Program
 ..........StringArray
 ..........Identifier(args)
 ....MethodBody
-......Call
-........Identifier(operators)
+......Call - undef
+........Identifier(operators) - undef

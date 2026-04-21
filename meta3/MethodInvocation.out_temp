@@ -23,9 +23,9 @@ Program
 ..........Identifier(n)
 ....MethodBody
 ......Return
-........Add
-..........Identifier(n)
-..........Natural(1)
+........Add - int
+..........Identifier(n) - int
+..........Natural(1) - int
 ..MethodDecl
 ....MethodHeader
 ......Void
@@ -35,14 +35,14 @@ Program
 ..........StringArray
 ..........Identifier(args)
 ....MethodBody
-......Call
-........Identifier(operators)
-........Call
-..........Identifier(operators)
-..........Call
-............Identifier(operators)
-............Call
-..............Identifier(operators)
-..............Call
-................Identifier(operators)
-................Natural(1)
+......Call - int
+........Identifier(operators) - int
+........Call - int
+..........Identifier(operators) - int
+..........Call - int
+............Identifier(operators) - int
+............Call - int
+..............Identifier(operators) - int
+..............Call - int
+................Identifier(operators) - int
+................Natural(1) - int

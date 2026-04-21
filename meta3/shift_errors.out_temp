@@ -33,13 +33,13 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(b)
-......Assign
-........Identifier(x)
-........Lshift
-..........Natural(1)
-..........Mul
-............Identifier(x)
-............Natural(1)
+......Assign - int
+........Identifier(x) - int
+........Lshift - int
+..........Natural(1) - int
+..........Mul - int
+............Identifier(x) - int
+............Natural(1) - int
 ..MethodDecl
 ....MethodHeader
 ......Void
@@ -58,83 +58,83 @@ Program
 ......VarDecl
 ........Bool
 ........Identifier(b)
-......Assign
-........Identifier(i)
-........Lshift
-..........Identifier(i)
-..........Natural(1)
-......Assign
-........Identifier(d)
-........Lshift
-..........Identifier(i)
-..........Natural(1)
-......Assign
-........Identifier(i)
-........Lshift
-..........Identifier(i)
-..........Decimal(1.1)
-......Assign
-........Identifier(i)
-........Lshift
-..........Identifier(i)
-..........BoolLit(true)
-......Assign
-........Identifier(d)
-........Lshift
-..........Identifier(d)
-..........Natural(1)
-......Assign
-........Identifier(i)
-........Lshift
-..........Identifier(d)
-..........Natural(1)
-......Assign
-........Identifier(d)
-........Lshift
-..........Identifier(d)
-..........Decimal(1.1)
-......Assign
-........Identifier(i)
-........Lshift
-..........Identifier(d)
-..........Decimal(1.1)
-......Assign
-........Identifier(d)
-........Lshift
-..........Identifier(d)
-..........BoolLit(true)
-......Assign
-........Identifier(i)
-........Lshift
-..........Identifier(d)
-..........BoolLit(true)
-......Assign
-........Identifier(b)
-........Lshift
-..........Identifier(b)
-..........Natural(1)
-......Assign
-........Identifier(i)
-........Lshift
-..........Identifier(b)
-..........Natural(1)
-......Assign
-........Identifier(b)
-........Lshift
-..........Identifier(b)
-..........Decimal(1.1)
-......Assign
-........Identifier(i)
-........Lshift
-..........Identifier(b)
-..........Decimal(1.1)
-......Assign
-........Identifier(b)
-........Lshift
-..........Identifier(b)
-..........BoolLit(true)
-......Assign
-........Identifier(i)
-........Lshift
-..........Identifier(b)
-..........BoolLit(true)
+......Assign - int
+........Identifier(i) - int
+........Lshift - int
+..........Identifier(i) - int
+..........Natural(1) - int
+......Assign - undef
+........Identifier(d) - double
+........Lshift - int
+..........Identifier(i) - int
+..........Natural(1) - int
+......Assign - undef
+........Identifier(i) - int
+........Lshift - undef
+..........Identifier(i) - int
+..........Decimal(1.1) - double
+......Assign - undef
+........Identifier(i) - int
+........Lshift - undef
+..........Identifier(i) - int
+..........BoolLit(true) - boolean
+......Assign - undef
+........Identifier(d) - double
+........Lshift - undef
+..........Identifier(d) - double
+..........Natural(1) - int
+......Assign - undef
+........Identifier(i) - int
+........Lshift - undef
+..........Identifier(d) - double
+..........Natural(1) - int
+......Assign - double
+........Identifier(d) - double
+........Lshift - double
+..........Identifier(d) - double
+..........Decimal(1.1) - double
+......Assign - undef
+........Identifier(i) - int
+........Lshift - double
+..........Identifier(d) - double
+..........Decimal(1.1) - double
+......Assign - undef
+........Identifier(d) - double
+........Lshift - undef
+..........Identifier(d) - double
+..........BoolLit(true) - boolean
+......Assign - undef
+........Identifier(i) - int
+........Lshift - undef
+..........Identifier(d) - double
+..........BoolLit(true) - boolean
+......Assign - undef
+........Identifier(b) - boolean
+........Lshift - undef
+..........Identifier(b) - boolean
+..........Natural(1) - int
+......Assign - undef
+........Identifier(i) - int
+........Lshift - undef
+..........Identifier(b) - boolean
+..........Natural(1) - int
+......Assign - undef
+........Identifier(b) - boolean
+........Lshift - undef
+..........Identifier(b) - boolean
+..........Decimal(1.1) - double
+......Assign - undef
+........Identifier(i) - int
+........Lshift - undef
+..........Identifier(b) - boolean
+..........Decimal(1.1) - double
+......Assign - undef
+........Identifier(b) - boolean
+........Lshift - undef
+..........Identifier(b) - boolean
+..........BoolLit(true) - boolean
+......Assign - undef
+........Identifier(i) - int
+........Lshift - undef
+..........Identifier(b) - boolean
+..........BoolLit(true) - boolean

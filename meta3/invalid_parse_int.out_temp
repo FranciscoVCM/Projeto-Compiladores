@@ -29,39 +29,39 @@ Program
 ......VarDecl
 ........Double
 ........Identifier(d)
-......ParseArgs
-........Identifier(undef)
-........Identifier(undef)
-......ParseArgs
-........Identifier(undef)
-........Lshift
-..........Natural(1)
-..........Natural(1)
-......ParseArgs
-........Identifier(undef)
-........Natural(0)
-......ParseArgs
-........Identifier(undef)
-........Identifier(i)
-......ParseArgs
-........Identifier(undef)
-........Length
-..........Identifier(args)
-......ParseArgs
-........Identifier(undef)
-........Decimal(0.0)
-......ParseArgs
-........Identifier(undef)
-........Identifier(d)
-......ParseArgs
-........Identifier(undef)
-........BoolLit(true)
-......ParseArgs
-........Identifier(undef)
-........Identifier(b)
-......ParseArgs
-........Identifier(undef)
-........Identifier(args)
-......ParseArgs
-........Identifier(args)
-........Identifier(undef)
+......ParseArgs - int
+........Identifier(undef) - undef
+........Identifier(undef) - undef
+......ParseArgs - int
+........Identifier(undef) - undef
+........Lshift - int
+..........Natural(1) - int
+..........Natural(1) - int
+......ParseArgs - int
+........Identifier(undef) - undef
+........Natural(0) - int
+......ParseArgs - int
+........Identifier(undef) - undef
+........Identifier(i) - int
+......ParseArgs - int
+........Identifier(undef) - undef
+........Length - int
+..........Identifier(args) - String[]
+......ParseArgs - int
+........Identifier(undef) - undef
+........Decimal(0.0) - double
+......ParseArgs - int
+........Identifier(undef) - undef
+........Identifier(d) - double
+......ParseArgs - int
+........Identifier(undef) - undef
+........BoolLit(true) - boolean
+......ParseArgs - int
+........Identifier(undef) - undef
+........Identifier(b) - boolean
+......ParseArgs - int
+........Identifier(undef) - undef
+........Identifier(args) - String[]
+......ParseArgs - int
+........Identifier(args) - String[]
+........Identifier(undef) - undef

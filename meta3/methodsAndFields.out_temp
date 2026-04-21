@@ -75,7 +75,7 @@ Program
 ........Int
 ........Identifier(i1)
 ......Return
-........Natural(0)
+........Natural(0) - int
 ..FieldDecl
 ....Int
 ....Identifier(pI)
@@ -97,26 +97,26 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(d)
-......Assign
-........Identifier(d)
-........Identifier(b)
+......Assign - int
+........Identifier(d) - int
+........Identifier(b) - int
 ......VarDecl
 ........Int
 ........Identifier(i)
 ......VarDecl
 ........Bool
 ........Identifier(b)
-......Assign
-........Identifier(b)
-........BoolLit(true)
+......Assign - undef
+........Identifier(b) - int
+........BoolLit(true) - boolean
 ......VarDecl
 ........Double
 ........Identifier(f)
-......Assign
-........Identifier(f)
-........Decimal(0.03)
+......Assign - double
+........Identifier(f) - double
+........Decimal(0.03) - double
 ......Return
-........Identifier(d)
+........Identifier(d) - int
 ..MethodDecl
 ....MethodHeader
 ......Void
@@ -144,11 +144,11 @@ Program
 ..........Bool
 ..........Identifier(e)
 ....MethodBody
-......Call
-........Identifier(a)
-........Natural(2)
-........Natural(3)
-........BoolLit(true)
+......Call - void
+........Identifier(a) - void
+........Natural(2) - int
+........Natural(3) - int
+........BoolLit(true) - boolean
 ......VarDecl
 ........Int
 ........Identifier(a)
@@ -167,17 +167,17 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(finalI)
-......Assign
-........Identifier(finalI)
-........Add
-..........Natural(2)
-..........Natural(3)
+......Assign - int
+........Identifier(finalI) - int
+........Add - int
+..........Natural(2) - int
+..........Natural(3) - int
 ......Return
-........Div
-..........Mul
-............Decimal(0.02)
-............Decimal(0.03)
-..........Natural(5)
+........Div - undef
+..........Mul - double
+............Decimal(0.02) - double
+............Decimal(0.03) - double
+..........Natural(5) - int
 ..MethodDecl
 ....MethodHeader
 ......Int
@@ -190,14 +190,14 @@ Program
 ..........Int
 ..........Identifier(j)
 ....MethodBody
-......Call
-........Identifier(test)
-........Natural(2)
-........Natural(2)
-........Decimal(2.0)
-........BoolLit(true)
-........BoolLit(false)
+......Call - double
+........Identifier(test) - double
+........Natural(2) - int
+........Natural(2) - int
+........Decimal(2.0) - double
+........BoolLit(true) - boolean
+........BoolLit(false) - boolean
 ......Return
-........Add
-..........Identifier(k)
-..........Identifier(j)
+........Add - int
+..........Identifier(k) - int
+..........Identifier(j) - int

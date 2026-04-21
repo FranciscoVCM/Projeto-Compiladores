@@ -22,36 +22,36 @@ Program
 ........Int
 ........Identifier(d)
 ......Print
-........Identifier(args)
+........Identifier(args) - String[]
 ......Print
-........Length
-..........Identifier(d)
+........Length - int
+..........Identifier(d) - int
 ......Print
-........Length
-..........Identifier(args)
+........Length - int
+..........Identifier(args) - String[]
 ......Print
-........ParseArgs
-..........Identifier(args)
-..........Decimal(2.0)
+........ParseArgs - int
+..........Identifier(args) - String[]
+..........Decimal(2.0) - double
 ......Print
-........ParseArgs
-..........Identifier(args)
-..........Natural(2)
+........ParseArgs - int
+..........Identifier(args) - String[]
+..........Natural(2) - int
 ......Print
-........ParseArgs
-..........Identifier(args)
-..........Identifier(e)
+........ParseArgs - int
+..........Identifier(args) - String[]
+..........Identifier(e) - undef
 ......Return
-........Identifier(args)
+........Identifier(args) - String[]
 ......Return
-........ParseArgs
-..........Identifier(args)
-..........Decimal(2.0)
+........ParseArgs - int
+..........Identifier(args) - String[]
+..........Decimal(2.0) - double
 ......Return
-........Call
-..........Identifier(xd)
-..........Identifier(args)
+........Call - void
+..........Identifier(xd) - void
+..........Identifier(args) - String[]
 ......Return
-........Identifier(d)
+........Identifier(d) - int
 ......Return
-........Decimal(2.0)
+........Decimal(2.0) - double

@@ -47,25 +47,25 @@ Program
 ........Bool
 ........Identifier(t)
 ......If
-........And
-..........Eq
-............Identifier(x)
-............Identifier(b)
-..........Eq
-............Identifier(z)
-............Identifier(t)
-........Assign
-..........Identifier(y)
-..........Mul
-............Lshift
-..............Identifier(a)
-..............Identifier(b)
-............Decimal(1.0)
-........Assign
-..........Identifier(y)
-..........Mod
-............Identifier(a)
-............Identifier(y)
+........And - boolean
+..........Eq - boolean
+............Identifier(x) - int
+............Identifier(b) - int
+..........Eq - boolean
+............Identifier(z) - boolean
+............Identifier(t) - boolean
+........Assign - undef
+..........Identifier(y) - double
+..........Mul - undef
+............Lshift - int
+..............Identifier(a) - int
+..............Identifier(b) - int
+............Decimal(1.0) - double
+........Assign - undef
+..........Identifier(y) - double
+..........Mod - undef
+............Identifier(a) - int
+............Identifier(y) - double
 ..MethodDecl
 ....MethodHeader
 ......Void
@@ -75,5 +75,5 @@ Program
 ..........StringArray
 ..........Identifier(args)
 ....MethodBody
-......Call
-........Identifier(operators)
+......Call - undef
+........Identifier(operators) - undef
