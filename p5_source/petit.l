@@ -1,12 +1,8 @@
-/* START definitions section -- C code delimited by %{ ... %} and substitutions */
-
 %{
-
 #include "y.tab.h"
 #include "ast.h"
 #include "semantics.h"
 
-#define YY_USER_ACTION { syn_line = lex_line; syn_column = lex_column; lex_column += yyleng; }
 #define PASS_TOKEN() yylval.lexeme = strdup(yytext);
 
 int yyparse(void);
@@ -17,7 +13,6 @@ int syn_line = -1, syn_column = -1;
 int errors = 0;
 
 extern struct node *ast;
-
 %}
 
 %option noyywrap
@@ -27,34 +22,45 @@ extern struct node *ast;
 digit   [0-9]
 letter  [a-zA-Z]
 
-/* START rules section -- regular expressions for pattern matching */
-
 %%
 
-integer                     { return INTEGER; }
-double                      { return DOUBLE; }
-if                          { return IF; }
-then                        { return THEN; }
-else                        { return ELSE; }
-{letter}({letter}|{digit})* { PASS_TOKEN(); return IDENTIFIER; }
-{digit}+                    { PASS_TOKEN(); return NATURAL; }
-{digit}*"."{digit}+         { PASS_TOKEN(); return DECIMAL; }
+integer                     { syn_line = lex_line; syn_column = lex_column; lex_column += yyleng; return INTEGER; }
+double                      { syn_line = lex_line; syn_column = lex_column; lex_column += yyleng; return DOUBLE; }
+if                          { syn_line = lex_line; syn_column = lex_column; lex_column += yyleng; return IF; }
+then                        { syn_line = lex_line; syn_column = lex_column; lex_column += yyleng; return THEN; }
+else                        { syn_line = lex_line; syn_column = lex_column; lex_column += yyleng; return ELSE; }
 
-"/*"                        { BEGIN(COMMENT); }
-<COMMENT>"*/"               { BEGIN(INITIAL); }
+{letter}({letter}|{digit})* {
+    syn_line = lex_line; syn_column = lex_column; lex_column += yyleng;
+    PASS_TOKEN();
+    return IDENTIFIER;
+}
+
+{digit}+ {
+    syn_line = lex_line; syn_column = lex_column; lex_column += yyleng;
+    PASS_TOKEN();
+    return NATURAL;
+}
+
+{digit}*"."{digit}+ {
+    syn_line = lex_line; syn_column = lex_column; lex_column += yyleng;
+    PASS_TOKEN();
+    return DECIMAL;
+}
+
+"/*"                        { syn_line = lex_line; syn_column = lex_column; lex_column += yyleng; BEGIN(COMMENT); }
+<COMMENT>"*/"               { lex_column += yyleng; BEGIN(INITIAL); }
 <COMMENT>\n|\r|\r\n         { lex_line++; lex_column = 1; }
-<COMMENT>.                  {;}
+<COMMENT>.                  { lex_column += yyleng; }
 <COMMENT><<EOF>>            { return 0; }
 
-[\t ]+                      {;}
+[\t ]+                      { lex_column += yyleng; }
 \n|\r|\r\n                  { lex_line++; lex_column = 1; }
-[()=,*/+-]                  { return yytext[0]; }
-.                           { yyerror("unrecognized character"); }
-<<EOF>>                     { YY_USER_ACTION; return 0; }
+[()=,*/+-]                  { syn_line = lex_line; syn_column = lex_column; lex_column += yyleng; return yytext[0]; }
+.                           { syn_line = lex_line; syn_column = lex_column; lex_column += yyleng; yyerror("unrecognized character"); }
+<<EOF>>                     { syn_line = lex_line; syn_column = lex_column; return 0; }
 
 %%
-
-/* START subroutines section -- user functions */
 
 void yyerror(char *error) {
     errors++;
