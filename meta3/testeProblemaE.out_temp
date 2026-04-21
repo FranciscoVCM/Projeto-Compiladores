@@ -1,3 +1,17 @@
+Line 0, col 0: Symbol main already defined
+Line 0, col 0: Symbol funcao3 already defined
+Line 0, col 0: Symbol funcao3 already defined
+Line 0, col 0: Symbol i already defined
+Line 0, col 0: Symbol i already defined
+Line 0, col 0: Symbol funcao already defined
+Line 0, col 0: Symbol ola56 already defined
+Line 0, col 0: Operator + cannot be applied to types boolean, boolean
+Line 0, col 0: Operator = cannot be applied to types boolean, int
+Line 0, col 0: Operator = cannot be applied to types boolean, int
+Line 0, col 0: Operator / cannot be applied to types double, int
+Line 0, col 0: Operator / cannot be applied to types double, int
+Line 0, col 0: Operator / cannot be applied to types double, int
+Line 0, col 0: Operator + cannot be applied to types int, double
 ===== Class Java Symbol Table =====
 funcao2	(String[])	void
 x	(double, int)	double
@@ -71,7 +85,6 @@ w	int
 ===== Method funcao (int, double) Symbol Table =====
 return	int
 i	int	param
-i	double	param
 
 ===== Method funcao (double, int) Symbol Table =====
 return	void
@@ -87,7 +100,6 @@ m	int
 
 ===== Method funcao (int, int) Symbol Table =====
 return	int
-i	int	param
 i	int	param
 
 ===== Method maine () Symbol Table =====
@@ -450,7 +462,7 @@ Program
 ......................Identifier(l) - boolean
 ......Assign - undef
 ........Identifier(f) - double
-........ParseArgs - int
+........ParseArgs - undef
 ..........Identifier(i) - boolean
 ..........Add - undef
 ............Add - undef

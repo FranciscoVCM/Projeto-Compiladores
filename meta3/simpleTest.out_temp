@@ -1,3 +1,25 @@
+Line 0, col 0: Operator = cannot be applied to types int, double
+Line 0, col 0: Operator = cannot be applied to types int, double
+Line 0, col 0: Operator * cannot be applied to types int, double
+Line 0, col 0: Operator == cannot be applied to types int, double
+Line 0, col 0: Operator * cannot be applied to types String[], String[]
+Line 0, col 0: Operator && cannot be applied to types String[], String[]
+Line 0, col 0: Operator * cannot be applied to types String[], int
+Line 0, col 0: Operator && cannot be applied to types boolean, String[]
+Line 0, col 0: Operator < cannot be applied to types String[], int
+Line 0, col 0: Operator < cannot be applied to types boolean, int
+Line 0, col 0: Operator == cannot be applied to types String[], double
+Line 0, col 0: Operator && cannot be applied to types String[], String[]
+Line 0, col 0: Operator + cannot be applied to types int, double
+Line 0, col 0: Operator % cannot be applied to types int, double
+Line 0, col 0: Operator > cannot be applied to types int, double
+Line 0, col 0: Operator == cannot be applied to types int, double
+Line 0, col 0: Operator >= cannot be applied to types int, double
+Line 0, col 0: Operator > cannot be applied to types String[], int
+Line 0, col 0: Cannot find symbol main
+Line 0, col 0: Incompatible type String[] in return statement
+Line 0, col 0: Incompatible type void in return statement
+Line 0, col 0: Incompatible type double in return statement
 ===== Class ThatsWhatSheSaid Symbol Table =====
 main2	double
 main	(String[])	int
@@ -159,7 +181,7 @@ Program
 ..............Identifier(argument) - int
 ..............Identifier(argument) - int
 ............Identifier(iterator) - double
-......Assign - undef
+......Assign - double
 ........Identifier(iterator) - double
 ........Identifier(argument) - int
 ......If

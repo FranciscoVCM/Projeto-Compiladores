@@ -1,3 +1,15 @@
+Line 0, col 0: Cannot find symbol undef
+Line 0, col 0: Cannot find symbol undef
+Line 0, col 0: Cannot find symbol undef
+Line 0, col 0: Cannot find symbol undef
+Line 0, col 0: Cannot find symbol undef
+Line 0, col 0: Cannot find symbol undef
+Line 0, col 0: Cannot find symbol undef
+Line 0, col 0: Cannot find symbol undef
+Line 0, col 0: Cannot find symbol undef
+Line 0, col 0: Cannot find symbol undef
+Line 0, col 0: Cannot find symbol undef
+Line 0, col 0: Cannot find symbol undef
 ===== Class ClassTeste Symbol Table =====
 main	(String[])	void
 
@@ -29,39 +41,39 @@ Program
 ......VarDecl
 ........Double
 ........Identifier(d)
-......ParseArgs - int
+......ParseArgs - undef
 ........Identifier(undef) - undef
 ........Identifier(undef) - undef
-......ParseArgs - int
+......ParseArgs - undef
 ........Identifier(undef) - undef
 ........Lshift - int
 ..........Natural(1) - int
 ..........Natural(1) - int
-......ParseArgs - int
+......ParseArgs - undef
 ........Identifier(undef) - undef
 ........Natural(0) - int
-......ParseArgs - int
+......ParseArgs - undef
 ........Identifier(undef) - undef
 ........Identifier(i) - int
-......ParseArgs - int
+......ParseArgs - undef
 ........Identifier(undef) - undef
 ........Length - int
 ..........Identifier(args) - String[]
-......ParseArgs - int
+......ParseArgs - undef
 ........Identifier(undef) - undef
 ........Decimal(0.0) - double
-......ParseArgs - int
+......ParseArgs - undef
 ........Identifier(undef) - undef
 ........Identifier(d) - double
-......ParseArgs - int
+......ParseArgs - undef
 ........Identifier(undef) - undef
 ........BoolLit(true) - boolean
-......ParseArgs - int
+......ParseArgs - undef
 ........Identifier(undef) - undef
 ........Identifier(b) - boolean
-......ParseArgs - int
+......ParseArgs - undef
 ........Identifier(undef) - undef
 ........Identifier(args) - String[]
-......ParseArgs - int
+......ParseArgs - undef
 ........Identifier(args) - String[]
 ........Identifier(undef) - undef

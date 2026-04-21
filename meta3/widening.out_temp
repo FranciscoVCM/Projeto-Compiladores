@@ -1,3 +1,12 @@
+Line 0, col 0: Operator = cannot be applied to types double, boolean
+Line 0, col 0: Operator * cannot be applied to types int, double
+Line 0, col 0: Operator * cannot be applied to types int, double
+Line 0, col 0: Operator * cannot be applied to types int, boolean
+Line 0, col 0: Cannot find symbol fun_di
+Line 0, col 0: Cannot find symbol fun_di
+Line 0, col 0: Cannot find symbol fun_ii
+Line 0, col 0: Cannot find symbol fun_ii
+Line 0, col 0: Cannot find symbol fun_ii
 ===== Class Narrow Symbol Table =====
 main	(String[])	void
 fun_dd	(double, double)	int
@@ -50,16 +59,16 @@ Program
 ......Assign - double
 ........Identifier(d) - double
 ........Decimal(1.1) - double
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Natural(1) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Identifier(i) - int
 ......Assign - undef
 ........Identifier(d) - double
 ........Identifier(b) - boolean
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Mul - int
 ..........Identifier(i) - int
@@ -79,31 +88,31 @@ Program
 ........Mul - undef
 ..........Identifier(i) - int
 ..........Identifier(b) - boolean
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
-........Call - undef
-..........Identifier(fun_dd) - undef
+........Call - int
+..........Identifier(fun_dd) - int
 ..........Natural(1) - int
 ..........Natural(2) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
-........Call - undef
-..........Identifier(fun_dd) - undef
+........Call - int
+..........Identifier(fun_dd) - int
 ..........Decimal(3.0) - double
 ..........Natural(4) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Call - int
 ..........Identifier(fun_dd) - int
 ..........Decimal(5.0) - double
 ..........Decimal(6.0) - double
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
-........Call - undef
-..........Identifier(fun_di) - undef
+........Call - int
+..........Identifier(fun_di) - int
 ..........Natural(1) - int
 ..........Natural(1) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Call - int
 ..........Identifier(fun_di) - int
@@ -121,7 +130,7 @@ Program
 ..........Identifier(fun_di) - undef
 ..........Decimal(1.0) - double
 ..........Decimal(1.0) - double
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Call - int
 ..........Identifier(fun_ii) - int

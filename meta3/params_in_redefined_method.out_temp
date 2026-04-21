@@ -1,3 +1,5 @@
+Line 0, col 0: Symbol a already defined
+Line 0, col 0: Symbol a already defined
 ===== Class test Symbol Table =====
 a	(int, int)	void
 a	(int, int)	void
@@ -10,7 +12,6 @@ b	int	param
 
 ===== Method a (int, int) Symbol Table =====
 return	void
-a	int	param
 a	int	param
 
 ===== Method main (String[]) Symbol Table =====

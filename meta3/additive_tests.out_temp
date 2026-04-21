@@ -1,3 +1,15 @@
+Line 0, col 0: Operator + cannot be applied to types int, double
+Line 0, col 0: Operator - cannot be applied to types int, double
+Line 0, col 0: Operator + cannot be applied to types int, boolean
+Line 0, col 0: Operator - cannot be applied to types int, boolean
+Line 0, col 0: Operator + cannot be applied to types int, String[]
+Line 0, col 0: Operator - cannot be applied to types int, String[]
+Line 0, col 0: Operator + cannot be applied to types int, double
+Line 0, col 0: Operator - cannot be applied to types int, double
+Line 0, col 0: Operator + cannot be applied to types int, boolean
+Line 0, col 0: Operator - cannot be applied to types int, boolean
+Line 0, col 0: Operator + cannot be applied to types int, String[]
+Line 0, col 0: Operator - cannot be applied to types int, String[]
 ===== Class sub_2_pewdiepie Symbol Table =====
 main	(String[])	void
 
@@ -78,12 +90,12 @@ Program
 ........Sub - undef
 ..........Identifier(i) - int
 ..........Identifier(args) - String[]
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Add - int
 ..........Identifier(i) - int
 ..........Identifier(i) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Sub - int
 ..........Identifier(i) - int

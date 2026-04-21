@@ -1,3 +1,11 @@
+Line 0, col 0: Symbol b already defined
+Line 0, col 0: Symbol e already defined
+Line 0, col 0: Symbol a already defined
+Line 0, col 0: Symbol b already defined
+Line 0, col 0: Symbol e already defined
+Line 0, col 0: Operator = cannot be applied to types int, boolean
+Line 0, col 0: Incompatible type int in return statement
+Line 0, col 0: Operator / cannot be applied to types double, int
 ===== Class newClass Symbol Table =====
 i	int
 b	boolean
@@ -33,7 +41,6 @@ return	double
 a	int	param
 b	int	param
 s	double	param
-e	boolean	param
 e	boolean	param
 c	int
 d	int

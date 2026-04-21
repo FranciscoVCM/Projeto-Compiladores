@@ -1,3 +1,5 @@
+Line 0, col 0: Cannot find symbol factorial
+Line 0, col 0: Cannot find symbol factorial
 ===== Class Factorial Symbol Table =====
 factorial	(int, int, double)	int
 main	(String[])	void

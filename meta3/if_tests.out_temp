@@ -1,3 +1,7 @@
+Line 0, col 0: Incompatible type int in if statement
+Line 0, col 0: Incompatible type double in if statement
+Line 0, col 0: Incompatible type String[] in if statement
+Line 0, col 0: Incompatible type int in if statement
 ===== Class if_tests Symbol Table =====
 main	(String[])	void
 

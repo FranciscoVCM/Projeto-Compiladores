@@ -1,3 +1,16 @@
+Line 0, col 0: Operator % cannot be applied to types double, double
+Line 0, col 0: Operator * cannot be applied to types double, int
+Line 0, col 0: Operator / cannot be applied to types double, int
+Line 0, col 0: Operator % cannot be applied to types double, int
+Line 0, col 0: Operator * cannot be applied to types double, int
+Line 0, col 0: Operator / cannot be applied to types double, int
+Line 0, col 0: Operator % cannot be applied to types double, int
+Line 0, col 0: Operator * cannot be applied to types double, boolean
+Line 0, col 0: Operator / cannot be applied to types double, boolean
+Line 0, col 0: Operator % cannot be applied to types double, boolean
+Line 0, col 0: Operator * cannot be applied to types double, String[]
+Line 0, col 0: Operator / cannot be applied to types double, String[]
+Line 0, col 0: Operator % cannot be applied to types double, String[]
 ===== Class mult Symbol Table =====
 main	(String[])	void
 
@@ -63,9 +76,9 @@ Program
 ........Div - double
 ..........Identifier(d) - double
 ..........Identifier(d) - double
-......Assign - double
+......Assign - undef
 ........Identifier(d) - double
-........Mod - double
+........Mod - undef
 ..........Identifier(d) - double
 ..........Identifier(d) - double
 ......Assign - undef

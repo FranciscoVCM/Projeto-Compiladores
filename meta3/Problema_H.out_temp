@@ -1,3 +1,11 @@
+Line 0, col 0: Incompatible type String[] in print statement
+Line 0, col 0: Operator .length cannot be applied to type int
+Line 0, col 0: Operator Integer.parseInt cannot be applied to types String[], double
+Line 0, col 0: Cannot find symbol e
+Line 0, col 0: Incompatible type String[] in return statement
+Line 0, col 0: Operator Integer.parseInt cannot be applied to types String[], double
+Line 0, col 0: Incompatible type int in return statement
+Line 0, col 0: Incompatible type double in return statement
 ===== Class teste Symbol Table =====
 xd	(String[])	void
 
@@ -24,13 +32,13 @@ Program
 ......Print
 ........Identifier(args) - String[]
 ......Print
-........Length - int
+........Length - undef
 ..........Identifier(d) - int
 ......Print
 ........Length - int
 ..........Identifier(args) - String[]
 ......Print
-........ParseArgs - int
+........ParseArgs - undef
 ..........Identifier(args) - String[]
 ..........Decimal(2.0) - double
 ......Print
@@ -38,13 +46,13 @@ Program
 ..........Identifier(args) - String[]
 ..........Natural(2) - int
 ......Print
-........ParseArgs - int
+........ParseArgs - undef
 ..........Identifier(args) - String[]
 ..........Identifier(e) - undef
 ......Return
 ........Identifier(args) - String[]
 ......Return
-........ParseArgs - int
+........ParseArgs - undef
 ..........Identifier(args) - String[]
 ..........Decimal(2.0) - double
 ......Return

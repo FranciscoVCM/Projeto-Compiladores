@@ -1,3 +1,9 @@
+Line 0, col 0: Symbol a already defined
+Line 0, col 0: Number 2147483648 out of bounds
+Line 0, col 0: Number 2147483649 out of bounds
+Line 0, col 0: Operator = cannot be applied to types int, boolean
+Line 0, col 0: Number 10_0000_00000 out of bounds
+Line 0, col 0: Cannot find symbol s
 ===== Class NoFlags Symbol Table =====
 a	(int)	int
 a	(double)	int
@@ -46,9 +52,9 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(a)
-......Assign - int
+......Assign - undef
 ........Identifier(a) - int
-........Natural(2147483648) - int
+........Natural(2147483648) - undef
 ..MethodDecl
 ....MethodHeader
 ......Int
@@ -82,9 +88,9 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(d)
-......Assign - int
+......Assign - undef
 ........Identifier(d) - int
-........Natural(2147483649) - int
+........Natural(2147483649) - undef
 ......Assign - undef
 ........Identifier(d) - int
 ........Identifier(c) - boolean
@@ -100,9 +106,9 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(d)
-......Assign - int
+......Assign - undef
 ........Identifier(d) - int
-........Natural(10_0000_00000) - int
+........Natural(10_0000_00000) - undef
 ..MethodDecl
 ....MethodHeader
 ......Void
@@ -112,7 +118,7 @@ Program
 ..........StringArray
 ..........Identifier(args)
 ....MethodBody
-......ParseArgs - int
+......ParseArgs - undef
 ........Identifier(s) - undef
 ........Decimal(2.2) - double
 ......Print

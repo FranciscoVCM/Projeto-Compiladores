@@ -1,3 +1,4 @@
+Line 0, col 0: Incompatible type void in print statement
 ===== Class Error Symbol Table =====
 a	(int)	void
 main	(String[])	void

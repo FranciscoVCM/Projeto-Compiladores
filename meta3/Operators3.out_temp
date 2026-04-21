@@ -1,3 +1,5 @@
+Line 0, col 0: Operator == cannot be applied to types double, int
+Line 0, col 0: Operator <= cannot be applied to types double, int
 ===== Class Sum Symbol Table =====
 operator	void
 main	void

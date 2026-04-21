@@ -1,3 +1,6 @@
+Line 0, col 0: Operator * cannot be applied to types int, double
+Line 0, col 0: Operator % cannot be applied to types int, double
+Line 0, col 0: Cannot find symbol operators
 ===== Class Factorial Symbol Table =====
 operators	(int)	int
 main	(String[])	void

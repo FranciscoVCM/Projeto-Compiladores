@@ -3,17 +3,23 @@
 #include <string.h>
 #include "ast.h"
 
-struct node *newnode(enum category category, char *token) {
+struct node *newnode4(enum category category, char *token, int line, int column) {
     struct node *new = malloc(sizeof(struct node));
     new->category = category;
     new->token = token ? strdup(token) : NULL;
     new->type = none_type;
+    new->line = line;
+    new->column = column;
 
     new->children = malloc(sizeof(struct node_list));
     new->children->node = NULL;
     new->children->next = NULL;
 
     return new;
+}
+
+struct node *newnode2(enum category category, char *token) {
+    return newnode4(category, token, 0, 0);
 }
 
 void addchild(struct node *parent, struct node *child) {

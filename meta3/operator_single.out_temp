@@ -1,3 +1,11 @@
+Line 0, col 0: Operator = cannot be applied to types int, double
+Line 0, col 0: Operator + cannot be applied to type boolean
+Line 0, col 0: Operator + cannot be applied to type boolean
+Line 0, col 0: Operator .length cannot be applied to type int
+Line 0, col 0: Operator .length cannot be applied to type double
+Line 0, col 0: Operator ! cannot be applied to type int
+Line 0, col 0: Operator ! cannot be applied to type double
+Line 0, col 0: Reference to method f is ambiguous
 ===== Class operator_single Symbol Table =====
 main	(String[])	void
 f	(int, double)	void
@@ -53,7 +61,7 @@ Program
 ........Identifier(i) - int
 ........Plus - double
 ..........Decimal(2.0) - double
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Plus - int
 ..........Natural(1) - int
@@ -76,13 +84,13 @@ Program
 ........Identifier(tamanho) - int
 ........Length - int
 ..........Identifier(args) - String[]
-......Assign - int
+......Assign - undef
 ........Identifier(i) - int
-........Length - int
+........Length - undef
 ..........Identifier(i) - int
-......Assign - int
+......Assign - undef
 ........Identifier(i) - int
-........Length - int
+........Length - undef
 ..........Identifier(d) - double
 ......Assign - undef
 ........Identifier(i) - int

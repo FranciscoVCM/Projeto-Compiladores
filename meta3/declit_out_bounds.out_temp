@@ -1,3 +1,24 @@
+Line 0, col 0: Number 10_0000_00000 out of bounds
+Line 0, col 0: Number 2147483648 out of bounds
+Line 0, col 0: Number 2147483649 out of bounds
+Line 0, col 0: Number 12147483649 out of bounds
+Line 0, col 0: Number 214__748_3648 out of bounds
+Line 0, col 0: Number 214__748_3649 out of bounds
+Line 0, col 0: Number 1214748364__9 out of bounds
+Line 0, col 0: Number 10_0000_00000 out of bounds
+Line 0, col 0: Number 2147483648 out of bounds
+Line 0, col 0: Number 2147483649 out of bounds
+Line 0, col 0: Number 12147483649 out of bounds
+Line 0, col 0: Number 214__748_3648 out of bounds
+Line 0, col 0: Number 214__748_3649 out of bounds
+Line 0, col 0: Number 1214748364__9 out of bounds
+Line 0, col 0: Number 10_0000_00000 out of bounds
+Line 0, col 0: Number 2147483648 out of bounds
+Line 0, col 0: Number 2147483649 out of bounds
+Line 0, col 0: Number 12147483649 out of bounds
+Line 0, col 0: Number 214__748_3648 out of bounds
+Line 0, col 0: Number 214__748_3649 out of bounds
+Line 0, col 0: Number 1214748364__9 out of bounds
 ===== Class ClassTeste Symbol Table =====
 main	(String[])	void
 
@@ -21,9 +42,9 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(a)
-......Assign - int
+......Assign - undef
 ........Identifier(a) - int
-........Natural(10_0000_00000) - int
+........Natural(10_0000_00000) - undef
 ......Assign - int
 ........Identifier(a) - int
 ........Natural(100) - int
@@ -33,15 +54,15 @@ Program
 ......Assign - int
 ........Identifier(a) - int
 ........Natural(2147483647) - int
-......Assign - int
+......Assign - undef
 ........Identifier(a) - int
-........Natural(2147483648) - int
-......Assign - int
+........Natural(2147483648) - undef
+......Assign - undef
 ........Identifier(a) - int
-........Natural(2147483649) - int
-......Assign - int
+........Natural(2147483649) - undef
+......Assign - undef
 ........Identifier(a) - int
-........Natural(12147483649) - int
+........Natural(12147483649) - undef
 ......Assign - int
 ........Identifier(a) - int
 ........Natural(1___0___0) - int
@@ -51,19 +72,19 @@ Program
 ......Assign - int
 ........Identifier(a) - int
 ........Natural(214__748_3647) - int
-......Assign - int
+......Assign - undef
 ........Identifier(a) - int
-........Natural(214__748_3648) - int
-......Assign - int
+........Natural(214__748_3648) - undef
+......Assign - undef
 ........Identifier(a) - int
-........Natural(214__748_3649) - int
-......Assign - int
+........Natural(214__748_3649) - undef
+......Assign - undef
 ........Identifier(a) - int
-........Natural(1214748364__9) - int
-......Assign - int
+........Natural(1214748364__9) - undef
+......Assign - undef
 ........Identifier(a) - int
-........Minus - int
-..........Natural(10_0000_00000) - int
+........Minus - undef
+..........Natural(10_0000_00000) - undef
 ......Assign - int
 ........Identifier(a) - int
 ........Minus - int
@@ -76,18 +97,18 @@ Program
 ........Identifier(a) - int
 ........Minus - int
 ..........Natural(2147483647) - int
-......Assign - int
+......Assign - undef
 ........Identifier(a) - int
-........Minus - int
-..........Natural(2147483648) - int
-......Assign - int
+........Minus - undef
+..........Natural(2147483648) - undef
+......Assign - undef
 ........Identifier(a) - int
-........Minus - int
-..........Natural(2147483649) - int
-......Assign - int
+........Minus - undef
+..........Natural(2147483649) - undef
+......Assign - undef
 ........Identifier(a) - int
-........Minus - int
-..........Natural(12147483649) - int
+........Minus - undef
+..........Natural(12147483649) - undef
 ......Assign - int
 ........Identifier(a) - int
 ........Minus - int
@@ -100,22 +121,22 @@ Program
 ........Identifier(a) - int
 ........Minus - int
 ..........Natural(214__748_3647) - int
-......Assign - int
+......Assign - undef
 ........Identifier(a) - int
-........Minus - int
-..........Natural(214__748_3648) - int
-......Assign - int
+........Minus - undef
+..........Natural(214__748_3648) - undef
+......Assign - undef
 ........Identifier(a) - int
-........Minus - int
-..........Natural(214__748_3649) - int
-......Assign - int
+........Minus - undef
+..........Natural(214__748_3649) - undef
+......Assign - undef
 ........Identifier(a) - int
-........Minus - int
-..........Natural(1214748364__9) - int
-......Assign - int
+........Minus - undef
+..........Natural(1214748364__9) - undef
+......Assign - undef
 ........Identifier(a) - int
-........Plus - int
-..........Natural(10_0000_00000) - int
+........Plus - undef
+..........Natural(10_0000_00000) - undef
 ......Assign - int
 ........Identifier(a) - int
 ........Plus - int
@@ -128,18 +149,18 @@ Program
 ........Identifier(a) - int
 ........Plus - int
 ..........Natural(2147483647) - int
-......Assign - int
+......Assign - undef
 ........Identifier(a) - int
-........Plus - int
-..........Natural(2147483648) - int
-......Assign - int
+........Plus - undef
+..........Natural(2147483648) - undef
+......Assign - undef
 ........Identifier(a) - int
-........Plus - int
-..........Natural(2147483649) - int
-......Assign - int
+........Plus - undef
+..........Natural(2147483649) - undef
+......Assign - undef
 ........Identifier(a) - int
-........Plus - int
-..........Natural(12147483649) - int
+........Plus - undef
+..........Natural(12147483649) - undef
 ......Assign - int
 ........Identifier(a) - int
 ........Plus - int
@@ -152,15 +173,15 @@ Program
 ........Identifier(a) - int
 ........Plus - int
 ..........Natural(214__748_3647) - int
-......Assign - int
+......Assign - undef
 ........Identifier(a) - int
-........Plus - int
-..........Natural(214__748_3648) - int
-......Assign - int
+........Plus - undef
+..........Natural(214__748_3648) - undef
+......Assign - undef
 ........Identifier(a) - int
-........Plus - int
-..........Natural(214__748_3649) - int
-......Assign - int
+........Plus - undef
+..........Natural(214__748_3649) - undef
+......Assign - undef
 ........Identifier(a) - int
-........Plus - int
-..........Natural(1214748364__9) - int
+........Plus - undef
+..........Natural(1214748364__9) - undef

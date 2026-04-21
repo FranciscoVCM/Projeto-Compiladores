@@ -1,3 +1,5 @@
+Line 0, col 0: Symbol teste2 already defined
+Line 0, col 0: Cannot find symbol factorial
 ===== Class ClassTeste Symbol Table =====
 teste0	int
 teste1	int

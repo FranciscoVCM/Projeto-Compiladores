@@ -1,3 +1,8 @@
+Line 0, col 0: Operator .length cannot be applied to type int
+Line 0, col 0: Operator .length cannot be applied to type boolean
+Line 0, col 0: Operator .length cannot be applied to type double
+Line 0, col 0: Cannot find symbol undef
+Line 0, col 0: Operator .length cannot be applied to type int
 ===== Class ClassTeste Symbol Table =====
 main	(String[])	void
 
@@ -29,27 +34,27 @@ Program
 ......VarDecl
 ........Double
 ........Identifier(d)
-......Assign - int
+......Assign - undef
 ........Identifier(i) - int
-........Length - int
+........Length - undef
 ..........Identifier(i) - int
-......Assign - int
+......Assign - undef
 ........Identifier(i) - int
-........Length - int
+........Length - undef
 ..........Identifier(b) - boolean
-......Assign - int
+......Assign - undef
 ........Identifier(i) - int
-........Length - int
+........Length - undef
 ..........Identifier(d) - double
 ......Assign - int
 ........Identifier(i) - int
 ........Length - int
 ..........Identifier(args) - String[]
-......Assign - int
+......Assign - undef
 ........Identifier(i) - int
-........Length - int
+........Length - undef
 ..........Identifier(undef) - undef
 ......Assign - undef
 ........Identifier(b) - boolean
-........Length - int
+........Length - undef
 ..........Identifier(i) - int

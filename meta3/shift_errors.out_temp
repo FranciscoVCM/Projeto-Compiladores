@@ -1,3 +1,17 @@
+Line 0, col 0: Operator << cannot be applied to types int, double
+Line 0, col 0: Operator << cannot be applied to types int, boolean
+Line 0, col 0: Operator << cannot be applied to types double, int
+Line 0, col 0: Operator << cannot be applied to types double, int
+Line 0, col 0: Operator << cannot be applied to types double, double
+Line 0, col 0: Operator << cannot be applied to types double, double
+Line 0, col 0: Operator << cannot be applied to types double, boolean
+Line 0, col 0: Operator << cannot be applied to types double, boolean
+Line 0, col 0: Operator << cannot be applied to types boolean, int
+Line 0, col 0: Operator << cannot be applied to types boolean, int
+Line 0, col 0: Operator << cannot be applied to types boolean, double
+Line 0, col 0: Operator << cannot be applied to types boolean, double
+Line 0, col 0: Operator << cannot be applied to types boolean, boolean
+Line 0, col 0: Operator << cannot be applied to types boolean, boolean
 ===== Class shift_errors Symbol Table =====
 valid	(String[])	void
 main	(String[])	void
@@ -63,7 +77,7 @@ Program
 ........Lshift - int
 ..........Identifier(i) - int
 ..........Natural(1) - int
-......Assign - undef
+......Assign - double
 ........Identifier(d) - double
 ........Lshift - int
 ..........Identifier(i) - int
@@ -88,14 +102,14 @@ Program
 ........Lshift - undef
 ..........Identifier(d) - double
 ..........Natural(1) - int
-......Assign - double
+......Assign - undef
 ........Identifier(d) - double
-........Lshift - double
+........Lshift - undef
 ..........Identifier(d) - double
 ..........Decimal(1.1) - double
 ......Assign - undef
 ........Identifier(i) - int
-........Lshift - double
+........Lshift - undef
 ..........Identifier(d) - double
 ..........Decimal(1.1) - double
 ......Assign - undef

@@ -1,3 +1,29 @@
+Line 0, col 0: Operator + cannot be applied to types double, int
+Line 0, col 0: Operator - cannot be applied to types double, int
+Line 0, col 0: Operator * cannot be applied to types double, int
+Line 0, col 0: Operator / cannot be applied to types double, int
+Line 0, col 0: Operator % cannot be applied to types double, int
+Line 0, col 0: Operator + cannot be applied to types int, double
+Line 0, col 0: Operator - cannot be applied to types int, double
+Line 0, col 0: Operator * cannot be applied to types int, double
+Line 0, col 0: Operator / cannot be applied to types int, double
+Line 0, col 0: Operator % cannot be applied to types int, double
+Line 0, col 0: Operator > cannot be applied to types int, double
+Line 0, col 0: Operator >= cannot be applied to types int, double
+Line 0, col 0: Operator < cannot be applied to types int, double
+Line 0, col 0: Operator <= cannot be applied to types int, double
+Line 0, col 0: Operator == cannot be applied to types int, double
+Line 0, col 0: Operator != cannot be applied to types int, double
+Line 0, col 0: Operator > cannot be applied to types double, int
+Line 0, col 0: Operator >= cannot be applied to types double, int
+Line 0, col 0: Operator < cannot be applied to types double, int
+Line 0, col 0: Operator <= cannot be applied to types double, int
+Line 0, col 0: Operator == cannot be applied to types double, int
+Line 0, col 0: Operator != cannot be applied to types double, int
+Line 0, col 0: Operator + cannot be applied to types double, int
+Line 0, col 0: Operator - cannot be applied to types int, double
+Line 0, col 0: Operator % cannot be applied to types int, double
+Line 0, col 0: Operator + cannot be applied to types int, double
 ===== Class LocalVariables Symbol Table =====
 factorial_mas_com_muitos_mais_carateres_para_ver_se_a_memoria_esta_bem	int
 factorial_mas_com_muitos_mais_carateres_para_ver_se_a_memoria_esta_bem	(int, int, double)	void
@@ -138,27 +164,27 @@ Program
 ........Mod - int
 ..........Identifier(a) - int
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
 ........Add - int
 ..........Identifier(a) - int
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
 ........Sub - int
 ..........Identifier(a) - int
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
 ........Mul - int
 ..........Identifier(a) - int
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
 ........Div - int
 ..........Identifier(a) - int
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
 ........Mod - int
 ..........Identifier(a) - int
@@ -213,27 +239,27 @@ Program
 ........Mod - undef
 ..........Identifier(b) - int
 ..........Identifier(c) - double
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
 ........Add - int
 ..........Identifier(a) - int
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
 ........Sub - int
 ..........Identifier(a) - int
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
 ........Mul - int
 ..........Identifier(a) - int
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
 ........Div - int
 ..........Identifier(a) - int
 ..........Identifier(b) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
 ........Mod - int
 ..........Identifier(a) - int
@@ -336,7 +362,7 @@ Program
 ......Assign - int
 ........Identifier(b) - int
 ........Natural(3) - int
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
 ........Natural(2) - int
 ......Assign - int
@@ -369,7 +395,7 @@ Program
 ........Mul - double
 ..........Decimal(2.0) - double
 ..........Decimal(2.0) - double
-......Assign - undef
+......Assign - double
 ........Identifier(c) - double
 ........Div - int
 ..........Identifier(a) - int
@@ -412,7 +438,7 @@ Program
 ......Assign - int
 ........Identifier(a) - int
 ........Natural(1) - int
-......Assign - undef
+......Assign - double
 ........Identifier(n) - double
 ........Natural(0) - int
 ......Assign - undef
@@ -420,7 +446,7 @@ Program
 ........Add - undef
 ..........Identifier(a) - int
 ..........Identifier(n) - double
-......Assign - undef
+......Assign - double
 ........Identifier(n) - double
 ........Sub - int
 ..........Identifier(a) - int

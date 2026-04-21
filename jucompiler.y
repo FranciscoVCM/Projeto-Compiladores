@@ -5,6 +5,9 @@
 #include "ast.h"
 #include "semantics.h"
 
+#define NODE(cat, tok) newnode(cat, tok, token_line, token_column)
+#define NODE_AT(cat, tok, ln, col) newnode(cat, tok, ln, col)
+
 extern int yylex();
 extern int line;
 extern int column;
