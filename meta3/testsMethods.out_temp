@@ -12,41 +12,40 @@ f	(double,double)	double
 main	(String[])	void
 
 ===== Method f(int,double,double,double) Symbol Table =====
-return		double
-a		int	param
-b		double	param
-c		double	param
-d		double	param
+return	double
+a	int	param
+b	double	param
+c	double	param
+d	double	param
 
 ===== Method f(double,double,double,int) Symbol Table =====
-return		double
-b		double	param
-c		double	param
-d		double	param
-a		int	param
+return	double
+b	double	param
+c	double	param
+d	double	param
+a	int	param
 
 ===== Method f(double) Symbol Table =====
-return		double
-b		double	param
+return	double
+b	double	param
 
 ===== Method f(int) Symbol Table =====
-return		double
-b		int	param
+return	double
+b	int	param
 
 ===== Method f(double,int) Symbol Table =====
-return		double
-b		double	param
-c		int	param
+return	double
+b	double	param
+c	int	param
 
 ===== Method f(double,double) Symbol Table =====
-return		double
-b		double	param
-c		double	param
+return	double
+b	double	param
+c	double	param
 
 ===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-
+return	void
+args	String[]	param
 
 Program
 ..Identifier(Alguns_Erros)
@@ -140,7 +139,7 @@ Program
 ......Call - undef
 ........Identifier(f) - undef
 ........Call - void
-..........Identifier(main)
+..........Identifier(main) - void
 ..........Identifier(args) - String[]
 ........Identifier(args) - String[]
 ........Natural(1) - int

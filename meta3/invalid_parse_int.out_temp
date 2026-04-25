@@ -25,12 +25,11 @@ Line 21, col 9: Operator Integer.parseInt cannot be applied to types String[], u
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-b		boolean
-i		int
-d		double
-
+return	void
+args	String[]	param
+b	boolean
+i	int
+d	double
 
 Program
 ..Identifier(ClassTeste)

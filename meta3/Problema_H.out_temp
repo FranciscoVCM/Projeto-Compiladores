@@ -12,10 +12,9 @@ Line 14, col 16: Incompatible type double in return statement
 xd	(String[])	void
 
 ===== Method xd(String[]) Symbol Table =====
-return		void
-args		String[]	param
-d		int
-
+return	void
+args	String[]	param
+d	int
 
 Program
 ..Identifier(teste)
@@ -59,7 +58,7 @@ Program
 ..........Decimal(2.0) - double
 ......Return
 ........Call - void
-..........Identifier(xd)
+..........Identifier(xd) - void
 ..........Identifier(args) - String[]
 ......Return
 ........Identifier(d) - int

@@ -4,13 +4,12 @@ a	(int)	void
 main	(String[])	void
 
 ===== Method a(int) Symbol Table =====
-return		void
-b		int	param
+return	void
+b	int	param
 
 ===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-
+return	void
+args	String[]	param
 
 Program
 ..Identifier(Error)
@@ -40,5 +39,5 @@ Program
 ....MethodBody
 ......Print
 ........Call - void
-..........Identifier(a)
+..........Identifier(a) - void
 ..........Natural(3) - int

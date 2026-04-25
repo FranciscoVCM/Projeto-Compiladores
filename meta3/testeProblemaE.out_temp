@@ -1,6 +1,6 @@
-Line 24, col 24: Symbol main already defined
-Line 32, col 22: Symbol funcao3 already defined
-Line 34, col 22: Symbol funcao3 already defined
+Line 24, col 24: Symbol main(String[]) already defined
+Line 32, col 22: Symbol funcao3(int,int,double) already defined
+Line 34, col 22: Symbol funcao3(int,int,double) already defined
 Line 43, col 41: Symbol i already defined
 Line 55, col 40: Symbol i already defined
 Line 57, col 26: Symbol funcao already defined
@@ -9,7 +9,6 @@ Line 10, col 9: Operator + cannot be applied to types boolean, boolean
 Line 10, col 15: Operator == cannot be applied to types undef, int
 Line 10, col 15: Incompatible type undef in if statement
 Line 13, col 6: Operator = cannot be applied to types boolean, int
-Line 26, col 5: Operator = cannot be applied to types boolean, int
 Line 62, col 26: Operator % cannot be applied to types double, int
 Line 62, col 15: Operator + cannot be applied to types int, undef
 Line 62, col 10: Operator = cannot be applied to types boolean, undef
@@ -24,111 +23,90 @@ Line 66, col 13: Operator Integer.parseInt cannot be applied to types boolean, d
 funcao2	(String[])	void
 x	(double,int)	double
 main	(String[])	void
-main	(String[])	void
-a		boolean
-funcao3	(int,int,double)	int
-funcao3	(int,int,double)	int
+a	boolean
 funcao3	(int,int,double)	int
 funcao3	(int,int,boolean)	boolean
-funcao		boolean
+funcao	boolean
 funcao	(int,double)	int
 funcao	(double,int)	void
 funcao	(double,double)	double
 funcao	(int,int)	int
-maine		void
+maine	()	void
 ola56	(int)	int
 
 ===== Method funcao2(String[]) Symbol Table =====
-return		void
-args		String[]	param
-a		boolean
-b		boolean
-c		int
-d		int
+return	void
+args	String[]	param
+a	boolean
+b	boolean
+c	int
+d	int
 
 ===== Method x(double,int) Symbol Table =====
-return		double
-x		double	param
-a		int	param
+return	double
+x	double	param
+a	int	param
 
 ===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-x		int
-b		int
-
-===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-x		int
+return	void
+args	String[]	param
+x	int
+b	int
 
 ===== Method funcao3(int,int,double) Symbol Table =====
-return		int
-a		int	param
-b		int	param
-c		double	param
-
-===== Method funcao3(int,int,double) Symbol Table =====
-return		int
-a		int	param
-b		int	param
-c		double	param
-
-===== Method funcao3(int,int,double) Symbol Table =====
-return		int
-a		int	param
-b		int	param
-c		double	param
+return	int
+a	int	param
+b	int	param
+c	double	param
 
 ===== Method funcao3(int,int,boolean) Symbol Table =====
-return		boolean
-a		int	param
-b		int	param
-c		boolean	param
-x		int
-y		int
-z		int
-w		int
+return	boolean
+a	int	param
+b	int	param
+c	boolean	param
+x	int
+y	int
+z	int
+w	int
 
 ===== Method funcao(int,double) Symbol Table =====
-return		int
-i		int	param
+return	int
+i	int	param
 
 ===== Method funcao(double,int) Symbol Table =====
-return		void
-i		double	param
-funcao		int	param
-m		boolean
+return	void
+i	double	param
+funcao	int	param
+m	boolean
 
 ===== Method funcao(double,double) Symbol Table =====
-return		double
-i		double	param
-funcao		double	param
-m		int
+return	double
+i	double	param
+funcao	double	param
+m	int
 
 ===== Method funcao(int,int) Symbol Table =====
-return		int
-i		int	param
+return	int
+i	int	param
 
 ===== Method maine() Symbol Table =====
-return		void
-a		int
-b		int
-c		int
-d		int
-e		double
-f		double
-g		double
-h		double
-i		boolean
-j		boolean
-k		boolean
-l		boolean
+return	void
+a	int
+b	int
+c	int
+d	int
+e	double
+f	double
+g	double
+h	double
+i	boolean
+j	boolean
+k	boolean
+l	boolean
 
 ===== Method ola56(int) Symbol Table =====
-return		int
-x1		int	param
-
+return	int
+x1	int	param
 
 Program
 ..Identifier(Java)
@@ -227,9 +205,9 @@ Program
 ......VarDecl
 ........Int
 ........Identifier(x)
-......Assign - boolean
-........Identifier(a) - boolean
-........Identifier(x) - int
+......Assign
+........Identifier(a)
+........Identifier(x)
 ..FieldDecl
 ....Bool
 ....Identifier(a)
@@ -355,7 +333,7 @@ Program
 ..........Identifier(m) - int
 ..........Natural(1) - int
 ........Call - int
-..........Identifier(funcao)
+..........Identifier(funcao) - int
 ..........Identifier(m) - int
 ..........Identifier(m) - int
 ........Block

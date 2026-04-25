@@ -13,12 +13,11 @@ Line 16, col 16: Incompatible type undef in while statement
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-i		int
-b		boolean
-d		double
-
+return	void
+args	String[]	param
+i	int
+b	boolean
+d	double
 
 Program
 ..Identifier(while_errors)

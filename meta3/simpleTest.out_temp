@@ -37,28 +37,27 @@ Line 32, col 16: Incompatible type String[] in return statement
 Line 33, col 9: Incompatible type void in return statement
 Line 37, col 12: Incompatible type double in return statement
 ===== Class ThatsWhatSheSaid Symbol Table =====
-main2		double
+main2	()	double
 main	(String[])	int
-one		int
-two		double
+one	()	int
+two	()	double
 
 ===== Method main2() Symbol Table =====
-return		double
-a		int
-b		double
+return	double
+a	int
+b	double
 
 ===== Method main(String[]) Symbol Table =====
-return		int
-args		String[]	param
-argument		int
-iterator		double
+return	int
+args	String[]	param
+argument	int
+iterator	double
 
 ===== Method one() Symbol Table =====
-return		int
+return	int
 
 ===== Method two() Symbol Table =====
-return		double
-
+return	double
 
 Program
 ..Identifier(ThatsWhatSheSaid)
@@ -128,7 +127,7 @@ Program
 ..............Identifier(args) - String[]
 ..............Natural(1) - int
 ............Call - int
-..............Identifier(main)
+..............Identifier(main) - int
 ..............Identifier(args) - String[]
 ..........And - undef
 ............BoolLit(true) - boolean
@@ -142,7 +141,7 @@ Program
 ................Identifier(args) - String[]
 ................Natural(1) - int
 ..............Call - int
-................Identifier(main)
+................Identifier(main) - int
 ................Identifier(args) - String[]
 ............BoolLit(true) - boolean
 ..........Identifier(args) - String[]
@@ -159,7 +158,7 @@ Program
 ..........Ne - boolean
 ............Natural(2) - int
 ............Call - int
-..............Identifier(main)
+..............Identifier(main) - int
 ..............Identifier(args) - String[]
 ......Assign - String[]
 ........Identifier(args) - String[]

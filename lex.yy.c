@@ -677,49 +677,43 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "jucompiler.l"
-#line 2 "jucompiler.l"
+#line 1 "claude.l"
+#line 2 "claude.l"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "y.tab.h"
-#include "ast.h"
-#include "semantics.h"
 
-#define PASS_TOKEN() yylval.lexeme = strdup(yytext);
-#define SETLOC() do { \
-    yylloc.first_line = line; \
-    yylloc.first_column = column; \
-    yylloc.last_line = line; \
-    yylloc.last_column = column + yyleng - 1; \
-} while(0)
-
-int yyparse(void);
-void yyerror(char *);
+extern YYSTYPE yylval;
 
 int line = 1;
 int column = 1;
 int token_line = 1;
 int token_column = 1;
-char token_text[10000] = "";
-int last_lex_error_line = 0;
-
-extern int print_tokens;
-extern int only_errors;
-extern int syntax_errors;
 
 int str_start_line;
 int str_start_column;
+
 int comment_start_line;
 int comment_start_column;
+
 int str_error;
+
 char str_buffer[10000];
 int str_index;
 
-static void set_token_text(const char *s) {
-    strncpy(token_text, s, sizeof(token_text) - 1);
-    token_text[sizeof(token_text) - 1] = '\0';
-}
-#line 721 "lex.yy.c"
+char token_text[10000] = "";
+int last_lex_error_line = 0;
 
-#line 723 "lex.yy.c"
+int print_tokens = 0;
+extern int suppress_errors;
+
+#define TOKEN(t) if(print_tokens) printf("%s\n", t);
+#define SET_TOKEN_TEXT(s) do { strncpy(token_text, (s), sizeof(token_text) - 1); token_text[sizeof(token_text) - 1] = '\0'; } while(0)
+
+#line 715 "lex.yy.c"
+
+#line 717 "lex.yy.c"
 
 #define INITIAL 0
 #define COMMENT 1
@@ -938,10 +932,10 @@ YY_DECL
 		}
 
 	{
-#line 54 "jucompiler.l"
+#line 48 "claude.l"
 
 
-#line 945 "lex.yy.c"
+#line 939 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1000,87 +994,110 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 56 "jucompiler.l"
+#line 50 "claude.l"
 {
-    SETLOC();
     comment_start_line = line;
     comment_start_column = column;
-    column += yyleng;
     BEGIN(COMMENT);
+    column += yyleng;
 }
 	YY_BREAK
 
 case 2:
 YY_RULE_SETUP
-#line 65 "jucompiler.l"
-{ column += yyleng; BEGIN(INITIAL); }
+#line 58 "claude.l"
+{
+        column += yyleng;
+        BEGIN(INITIAL);
+    }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 66 "jucompiler.l"
-{ column += yyleng; }
+#line 63 "claude.l"
+{
+        column += yyleng;
+    }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 67 "jucompiler.l"
-{ column += yyleng; }
+#line 67 "claude.l"
+{
+        column += yyleng;
+    }
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 68 "jucompiler.l"
-{ line++; column = 1; }
+#line 71 "claude.l"
+{
+        line++;
+        column = 1;
+    }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 69 "jucompiler.l"
-{ line++; column = 1; }
+#line 76 "claude.l"
+{
+        line++;
+        column = 1;
+    }
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 70 "jucompiler.l"
-{ line++; column = 1; }
+#line 81 "claude.l"
+{
+        line++;
+        column = 1;
+    }
 	YY_BREAK
 
 case YY_STATE_EOF(COMMENT):
-#line 73 "jucompiler.l"
+#line 87 "claude.l"
 {
-    printf("Line %d, col %d: unterminated comment\n", comment_start_line, comment_start_column);
-    last_lex_error_line = comment_start_line;
+    if (!suppress_errors) {
+        printf("Line %d, col %d: unterminated comment\n",
+               comment_start_line, comment_start_column);
+        last_lex_error_line = comment_start_line;
+    }
+    token_line = line;
+    token_column = column;
+    SET_TOKEN_TEXT("");
+    BEGIN(INITIAL);
     return 0;
 }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 79 "jucompiler.l"
+#line 100 "claude.l"
 {
     column += yyleng;
 }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 83 "jucompiler.l"
+#line 104 "claude.l"
 {
-    SETLOC();
     str_start_line = line;
     str_start_column = column;
     str_index = 0;
     str_error = 0;
     str_buffer[str_index++] = '"';
-    column += yyleng;
     BEGIN(STRING_STATE);
+    column += yyleng;
 }
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 94 "jucompiler.l"
+#line 114 "claude.l"
 {
-    printf("Line %d, col %d: invalid escape sequence (\\)\n", line, column);
-    last_lex_error_line = line;
-    printf("Line %d, col %d: unterminated string literal\n", str_start_line, str_start_column);
-    last_lex_error_line = str_start_line;
+    if (!suppress_errors) {
+        printf("Line %d, col %d: invalid escape sequence (\\)\n", line, column);
+        last_lex_error_line = line;
+        printf("Line %d, col %d: unterminated string literal\n", str_start_line, str_start_column);
+        last_lex_error_line = str_start_line;
+    }
     line++;
     column = 1;
     BEGIN(INITIAL);
@@ -1088,10 +1105,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 104 "jucompiler.l"
+#line 126 "claude.l"
 {
-    if (!str_error) {
-        for (int i = 0; i < yyleng; i++)
+    if(!str_error) {
+        for(int i = 0; i < yyleng; i++)
             str_buffer[str_index++] = yytext[i];
     }
     column += yyleng;
@@ -1099,20 +1116,22 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 112 "jucompiler.l"
+#line 134 "claude.l"
 {
-    printf("Line %d, col %d: invalid escape sequence (%s)\n", line, column, yytext);
-    last_lex_error_line = line;
+    if (!suppress_errors) {
+        printf("Line %d, col %d: invalid escape sequence (%s)\n", line, column, yytext);
+        last_lex_error_line = line;
+    }
     str_error = 1;
     column += yyleng;
 }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 119 "jucompiler.l"
+#line 143 "claude.l"
 {
-    if (!str_error) {
-        for (int i = 0; i < yyleng; i++)
+    if(!str_error) {
+        for(int i = 0; i < yyleng; i++)
             str_buffer[str_index++] = yytext[i];
     }
     column += yyleng;
@@ -1121,10 +1140,12 @@ YY_RULE_SETUP
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 127 "jucompiler.l"
+#line 151 "claude.l"
 {
-    printf("Line %d, col %d: unterminated string literal\n", str_start_line, str_start_column);
-    last_lex_error_line = str_start_line;
+    if (!suppress_errors) {
+        printf("Line %d, col %d: unterminated string literal\n", str_start_line, str_start_column);
+        last_lex_error_line = str_start_line;
+    }
     line++;
     column = 1;
     BEGIN(INITIAL);
@@ -1132,10 +1153,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 135 "jucompiler.l"
+#line 161 "claude.l"
 {
-    printf("Line %d, col %d: unterminated string literal\n", str_start_line, str_start_column);
-    last_lex_error_line = str_start_line;
+    if (!suppress_errors) {
+        printf("Line %d, col %d: unterminated string literal\n", str_start_line, str_start_column);
+        last_lex_error_line = str_start_line;
+    }
     line++;
     column = 1;
     BEGIN(INITIAL);
@@ -1144,10 +1167,12 @@ YY_RULE_SETUP
 case 16:
 /* rule 16 can match eol */
 YY_RULE_SETUP
-#line 143 "jucompiler.l"
+#line 171 "claude.l"
 {
-    printf("Line %d, col %d: unterminated string literal\n", str_start_line, str_start_column);
-    last_lex_error_line = str_start_line;
+    if (!suppress_errors) {
+        printf("Line %d, col %d: unterminated string literal\n", str_start_line, str_start_column);
+        last_lex_error_line = str_start_line;
+    }
     line++;
     column = 1;
     BEGIN(INITIAL);
@@ -1155,24 +1180,19 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 151 "jucompiler.l"
+#line 181 "claude.l"
 {
-    if (!str_error) {
+    if(!str_error) {
         str_buffer[str_index++] = '"';
         str_buffer[str_index] = '\0';
 
-        if (print_tokens)
+        if(print_tokens)
             printf("STRLIT(%s)\n", str_buffer);
 
         yylval.lexeme = strdup(str_buffer);
         token_line = str_start_line;
         token_column = str_start_column;
-        set_token_text(str_buffer);
-        yylloc.first_line = str_start_line;
-        yylloc.first_column = str_start_column;
-        yylloc.last_line = line;
-        yylloc.last_column = column;
-
+        SET_TOKEN_TEXT(str_buffer);
         column += yyleng;
         BEGIN(INITIAL);
         return STRLIT;
@@ -1183,328 +1203,338 @@ YY_RULE_SETUP
 }
 	YY_BREAK
 case YY_STATE_EOF(STRING_STATE):
-#line 177 "jucompiler.l"
+#line 202 "claude.l"
 {
-    printf("Line %d, col %d: unterminated string literal\n", str_start_line, str_start_column);
-    last_lex_error_line = str_start_line;
+    if (!suppress_errors) {
+        printf("Line %d, col %d: unterminated string literal\n", str_start_line, str_start_column);
+        last_lex_error_line = str_start_line;
+    }
+    token_line = line;
+    token_column = column;
+    SET_TOKEN_TEXT("");
+    BEGIN(INITIAL);
     return 0;
 }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 183 "jucompiler.l"
+#line 214 "claude.l"
 {
-    SETLOC();
-    if (print_tokens) printf("BOOLLIT(true)\n");
+    if(print_tokens) printf("BOOLLIT(true)\n");
     yylval.lexeme = strdup("true");
-    token_line = line; token_column = column;
-    set_token_text("true");
+    token_line = line;
+    token_column = column;
+    SET_TOKEN_TEXT("true");
     column += yyleng;
     return BOOLLIT;
 }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 193 "jucompiler.l"
+#line 224 "claude.l"
 {
-    SETLOC();
-    if (print_tokens) printf("BOOLLIT(false)\n");
+    if(print_tokens) printf("BOOLLIT(false)\n");
     yylval.lexeme = strdup("false");
-    token_line = line; token_column = column;
-    set_token_text("false");
+    token_line = line;
+    token_column = column;
+    SET_TOKEN_TEXT("false");
     column += yyleng;
     return BOOLLIT;
 }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 203 "jucompiler.l"
+#line 234 "claude.l"
 {
-    SETLOC();
-    if (print_tokens) printf("DECIMAL(%s)\n", yytext);
+    if(print_tokens) printf("DECIMAL(%s)\n", yytext);
     yylval.lexeme = strdup(yytext);
-    token_line = line; token_column = column;
-    set_token_text(yytext);
+    token_line = line;
+    token_column = column;
+    SET_TOKEN_TEXT(yytext);
     column += yyleng;
     return DECIMAL;
 }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 213 "jucompiler.l"
+#line 244 "claude.l"
 {
-    SETLOC();
-    if (print_tokens) printf("NATURAL(%s)\n", yytext);
+    if(print_tokens) printf("NATURAL(%s)\n", yytext);
     yylval.lexeme = strdup(yytext);
-    token_line = line; token_column = column;
-    set_token_text(yytext);
+    token_line = line;
+    token_column = column;
+    SET_TOKEN_TEXT(yytext);
     column += yyleng;
     return NATURAL;
 }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 223 "jucompiler.l"
+#line 254 "claude.l"
 {
-    SETLOC();
-    if (print_tokens) printf("NATURAL(0)\n");
+    if(print_tokens) printf("NATURAL(0)\n");
     yylval.lexeme = strdup("0");
-    token_line = line; token_column = column;
-    set_token_text("0");
+    token_line = line;
+    token_column = column;
+    SET_TOKEN_TEXT("0");
     column += yyleng;
     return NATURAL;
 }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 233 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("RESERVED(++)\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return INC; }
+#line 264 "claude.l"
+{ if(print_tokens) printf("RESERVED(++)\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return INC; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 234 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("RESERVED(--)\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return DEC; }
+#line 265 "claude.l"
+{ if(print_tokens) printf("RESERVED(--)\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return DEC; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 236 "jucompiler.l"
+#line 267 "claude.l"
 {
-    printf("Line %d, col %d: illegal character (.)\n", line, column + 6);
-    last_lex_error_line = line;
-    printf("Line %d, col %d: illegal character (.)\n", line, column + 10);
-    last_lex_error_line = line;
+    if (!suppress_errors) {
+        printf("Line %d, col %d: illegal character (.)\n", line, column + 6);
+        last_lex_error_line = line;
+        printf("Line %d, col %d: illegal character (.)\n", line, column + 10);
+        last_lex_error_line = line;
+    }
     column += yyleng;
 }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 244 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("PRINT\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return PRINT; }
+#line 276 "claude.l"
+{ TOKEN("PRINT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return PRINT; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 245 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("PARSEINT\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return PARSEINT; }
+#line 277 "claude.l"
+{ TOKEN("PARSEINT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return PARSEINT; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 246 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("DOTLENGTH\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return DOTLENGTH; }
+#line 278 "claude.l"
+{ TOKEN("DOTLENGTH"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return DOTLENGTH; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 248 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("EQ\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return EQ; }
+#line 280 "claude.l"
+{ TOKEN("EQ"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return EQ; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 249 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("NE\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return NE; }
+#line 281 "claude.l"
+{ TOKEN("NE"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return NE; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 250 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("GE\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return GE; }
+#line 282 "claude.l"
+{ TOKEN("GE"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return GE; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 251 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("LE\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return LE; }
+#line 283 "claude.l"
+{ TOKEN("LE"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return LE; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 252 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("AND\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return AND; }
+#line 284 "claude.l"
+{ TOKEN("AND"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return AND; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 253 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("OR\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return OR; }
+#line 285 "claude.l"
+{ TOKEN("OR"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return OR; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 254 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("XOR\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return XOR; }
+#line 286 "claude.l"
+{ TOKEN("XOR"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return XOR; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 255 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("ARROW\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return ARROW; }
+#line 287 "claude.l"
+{ TOKEN("ARROW"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return ARROW; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 257 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("ASSIGN\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return ASSIGN; }
+#line 289 "claude.l"
+{ TOKEN("ASSIGN"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return ASSIGN; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 258 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("RSHIFT\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return RSHIFT; }
+#line 290 "claude.l"
+{ TOKEN("RSHIFT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return RSHIFT; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 259 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("LSHIFT\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return LSHIFT; }
+#line 291 "claude.l"
+{ TOKEN("LSHIFT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return LSHIFT; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 260 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("GT\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return GT; }
+#line 292 "claude.l"
+{ TOKEN("GT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return GT; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 261 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("LT\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return LT; }
+#line 293 "claude.l"
+{ TOKEN("LT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return LT; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 263 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("PLUS\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return PLUS; }
+#line 295 "claude.l"
+{ TOKEN("PLUS"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return PLUS; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 264 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("MINUS\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return MINUS; }
+#line 296 "claude.l"
+{ TOKEN("MINUS"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return MINUS; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 265 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("STAR\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return STAR; }
+#line 298 "claude.l"
+{ TOKEN("STAR"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return STAR; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 266 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("DIV\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return DIV; }
+#line 299 "claude.l"
+{ TOKEN("DIV"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return DIV; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 267 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("MOD\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return MOD; }
+#line 300 "claude.l"
+{ TOKEN("MOD"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return MOD; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 269 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("NOT\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return NOT; }
+#line 302 "claude.l"
+{ TOKEN("NOT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return NOT; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 271 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("LBRACE\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return LBRACE; }
+#line 304 "claude.l"
+{ TOKEN("LBRACE"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return LBRACE; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 272 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("RBRACE\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return RBRACE; }
+#line 305 "claude.l"
+{ TOKEN("RBRACE"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return RBRACE; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 273 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("LPAR\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return LPAR; }
+#line 306 "claude.l"
+{ TOKEN("LPAR"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return LPAR; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 274 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("RPAR\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return RPAR; }
+#line 307 "claude.l"
+{ TOKEN("RPAR"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return RPAR; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 275 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("LSQ\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return LSQ; }
+#line 308 "claude.l"
+{ TOKEN("LSQ"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return LSQ; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 276 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("RSQ\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return RSQ; }
+#line 309 "claude.l"
+{ TOKEN("RSQ"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return RSQ; }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 277 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("SEMICOLON\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return SEMICOLON; }
+#line 310 "claude.l"
+{ TOKEN("SEMICOLON"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return SEMICOLON; }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 278 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("COMMA\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return COMMA; }
+#line 311 "claude.l"
+{ TOKEN("COMMA"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return COMMA; }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 280 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("CLASS\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return CLASS; }
+#line 313 "claude.l"
+{ if(print_tokens) printf("CLASS\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return CLASS; }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 281 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("PUBLIC\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return PUBLIC; }
+#line 314 "claude.l"
+{ if(print_tokens) printf("PUBLIC\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return PUBLIC; }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 282 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("STATIC\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return STATIC; }
+#line 315 "claude.l"
+{ if(print_tokens) printf("STATIC\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return STATIC; }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 283 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("INT\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return INT; }
+#line 316 "claude.l"
+{ if(print_tokens) printf("INT\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return INT; }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 284 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("DOUBLE\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return DOUBLE; }
+#line 317 "claude.l"
+{ if(print_tokens) printf("DOUBLE\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return DOUBLE; }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 285 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("BOOL\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return BOOL; }
+#line 318 "claude.l"
+{ if(print_tokens) printf("BOOL\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return BOOL; }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 286 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("VOID\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return VOID; }
+#line 319 "claude.l"
+{ if(print_tokens) printf("VOID\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return VOID; }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 287 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("IF\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return IF; }
+#line 320 "claude.l"
+{ if(print_tokens) printf("IF\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return IF; }
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 288 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("ELSE\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return ELSE; }
+#line 321 "claude.l"
+{ if(print_tokens) printf("ELSE\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return ELSE; }
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 289 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("WHILE\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return WHILE; }
+#line 322 "claude.l"
+{ if(print_tokens) printf("WHILE\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return WHILE; }
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 290 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("RETURN\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return RETURN; }
+#line 323 "claude.l"
+{ if(print_tokens) printf("RETURN\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return RETURN; }
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 291 "jucompiler.l"
-{ SETLOC(); if (print_tokens) printf("STRING\n"); token_line=line; token_column=column; set_token_text(yytext); column += yyleng; return STRING; }
+#line 324 "claude.l"
+{ if(print_tokens) printf("STRING\n"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return STRING; }
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 293 "jucompiler.l"
+#line 326 "claude.l"
 {
-    SETLOC();
-    if (print_tokens) printf("RESERVED(%s)\n", yytext);
-    token_line=line; token_column=column; set_token_text(yytext);
+    if(print_tokens) printf("RESERVED(%s)\n", yytext);
+    token_line = line;
+    token_column = column;
+    SET_TOKEN_TEXT(yytext);
     column += yyleng;
     return RESERVED;
 }
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 301 "jucompiler.l"
+#line 335 "claude.l"
 {
-    SETLOC();
-    if (print_tokens) printf("IDENTIFIER(%s)\n", yytext);
+    if(print_tokens) printf("IDENTIFIER(%s)\n", yytext);
     yylval.lexeme = strdup(yytext);
-    token_line=line; token_column=column; set_token_text(yytext);
+    token_line = line;
+    token_column = column;
+    SET_TOKEN_TEXT(yytext);
     column += yyleng;
     return IDENTIFIER;
 }
@@ -1512,40 +1542,43 @@ YY_RULE_SETUP
 case 70:
 /* rule 70 can match eol */
 YY_RULE_SETUP
-#line 310 "jucompiler.l"
+#line 345 "claude.l"
 { line++; column = 1; }
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 311 "jucompiler.l"
+#line 346 "claude.l"
 { line++; column = 1; }
 	YY_BREAK
 case 72:
 /* rule 72 can match eol */
 YY_RULE_SETUP
-#line 312 "jucompiler.l"
+#line 347 "claude.l"
 { line++; column = 1; }
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 313 "jucompiler.l"
+#line 349 "claude.l"
 { column += yyleng; }
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 315 "jucompiler.l"
+#line 351 "claude.l"
 {
-    printf("Line %d, col %d: illegal character (%s)\n", line, column, yytext);
-    last_lex_error_line = line;
+    if (!suppress_errors) {
+        printf("Line %d, col %d: illegal character (%s)\n",
+               line, column, yytext);
+        last_lex_error_line = line;
+    }
     column += yyleng;
 }
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 321 "jucompiler.l"
+#line 360 "claude.l"
 ECHO;
 	YY_BREAK
-#line 1549 "lex.yy.c"
+#line 1582 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2550,5 +2583,5 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 321 "jucompiler.l"
+#line 360 "claude.l"
 

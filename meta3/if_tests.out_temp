@@ -6,10 +6,9 @@ Line 8, col 14: Incompatible type int in if statement
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-a		int
-
+return	void
+args	String[]	param
+a	int
 
 Program
 ..Identifier(if_tests)

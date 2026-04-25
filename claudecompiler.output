@@ -605,6 +605,30 @@ State 27
     stmt_entry  go to state 42
     type        go to state 43
 
+    shift/reduce conflict on token error:
+       33 stmt_entry: ε •
+       22 method_body: LBRACE method_body_items • error RBRACE
+      First example: CLASS IDENTIFIER LBRACE PUBLIC STATIC method_header LBRACE method_body_items • error RBRACE method_decl RBRACE $end
+      Shift derivation
+        $accept
+        ↳ 0: program                                                                                                                              $end
+             ↳ 1: CLASS IDENTIFIER LBRACE class_body                                                                                       RBRACE
+                                          ↳ 4: method_decl                                                                     method_decl
+                                               ↳ 10: PUBLIC STATIC method_header method_body
+                                                                                 ↳ 22: LBRACE method_body_items • error RBRACE
+      Second example: CLASS IDENTIFIER LBRACE class_body PUBLIC STATIC method_header LBRACE method_body_items • error SEMICOLON RBRACE RBRACE $end
+      Reduce derivation
+        $accept
+        ↳ 0: program                                                                                                                                                                  $end
+             ↳ 1: CLASS IDENTIFIER LBRACE class_body                                                                                                                           RBRACE
+                                          ↳ 4: class_body method_decl
+                                                          ↳ 10: PUBLIC STATIC method_header method_body
+                                                                                            ↳ 21: LBRACE method_body_items                                              RBRACE
+                                                                                                         ↳ 27: method_body_items stmt
+                                                                                                                                 ↳ 32: stmt_entry stmt_core
+                                                                                                                                       ↳ 33: ε •  ↳ 52: error SEMICOLON
+
+
 
 State 28
 

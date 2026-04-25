@@ -7,14 +7,13 @@ factorial	(int,int)	int
 main	(String[])	void
 
 ===== Method factorial(int,int) Symbol Table =====
-return		int
-n		int	param
-i		int	param
+return	int
+n	int	param
+i	int	param
 
 ===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-
+return	void
+args	String[]	param
 
 Program
 ..Identifier(Factorial)
@@ -55,7 +54,7 @@ Program
 ..........Identifier(args)
 ....MethodBody
 ......Call - int
-........Identifier(factorial)
+........Identifier(factorial) - int
 ........Natural(1) - int
 ........Natural(2) - int
 ......Call - undef

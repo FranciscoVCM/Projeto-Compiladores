@@ -73,6 +73,9 @@ alnum      [a-zA-Z0-9_$]
 <COMMENT><<EOF>> {
     printf("Line %d, col %d: unterminated comment\n", comment_start_line, comment_start_column);
     last_lex_error_line = comment_start_line;
+    token_line = line;
+    token_column = column;
+    token_text[0] = '\0';
     return 0;
 }
 
@@ -177,6 +180,9 @@ alnum      [a-zA-Z0-9_$]
 <STRING_STATE><<EOF>> {
     printf("Line %d, col %d: unterminated string literal\n", str_start_line, str_start_column);
     last_lex_error_line = str_start_line;
+    token_line = line;
+    token_column = column;
+    token_text[0] = '\0';
     return 0;
 }
 
@@ -311,6 +317,17 @@ alnum      [a-zA-Z0-9_$]
 <INITIAL>\r   { line++; column = 1; }
 <INITIAL>\n   { line++; column = 1; }
 <INITIAL>[ \t\f]+ { column += yyleng; }
+
+<<EOF>> {
+    yylloc.first_line = line;
+    yylloc.first_column = column;
+    yylloc.last_line = line;
+    yylloc.last_column = column;
+    token_line = line;
+    token_column = column;
+    token_text[0] = '\0';
+    return 0;
+}
 
 . {
     printf("Line %d, col %d: illegal character (%s)\n", line, column, yytext);

@@ -283,40 +283,47 @@ static void collect_method_decl(struct node *method_decl) {
     struct symbol_list *cur = global_table;
     while (cur != NULL) {
         if (strcmp(cur->name, id->token) == 0 &&
-            cur->params != NULL &&
+            cur->node != NULL &&
+            cur->node->category == MethodDecl &&
             params_exact_match(cur->params, params)) {
-            semantic_error_symbol(id, "Symbol %s already defined", id->token);
-            break;
+            char *sig = call_signature_string(id->token, params);
+            semantic_error_symbol(id, "Symbol %s already defined", sig);
+            free(sig);
+            return;
         }
         cur = cur->next;
     }
 
-    struct symbol_list *method_symbol = new_symbol(id->token, return_type, 0, method_decl);
-    method_symbol->params = params;
-    append_symbol(&global_table, method_symbol);
-
-    struct method_scope *scope = new_method_scope(id->token, return_type, params, method_decl, body);
-    append_symbol(&scope->symbols, new_symbol("return", return_type, 0, method_decl));
-
-    if (params_node && params_node->children) {
-        struct node_list *child = params_node->children->next;
-        while (child != NULL) {
-            struct node *param_decl = child->node;
-            struct node *ptype = get_child(param_decl, 0);
-            struct node *pid = get_child(param_decl, 1);
-
-            if (search_symbol(scope->symbols, pid->token) != NULL) {
-                semantic_error_symbol(pid, "Symbol %s already defined", pid->token);
-            } else {
-                append_symbol(&scope->symbols,
-                    new_symbol(pid->token, category_to_type(ptype->category), 1, param_decl));
-            }
-
-            child = child->next;
-        }
+    {
+        struct symbol_list *method_symbol = new_symbol(id->token, return_type, 0, method_decl);
+        method_symbol->params = params;
+        append_symbol(&global_table, method_symbol);
     }
 
-    append_method_scope(&method_scopes, scope);
+    {
+        struct method_scope *scope = new_method_scope(id->token, return_type, params, method_decl, body);
+        append_symbol(&scope->symbols, new_symbol("return", return_type, 0, method_decl));
+
+        if (params_node && params_node->children) {
+            struct node_list *child = params_node->children->next;
+            while (child != NULL) {
+                struct node *param_decl = child->node;
+                struct node *ptype = get_child(param_decl, 0);
+                struct node *pid = get_child(param_decl, 1);
+
+                if (search_symbol(scope->symbols, pid->token) != NULL) {
+                    semantic_error_symbol(pid, "Symbol %s already defined", pid->token);
+                } else {
+                    append_symbol(&scope->symbols,
+                        new_symbol(pid->token, category_to_type(ptype->category), 1, param_decl));
+                }
+
+                child = child->next;
+            }
+        }
+
+        append_method_scope(&method_scopes, scope);
+    }
 }
 
 static void declare_local_var(struct method_scope *scope, struct node *var_decl) {
@@ -380,10 +387,12 @@ static enum type check_identifier_expr(struct node *expr, struct method_scope *s
         return expr->type;
     }
 
-    struct symbol_list *global = search_symbol(global_table, expr->token);
-    if (global != NULL) {
-        expr->type = global->type;
-        return expr->type;
+    {
+        struct symbol_list *global = search_symbol(global_table, expr->token);
+        if (global != NULL) {
+            expr->type = global->type;
+            return expr->type;
+        }
     }
 
     semantic_error_symbol(expr, "Cannot find symbol %s", expr->token);
@@ -409,35 +418,43 @@ static enum type check_call(struct node *expr, struct method_scope *scope) {
         return expr->type;
     }
 
-    struct method_scope *exact = resolve_exact_method(id->token, arg_types);
-    if (exact != NULL) {
-        char *sig = param_list_to_string(exact->params);
-        set_annotation_string(id, sig);
-        free(sig);
-        expr->type = exact->return_type;
-        return expr->type;
+    {
+        struct method_scope *exact = resolve_exact_method(id->token, arg_types);
+        if (exact != NULL) {
+            char *sig = param_list_to_string(exact->params);
+            set_annotation_string(id, sig);
+            id->type = exact->return_type;
+            expr->type = exact->return_type;
+            free(sig);
+            return expr->type;
+        }
     }
 
-    int ambiguous = 0;
-    struct method_scope *compat = resolve_compatible_method_unique(id->token, arg_types, &ambiguous);
-    if (ambiguous) {
-        semantic_error_symbol(id, "Reference to method %s is ambiguous", id->token);
-        id->type = undef_type;
-        expr->type = undef_type;
-        return expr->type;
+    {
+        int ambiguous = 0;
+        struct method_scope *compat = resolve_compatible_method_unique(id->token, arg_types, &ambiguous);
+        if (ambiguous) {
+            semantic_error_symbol(id, "Reference to method %s is ambiguous", id->token);
+            id->type = undef_type;
+            expr->type = undef_type;
+            return expr->type;
+        }
+
+        if (compat != NULL) {
+            char *sig = param_list_to_string(compat->params);
+            set_annotation_string(id, sig);
+            id->type = compat->return_type;
+            expr->type = compat->return_type;
+            free(sig);
+            return expr->type;
+        }
     }
 
-    if (compat != NULL) {
-        char *sig = param_list_to_string(compat->params);
-        set_annotation_string(id, sig);
-        free(sig);
-        expr->type = compat->return_type;
-        return expr->type;
+    {
+        char *call_sig = call_signature_string(id->token, arg_types);
+        semantic_error_symbol(id, "Cannot find symbol %s", call_sig);
+        free(call_sig);
     }
-
-    char *call_sig = call_signature_string(id->token, arg_types);
-    semantic_error_symbol(id, "Cannot find symbol %s", call_sig);
-    free(call_sig);
 
     id->type = undef_type;
     expr->type = undef_type;
@@ -649,9 +666,11 @@ static void annotate_statement_or_decl(struct node *node, struct method_scope *s
                 return;
             }
 
-            enum type t = check_expression(value, scope);
-            if (!(t == scope->return_type || (scope->return_type == double_type && t == integer_type)))
-                semantic_error_stmt(value, t, "return");
+            {
+                enum type t = check_expression(value, scope);
+                if (!(t == scope->return_type || (scope->return_type == double_type && t == integer_type)))
+                    semantic_error_stmt(value, t, "return");
+            }
             return;
         }
 
@@ -758,16 +777,13 @@ static void print_global_table(void) {
     printf("===== Class %s Symbol Table =====\n", class_name ? class_name : "");
 
     while (s != NULL) {
-        printf("%s", s->name);
-
-        if (s->params != NULL) {
-            printf("\t");
+        if (s->node != NULL && s->node->category == MethodDecl) {
+            printf("%s\t", s->name);
             print_param_list(s->params);
+            printf("\t%s\n", type_name(s->type));
         } else {
-            printf("\t");
+            printf("%s\t%s\n", s->name, type_name(s->type));
         }
-
-        printf("\t%s\n", type_name(s->type));
         s = s->next;
     }
 }
@@ -781,7 +797,7 @@ static void print_method_table(struct method_scope *scope) {
 
     s = scope->symbols;
     while (s != NULL) {
-        printf("%s\t\t%s", s->name, type_name(s->type));
+        printf("%s\t%s", s->name, type_name(s->type));
         if (s->is_parameter)
             printf("\tparam");
         printf("\n");

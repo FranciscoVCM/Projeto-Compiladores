@@ -3,23 +3,16 @@
 #include <string.h>
 #include "ast.h"
 
-struct node *newnode4(enum category category, char *token, int line, int column) {
+struct node *newnode(enum category category, char *token) {
     struct node *new = malloc(sizeof(struct node));
     new->category = category;
     new->token = token ? strdup(token) : NULL;
-    new->type = none_type;
-    new->line = line;
-    new->column = column;
 
     new->children = malloc(sizeof(struct node_list));
     new->children->node = NULL;
     new->children->next = NULL;
 
     return new;
-}
-
-struct node *newnode2(enum category category, char *token) {
-    return newnode4(category, token, 0, 0);
 }
 
 void addchild(struct node *parent, struct node *child) {
@@ -85,64 +78,6 @@ static const char *category_name[] = {
     "Void"
 };
 
-const char *type_name(enum type type) {
-    switch (type) {
-        case integer_type: return "int";
-        case double_type: return "double";
-        case bool_type: return "boolean";
-        case string_array_type: return "String[]";
-        case void_type: return "void";
-        case undef_type: return "undef";
-        default: return "none";
-    }
-}
-
-enum type category_to_type(enum category category) {
-    switch (category) {
-        case Int: return integer_type;
-        case Double: return double_type;
-        case Bool: return bool_type;
-        case StringArray: return string_array_type;
-        case Void: return void_type;
-        default: return none_type;
-    }
-}
-
-int is_expression_node(enum category category) {
-    switch (category) {
-        case Call:
-        case ParseArgs:
-        case Assign:
-        case Or:
-        case And:
-        case Eq:
-        case Ne:
-        case Lt:
-        case Gt:
-        case Le:
-        case Ge:
-        case Add:
-        case Sub:
-        case Mul:
-        case Div:
-        case Mod:
-        case Lshift:
-        case Rshift:
-        case Xor:
-        case Not:
-        case Minus:
-        case Plus:
-        case Length:
-        case BoolLit:
-        case Decimal:
-        case Identifier:
-        case Natural:
-            return 1;
-        default:
-            return 0;
-    }
-}
-
 void print_ast(struct node *node, int depth) {
     if (!node) return;
 
@@ -150,14 +85,9 @@ void print_ast(struct node *node, int depth) {
         printf("..");
 
     if (node->token)
-        printf("%s(%s)", category_name[node->category], node->token);
+        printf("%s(%s)\n", category_name[node->category], node->token);
     else
-        printf("%s", category_name[node->category]);
-
-    if (is_expression_node(node->category) && node->type != none_type)
-        printf(" - %s", type_name(node->type));
-
-    printf("\n");
+        printf("%s\n", category_name[node->category]);
 
     struct node_list *child = node->children->next;
     while (child) {

@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_Y_TAB_H_INCLUDED
-# define YY_YY_Y_TAB_H_INCLUDED
+#ifndef YY_YY_CLAUDECOMPILER_TAB_H_INCLUDED
+# define YY_YY_CLAUDECOMPILER_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -108,62 +108,6 @@ extern int yydebug;
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
-/* Token kinds.  */
-#define YYEMPTY -2
-#define YYEOF 0
-#define YYerror 256
-#define YYUNDEF 257
-#define IDENTIFIER 258
-#define NATURAL 259
-#define DECIMAL 260
-#define STRLIT 261
-#define BOOLLIT 262
-#define CLASS 263
-#define PUBLIC 264
-#define STATIC 265
-#define RESERVED 266
-#define BOOL 267
-#define INT 268
-#define DOUBLE 269
-#define VOID 270
-#define STRING 271
-#define IF 272
-#define ELSE 273
-#define WHILE 274
-#define RETURN 275
-#define PRINT 276
-#define PARSEINT 277
-#define DOTLENGTH 278
-#define INC 279
-#define DEC 280
-#define ARROW 281
-#define ASSIGN 282
-#define PLUS 283
-#define MINUS 284
-#define STAR 285
-#define DIV 286
-#define MOD 287
-#define AND 288
-#define OR 289
-#define XOR 290
-#define LSHIFT 291
-#define RSHIFT 292
-#define EQ 293
-#define NE 294
-#define LT 295
-#define GT 296
-#define LE 297
-#define GE 298
-#define NOT 299
-#define LPAR 300
-#define RPAR 301
-#define LBRACE 302
-#define RBRACE 303
-#define LSQ 304
-#define RSQ 305
-#define SEMICOLON 306
-#define COMMA 307
-#define LOWER_THAN_ELSE 308
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -172,7 +116,7 @@ union YYSTYPE
 #line 112 "claudecompiler.y"
  char *lexeme; struct node *node; 
 
-#line 176 "y.tab.h"
+#line 120 "claudecompiler.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -187,4 +131,4 @@ extern YYSTYPE yylval;
 int yyparse (void);
 
 
-#endif /* !YY_YY_Y_TAB_H_INCLUDED  */
+#endif /* !YY_YY_CLAUDECOMPILER_TAB_H_INCLUDED  */

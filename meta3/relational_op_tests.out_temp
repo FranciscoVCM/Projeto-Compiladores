@@ -58,12 +58,11 @@ Line 77, col 15: Incompatible type undef in if statement
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-i		int
-d		double
-b		boolean
-
+return	void
+args	String[]	param
+i	int
+d	double
+b	boolean
 
 Program
 ..Identifier(time_is_relative)

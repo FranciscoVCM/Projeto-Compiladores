@@ -9,12 +9,11 @@ Line 14, col 11: Operator = cannot be applied to types boolean, int
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-b		boolean
-i		int
-d		double
-
+return	void
+args	String[]	param
+b	boolean
+i	int
+d	double
 
 Program
 ..Identifier(ClassTeste)

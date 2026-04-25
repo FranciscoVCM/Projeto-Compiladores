@@ -6,22 +6,21 @@ Line 12, col 26: Incompatible type undef in print statement
 ===== Class Factorial Symbol Table =====
 factorial	(int,int,double)	int
 main	(String[])	void
-noArguments		void
+noArguments	()	void
 
 ===== Method factorial(int,int,double) Symbol Table =====
-return		int
-n		int	param
-x		int	param
-y		double	param
+return	int
+n	int	param
+x	int	param
+y	double	param
 
 ===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-argument		int
+return	void
+args	String[]	param
+argument	int
 
 ===== Method noArguments() Symbol Table =====
-return		void
-
+return	void
 
 Program
 ..Identifier(Factorial)

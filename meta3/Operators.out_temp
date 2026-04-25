@@ -4,17 +4,16 @@ operators	(int)	int
 main	(String[])	void
 
 ===== Method operators(int) Symbol Table =====
-return		int
-n		int	param
-x		int
-b		int
-a		int
-y		double
+return	int
+n	int	param
+x	int
+b	int
+a	int
+y	double
 
 ===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-
+return	void
+args	String[]	param
 
 Program
 ..Identifier(Factorial)

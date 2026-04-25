@@ -16,23 +16,22 @@ f	(int,double)	void
 f	(double,int)	void
 
 ===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-i		int
-d		double
-b		boolean
-tamanho		int
+return	void
+args	String[]	param
+i	int
+d	double
+b	boolean
+tamanho	int
 
 ===== Method f(int,double) Symbol Table =====
-return		void
-a		int	param
-b		double	param
+return	void
+a	int	param
+b	double	param
 
 ===== Method f(double,int) Symbol Table =====
-return		void
-a		double	param
-b		int	param
-
+return	void
+a	double	param
+b	int	param
 
 Program
 ..Identifier(operator_single)

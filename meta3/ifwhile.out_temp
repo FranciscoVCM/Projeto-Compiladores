@@ -1,16 +1,15 @@
 ===== Class ifwhile Symbol Table =====
-b		boolean
-i		int
-d		double
+b	boolean
+i	int
+d	double
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-bl		boolean
-t		boolean
-f		boolean
-
+return	void
+args	String[]	param
+bl	boolean
+t	boolean
+f	boolean
 
 Program
 ..Identifier(ifwhile)

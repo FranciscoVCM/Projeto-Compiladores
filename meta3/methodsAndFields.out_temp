@@ -6,50 +6,49 @@ Line 30, col 7: Symbol a already defined
 Line 30, col 10: Symbol b already defined
 Line 30, col 19: Symbol e already defined
 ===== Class newClass Symbol Table =====
-i		int
-b		boolean
+i	int
+b	boolean
 main	(int,int,double)	int
-pI		int
+pI	int
 a	(int,int,boolean)	void
-a		void
+a	()	void
 test	(int,int,double,boolean,boolean)	double
 sum	(int,int)	int
 
 ===== Method main(int,int,double) Symbol Table =====
-return		int
-a		int	param
-c		int	param
-d		double	param
-b		boolean
-i1		int
+return	int
+a	int	param
+c	int	param
+d	double	param
+b	boolean
+i1	int
 
 ===== Method a(int,int,boolean) Symbol Table =====
-return		void
-a		int	param
-b		int	param
-c		boolean	param
-d		int
-i		int
-f		double
+return	void
+a	int	param
+b	int	param
+c	boolean	param
+d	int
+i	int
+f	double
 
 ===== Method a() Symbol Table =====
-return		void
+return	void
 
 ===== Method test(int,int,double,boolean,boolean) Symbol Table =====
-return		double
-a		int	param
-b		int	param
-s		double	param
-e		boolean	param
-c		int
-d		int
-finalI		int
+return	double
+a	int	param
+b	int	param
+s	double	param
+e	boolean	param
+c	int
+d	int
+finalI	int
 
 ===== Method sum(int,int) Symbol Table =====
-return		int
-k		int	param
-j		int	param
-
+return	int
+k	int	param
+j	int	param
 
 Program
 ..Identifier(newClass)
@@ -151,7 +150,7 @@ Program
 ..........Identifier(e)
 ....MethodBody
 ......Call - void
-........Identifier(a)
+........Identifier(a) - void
 ........Natural(2) - int
 ........Natural(3) - int
 ........BoolLit(true) - boolean
@@ -197,7 +196,7 @@ Program
 ..........Identifier(j)
 ....MethodBody
 ......Call - double
-........Identifier(test)
+........Identifier(test) - double
 ........Natural(2) - int
 ........Natural(2) - int
 ........Decimal(2.0) - double

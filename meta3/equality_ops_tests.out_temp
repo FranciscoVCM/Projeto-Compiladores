@@ -12,12 +12,11 @@ Line 39, col 18: Incompatible type undef in if statement
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-i		int
-d		double
-b		boolean
-
+return	void
+args	String[]	param
+i	int
+d	double
+b	boolean
 
 Program
 ..Identifier(equality_or_equity_question_mark)

@@ -803,7 +803,7 @@ int main(int argc, char **argv) {
 
             if (semantic_mode) {
                 show_symbol_tables();
-                printf("\n\n");
+                printf("\n");
                 print_ast(ast, 0);
             }
         } else if (print_tree) {
