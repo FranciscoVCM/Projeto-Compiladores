@@ -84,7 +84,12 @@ int print_tree = 0, only_errors = 0, syntax_errors = 0, syntax_error_count = 0;
 int suppress_errors = 0;
 int pending_error_after_block = 0;
 int hard_suppress_errors = 0;
-int suppress_next_public = 0;
+
+/* novo: controlar publics consecutivos inválidos dentro de método */
+int suppress_public_count = 0;
+
+/* novo: depois de "String ... ;" inválido, manter recovery ligado */
+int suppress_after_string = 0;
 
 static struct node *clone_type_node(struct node *n) { if (!n) return NULL; return newnode(n->category, n->token); }
 static struct node *make_holder() { return newnode(Program, NULL); }
@@ -178,7 +183,7 @@ void yyerror(char *s) {
     syntax_error_count++;
 }
 
-#line 182 "claudecompiler.tab.c"
+#line 187 "claudecompiler.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -688,17 +693,17 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   145,   145,   154,   155,   156,   157,   158,   161,   177,
-     178,   181,   192,   198,   204,   210,   216,   225,   237,   238,
-     242,   247,   255,   265,   279,   280,   287,   287,   300,   312,
-     326,   333,   334,   338,   342,   363,   363,   370,   376,   382,
-     390,   398,   403,   403,   407,   408,   413,   417,   421,   422,
-     423,   423,   435,   436,   444,   445,   456,   459,   464,   468,
-     469,   473,   474,   478,   479,   483,   484,   485,   489,   490,
-     491,   492,   493,   497,   498,   499,   503,   504,   505,   509,
-     510,   511,   512,   516,   517,   518,   519,   523,   524,   525,
-     526,   527,   528,   529,   530,   534,   540,   548,   549,   553,
-     554,   557,   564,   565,   566
+       0,   150,   150,   159,   160,   161,   162,   163,   166,   182,
+     183,   186,   198,   204,   210,   216,   222,   231,   243,   244,
+     248,   253,   261,   272,   287,   288,   295,   295,   310,   322,
+     336,   343,   344,   348,   352,   370,   370,   377,   383,   389,
+     397,   405,   410,   410,   414,   415,   420,   424,   428,   429,
+     430,   430,   443,   444,   452,   453,   464,   467,   472,   476,
+     477,   481,   482,   486,   487,   491,   492,   493,   497,   498,
+     499,   500,   501,   505,   506,   507,   511,   512,   513,   517,
+     518,   519,   520,   524,   525,   526,   527,   531,   532,   533,
+     534,   535,   536,   537,   538,   542,   548,   556,   557,   561,
+     562,   565,   572,   573,   574
 };
 #endif
 
@@ -1392,7 +1397,7 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: CLASS IDENTIFIER LBRACE class_body RBRACE  */
-#line 145 "claudecompiler.y"
+#line 150 "claudecompiler.y"
                                                    {
     (yyval.node) = newnode(Program, NULL);
     addchild((yyval.node), newnode(Identifier, (yyvsp[-3].lexeme)));
@@ -1400,41 +1405,41 @@ yyreduce:
     free_holder_only((yyvsp[-1].node));
     ast = (yyval.node);
 }
-#line 1404 "claudecompiler.tab.c"
+#line 1409 "claudecompiler.tab.c"
     break;
 
   case 3: /* class_body: %empty  */
-#line 154 "claudecompiler.y"
+#line 159 "claudecompiler.y"
     { (yyval.node) = make_holder(); }
-#line 1410 "claudecompiler.tab.c"
+#line 1415 "claudecompiler.tab.c"
     break;
 
   case 4: /* class_body: class_body field_decl  */
-#line 155 "claudecompiler.y"
+#line 160 "claudecompiler.y"
                           { append_holder((yyvsp[-1].node), (yyvsp[0].node)); free_holder_only((yyvsp[0].node)); (yyval.node) = (yyvsp[-1].node); }
-#line 1416 "claudecompiler.tab.c"
+#line 1421 "claudecompiler.tab.c"
     break;
 
   case 5: /* class_body: class_body method_decl  */
-#line 156 "claudecompiler.y"
+#line 161 "claudecompiler.y"
                            { addchild((yyvsp[-1].node), (yyvsp[0].node)); (yyval.node) = (yyvsp[-1].node); }
-#line 1422 "claudecompiler.tab.c"
+#line 1427 "claudecompiler.tab.c"
     break;
 
   case 6: /* class_body: class_body SEMICOLON  */
-#line 157 "claudecompiler.y"
+#line 162 "claudecompiler.y"
                          { (yyval.node) = (yyvsp[-1].node); }
-#line 1428 "claudecompiler.tab.c"
+#line 1433 "claudecompiler.tab.c"
     break;
 
   case 7: /* class_body: class_body error SEMICOLON  */
-#line 158 "claudecompiler.y"
+#line 163 "claudecompiler.y"
                                { yyerrok; (yyval.node) = (yyvsp[-2].node); }
-#line 1434 "claudecompiler.tab.c"
+#line 1439 "claudecompiler.tab.c"
     break;
 
   case 8: /* field_decl: PUBLIC STATIC type field_ids SEMICOLON  */
-#line 161 "claudecompiler.y"
+#line 166 "claudecompiler.y"
                                                    {
     struct node_list *child;
     (yyval.node) = make_holder();
@@ -1449,81 +1454,82 @@ yyreduce:
     free_ast((yyvsp[-2].node));
     free_ast((yyvsp[-1].node));
 }
-#line 1453 "claudecompiler.tab.c"
+#line 1458 "claudecompiler.tab.c"
     break;
 
   case 9: /* field_ids: IDENTIFIER  */
-#line 177 "claudecompiler.y"
+#line 182 "claudecompiler.y"
                { (yyval.node) = make_holder(); addchild((yyval.node), newnode(Identifier, (yyvsp[0].lexeme))); }
-#line 1459 "claudecompiler.tab.c"
+#line 1464 "claudecompiler.tab.c"
     break;
 
   case 10: /* field_ids: field_ids COMMA IDENTIFIER  */
-#line 178 "claudecompiler.y"
+#line 183 "claudecompiler.y"
                                { addchild((yyvsp[-2].node), newnode(Identifier, (yyvsp[0].lexeme))); (yyval.node) = (yyvsp[-2].node); }
-#line 1465 "claudecompiler.tab.c"
+#line 1470 "claudecompiler.tab.c"
     break;
 
   case 11: /* method_decl: PUBLIC STATIC method_header method_body  */
-#line 181 "claudecompiler.y"
+#line 186 "claudecompiler.y"
                                                      {
     (yyval.node) = newnode(MethodDecl, NULL);
     addchild((yyval.node), (yyvsp[-1].node));
     addchild((yyval.node), (yyvsp[0].node));
     pending_error_after_block = 0;
-    suppress_next_public = 0;
+    suppress_public_count = 0;
+    suppress_after_string = 0;
     if (!hard_suppress_errors)
         suppress_errors = 0;
 }
-#line 1479 "claudecompiler.tab.c"
+#line 1485 "claudecompiler.tab.c"
     break;
 
   case 12: /* method_header: type IDENTIFIER LPAR RPAR  */
-#line 192 "claudecompiler.y"
+#line 198 "claudecompiler.y"
                               {
         (yyval.node) = newnode(MethodHeader, NULL);
         addchild((yyval.node), (yyvsp[-3].node));
         addchild((yyval.node), newnode(Identifier, (yyvsp[-2].lexeme)));
         addchild((yyval.node), newnode(MethodParams, NULL));
     }
-#line 1490 "claudecompiler.tab.c"
+#line 1496 "claudecompiler.tab.c"
     break;
 
   case 13: /* method_header: type IDENTIFIER LPAR param_list RPAR  */
-#line 198 "claudecompiler.y"
+#line 204 "claudecompiler.y"
                                          {
         (yyval.node) = newnode(MethodHeader, NULL);
         addchild((yyval.node), (yyvsp[-4].node));
         addchild((yyval.node), newnode(Identifier, (yyvsp[-3].lexeme)));
         addchild((yyval.node), (yyvsp[-1].node));
     }
-#line 1501 "claudecompiler.tab.c"
+#line 1507 "claudecompiler.tab.c"
     break;
 
   case 14: /* method_header: VOID IDENTIFIER LPAR RPAR  */
-#line 204 "claudecompiler.y"
+#line 210 "claudecompiler.y"
                               {
         (yyval.node) = newnode(MethodHeader, NULL);
         addchild((yyval.node), newnode(Void, NULL));
         addchild((yyval.node), newnode(Identifier, (yyvsp[-2].lexeme)));
         addchild((yyval.node), newnode(MethodParams, NULL));
     }
-#line 1512 "claudecompiler.tab.c"
+#line 1518 "claudecompiler.tab.c"
     break;
 
   case 15: /* method_header: VOID IDENTIFIER LPAR param_list RPAR  */
-#line 210 "claudecompiler.y"
+#line 216 "claudecompiler.y"
                                          {
         (yyval.node) = newnode(MethodHeader, NULL);
         addchild((yyval.node), newnode(Void, NULL));
         addchild((yyval.node), newnode(Identifier, (yyvsp[-3].lexeme)));
         addchild((yyval.node), (yyvsp[-1].node));
     }
-#line 1523 "claudecompiler.tab.c"
+#line 1529 "claudecompiler.tab.c"
     break;
 
   case 16: /* method_header: type IDENTIFIER LPAR error RPAR  */
-#line 216 "claudecompiler.y"
+#line 222 "claudecompiler.y"
                                     {
         yyerrok;
         suppress_errors = 1;
@@ -1533,11 +1539,11 @@ yyreduce:
         addchild((yyval.node), newnode(Identifier, (yyvsp[-3].lexeme)));
         addchild((yyval.node), newnode(MethodParams, NULL));
     }
-#line 1537 "claudecompiler.tab.c"
+#line 1543 "claudecompiler.tab.c"
     break;
 
   case 17: /* method_header: VOID IDENTIFIER LPAR error RPAR  */
-#line 225 "claudecompiler.y"
+#line 231 "claudecompiler.y"
                                     {
         yyerrok;
         suppress_errors = 1;
@@ -1547,43 +1553,43 @@ yyreduce:
         addchild((yyval.node), newnode(Identifier, (yyvsp[-3].lexeme)));
         addchild((yyval.node), newnode(MethodParams, NULL));
     }
-#line 1551 "claudecompiler.tab.c"
-    break;
-
-  case 18: /* param_list: param_decl  */
-#line 237 "claudecompiler.y"
-               { (yyval.node) = newnode(MethodParams, NULL); addchild((yyval.node), (yyvsp[0].node)); }
 #line 1557 "claudecompiler.tab.c"
     break;
 
-  case 19: /* param_list: param_list COMMA param_decl  */
-#line 238 "claudecompiler.y"
-                                { addchild((yyvsp[-2].node), (yyvsp[0].node)); (yyval.node) = (yyvsp[-2].node); }
+  case 18: /* param_list: param_decl  */
+#line 243 "claudecompiler.y"
+               { (yyval.node) = newnode(MethodParams, NULL); addchild((yyval.node), (yyvsp[0].node)); }
 #line 1563 "claudecompiler.tab.c"
     break;
 
+  case 19: /* param_list: param_list COMMA param_decl  */
+#line 244 "claudecompiler.y"
+                                { addchild((yyvsp[-2].node), (yyvsp[0].node)); (yyval.node) = (yyvsp[-2].node); }
+#line 1569 "claudecompiler.tab.c"
+    break;
+
   case 20: /* param_decl: type IDENTIFIER  */
-#line 242 "claudecompiler.y"
+#line 248 "claudecompiler.y"
                     {
         (yyval.node) = newnode(ParamDecl, NULL);
         addchild((yyval.node), (yyvsp[-1].node));
         addchild((yyval.node), newnode(Identifier, (yyvsp[0].lexeme)));
     }
-#line 1573 "claudecompiler.tab.c"
+#line 1579 "claudecompiler.tab.c"
     break;
 
   case 21: /* param_decl: STRING LSQ RSQ IDENTIFIER  */
-#line 247 "claudecompiler.y"
+#line 253 "claudecompiler.y"
                               {
         (yyval.node) = newnode(ParamDecl, NULL);
         addchild((yyval.node), newnode(StringArray, NULL));
         addchild((yyval.node), newnode(Identifier, (yyvsp[0].lexeme)));
     }
-#line 1583 "claudecompiler.tab.c"
+#line 1589 "claudecompiler.tab.c"
     break;
 
   case 22: /* method_body: LBRACE method_body_items RBRACE  */
-#line 255 "claudecompiler.y"
+#line 261 "claudecompiler.y"
                                     {
         (yyval.node) = newnode(MethodBody, NULL);
         append_holder((yyval.node), (yyvsp[-1].node));
@@ -1591,14 +1597,15 @@ yyreduce:
         if (!hard_suppress_errors) {
             suppress_errors = 0;
             pending_error_after_block = 0;
-            suppress_next_public = 0;
+            suppress_public_count = 0;
+            suppress_after_string = 0;
         }
     }
-#line 1598 "claudecompiler.tab.c"
+#line 1605 "claudecompiler.tab.c"
     break;
 
   case 23: /* method_body: LBRACE method_body_items error RBRACE  */
-#line 265 "claudecompiler.y"
+#line 272 "claudecompiler.y"
                                           {
         yyerrok;
         (yyval.node) = newnode(MethodBody, NULL);
@@ -1607,70 +1614,73 @@ yyreduce:
         if (!hard_suppress_errors) {
             suppress_errors = 0;
             pending_error_after_block = 0;
-            suppress_next_public = 0;
+            suppress_public_count = 0;
+            suppress_after_string = 0;
         }
     }
-#line 1614 "claudecompiler.tab.c"
+#line 1622 "claudecompiler.tab.c"
     break;
 
   case 24: /* method_body_items: %empty  */
-#line 279 "claudecompiler.y"
+#line 287 "claudecompiler.y"
     { (yyval.node) = make_holder(); }
-#line 1620 "claudecompiler.tab.c"
+#line 1628 "claudecompiler.tab.c"
     break;
 
   case 25: /* method_body_items: method_body_items var_decl  */
-#line 280 "claudecompiler.y"
+#line 288 "claudecompiler.y"
                                {
         append_holder((yyvsp[-1].node), (yyvsp[0].node));
         free_holder_only((yyvsp[0].node));
-        if (!hard_suppress_errors)
+        if (!hard_suppress_errors && !suppress_after_string)
             suppress_errors = 0;
         (yyval.node) = (yyvsp[-1].node);
     }
-#line 1632 "claudecompiler.tab.c"
+#line 1640 "claudecompiler.tab.c"
     break;
 
   case 26: /* $@1: %empty  */
-#line 287 "claudecompiler.y"
+#line 295 "claudecompiler.y"
                              {
-        if (!suppress_errors && !suppress_next_public && token_line != last_lex_error_line) {
+        if (suppress_public_count > 0) {
+            suppress_public_count--;
+        } else if (!suppress_errors && token_line != last_lex_error_line) {
             syntax_errors = 1;
             printf("Line %d, col %d: syntax error: public\n", token_line, token_column);
             syntax_error_count++;
         }
         suppress_errors = 1;
     }
-#line 1645 "claudecompiler.tab.c"
+#line 1655 "claudecompiler.tab.c"
     break;
 
   case 27: /* method_body_items: method_body_items PUBLIC $@1 error SEMICOLON  */
-#line 294 "claudecompiler.y"
+#line 304 "claudecompiler.y"
                       {
         yyerrok;
         pending_error_after_block = 1;
-        suppress_next_public = 1;
+        suppress_public_count = 1;
         (yyval.node) = (yyvsp[-4].node);
     }
-#line 1656 "claudecompiler.tab.c"
+#line 1666 "claudecompiler.tab.c"
     break;
 
   case 28: /* method_body_items: method_body_items stmt  */
-#line 300 "claudecompiler.y"
+#line 310 "claudecompiler.y"
                            {
         if (!is_empty_block((yyvsp[0].node)))
             addchild((yyvsp[-1].node), (yyvsp[0].node));
 
-        if (!hard_suppress_errors && !pending_error_after_block)
+        if (!hard_suppress_errors && !pending_error_after_block && !suppress_after_string)
             suppress_errors = 0;
 
         (yyval.node) = (yyvsp[-1].node);
     }
-#line 1670 "claudecompiler.tab.c"
+#line 1680 "claudecompiler.tab.c"
     break;
 
   case 29: /* var_decl: type var_ids SEMICOLON  */
-#line 312 "claudecompiler.y"
+#line 322 "claudecompiler.y"
                            {
         struct node_list *child;
         (yyval.node) = make_holder();
@@ -1685,38 +1695,38 @@ yyreduce:
         free_ast((yyvsp[-2].node));
         free_ast((yyvsp[-1].node));
     }
-#line 1689 "claudecompiler.tab.c"
+#line 1699 "claudecompiler.tab.c"
     break;
 
   case 30: /* var_decl: type IDENTIFIER error SEMICOLON  */
-#line 326 "claudecompiler.y"
+#line 336 "claudecompiler.y"
                                     {
         yyerrok;
         (yyval.node) = make_holder();
     }
-#line 1698 "claudecompiler.tab.c"
+#line 1708 "claudecompiler.tab.c"
     break;
 
   case 31: /* var_ids: IDENTIFIER  */
-#line 333 "claudecompiler.y"
+#line 343 "claudecompiler.y"
                { (yyval.node) = make_holder(); addchild((yyval.node), newnode(Identifier, (yyvsp[0].lexeme))); }
-#line 1704 "claudecompiler.tab.c"
+#line 1714 "claudecompiler.tab.c"
     break;
 
   case 32: /* var_ids: var_ids COMMA IDENTIFIER  */
-#line 334 "claudecompiler.y"
+#line 344 "claudecompiler.y"
                              { addchild((yyvsp[-2].node), newnode(Identifier, (yyvsp[0].lexeme))); (yyval.node) = (yyvsp[-2].node); }
-#line 1710 "claudecompiler.tab.c"
+#line 1720 "claudecompiler.tab.c"
     break;
 
   case 33: /* stmt: stmt_entry stmt_core  */
-#line 338 "claudecompiler.y"
+#line 348 "claudecompiler.y"
                          { (yyval.node) = (yyvsp[0].node); }
-#line 1716 "claudecompiler.tab.c"
+#line 1726 "claudecompiler.tab.c"
     break;
 
   case 34: /* stmt_entry: %empty  */
-#line 342 "claudecompiler.y"
+#line 352 "claudecompiler.y"
     {
         if (pending_error_after_block && yychar == IDENTIFIER) {
             pending_error_after_block = 0;
@@ -1725,61 +1735,58 @@ yyreduce:
             pending_error_after_block = 0;
         }
 
-        if (suppress_next_public && yychar != PUBLIC)
-            suppress_next_public = 0;
-
-        if (suppress_errors && !hard_suppress_errors) {
+        if (suppress_errors && !hard_suppress_errors && !suppress_after_string) {
             if (yychar != PUBLIC && yychar != SEMICOLON)
                 suppress_errors = 0;
         }
 
         (yyval.node) = NULL;
     }
-#line 1739 "claudecompiler.tab.c"
+#line 1746 "claudecompiler.tab.c"
     break;
 
   case 35: /* $@2: %empty  */
-#line 363 "claudecompiler.y"
-           { if (!hard_suppress_errors) suppress_errors = 0; }
-#line 1745 "claudecompiler.tab.c"
+#line 370 "claudecompiler.y"
+           { if (!hard_suppress_errors && !suppress_after_string) suppress_errors = 0; }
+#line 1752 "claudecompiler.tab.c"
     break;
 
   case 36: /* stmt_core: LBRACE $@2 stmt_list RBRACE  */
-#line 363 "claudecompiler.y"
-                                                                                {
+#line 370 "claudecompiler.y"
+                                                                                                          {
         if (suppress_errors && !hard_suppress_errors)
             pending_error_after_block = 1;
-        if (!hard_suppress_errors)
+        if (!hard_suppress_errors && !suppress_after_string)
             suppress_errors = 0;
         (yyval.node) = build_block_from_holder((yyvsp[-1].node));
     }
-#line 1757 "claudecompiler.tab.c"
+#line 1764 "claudecompiler.tab.c"
     break;
 
   case 37: /* stmt_core: IF LPAR expr RPAR stmt  */
-#line 370 "claudecompiler.y"
+#line 377 "claudecompiler.y"
                                                  {
         (yyval.node) = newnode(If, NULL);
         addchild((yyval.node), (yyvsp[-2].node));
         addchild((yyval.node), (yyvsp[0].node));
         addchild((yyval.node), newnode(Block, NULL));
     }
-#line 1768 "claudecompiler.tab.c"
+#line 1775 "claudecompiler.tab.c"
     break;
 
   case 38: /* stmt_core: IF LPAR expr RPAR stmt ELSE stmt  */
-#line 376 "claudecompiler.y"
+#line 383 "claudecompiler.y"
                                      {
         (yyval.node) = newnode(If, NULL);
         addchild((yyval.node), (yyvsp[-4].node));
         addchild((yyval.node), (yyvsp[-2].node));
         addchild((yyval.node), (yyvsp[0].node));
     }
-#line 1779 "claudecompiler.tab.c"
+#line 1786 "claudecompiler.tab.c"
     break;
 
   case 39: /* stmt_core: IF LPAR expr error stmt  */
-#line 382 "claudecompiler.y"
+#line 389 "claudecompiler.y"
                                                   {
         yyerrok;
         pending_error_after_block = 1;
@@ -1788,11 +1795,11 @@ yyreduce:
         addchild((yyval.node), (yyvsp[0].node));
         addchild((yyval.node), newnode(Block, NULL));
     }
-#line 1792 "claudecompiler.tab.c"
+#line 1799 "claudecompiler.tab.c"
     break;
 
   case 40: /* stmt_core: IF LPAR expr error stmt ELSE stmt  */
-#line 390 "claudecompiler.y"
+#line 397 "claudecompiler.y"
                                       {
         yyerrok;
         pending_error_after_block = 1;
@@ -1801,82 +1808,82 @@ yyreduce:
         addchild((yyval.node), (yyvsp[-2].node));
         addchild((yyval.node), (yyvsp[0].node));
     }
-#line 1805 "claudecompiler.tab.c"
+#line 1812 "claudecompiler.tab.c"
     break;
 
   case 41: /* stmt_core: WHILE LPAR expr RPAR stmt  */
-#line 398 "claudecompiler.y"
+#line 405 "claudecompiler.y"
                               {
         (yyval.node) = newnode(While, NULL);
         addchild((yyval.node), (yyvsp[-2].node));
         addchild((yyval.node), (yyvsp[0].node));
     }
-#line 1815 "claudecompiler.tab.c"
+#line 1822 "claudecompiler.tab.c"
     break;
 
   case 42: /* $@3: %empty  */
-#line 403 "claudecompiler.y"
-           { if (!hard_suppress_errors) suppress_errors = 0; }
-#line 1821 "claudecompiler.tab.c"
+#line 410 "claudecompiler.y"
+           { if (!hard_suppress_errors && !suppress_after_string) suppress_errors = 0; }
+#line 1828 "claudecompiler.tab.c"
     break;
 
   case 43: /* stmt_core: RETURN $@3 expr SEMICOLON  */
-#line 403 "claudecompiler.y"
-                                                                              {
+#line 410 "claudecompiler.y"
+                                                                                                        {
         (yyval.node) = newnode(Return, NULL);
         addchild((yyval.node), (yyvsp[-1].node));
     }
-#line 1830 "claudecompiler.tab.c"
+#line 1837 "claudecompiler.tab.c"
     break;
 
   case 44: /* stmt_core: RETURN SEMICOLON  */
-#line 407 "claudecompiler.y"
+#line 414 "claudecompiler.y"
                      { (yyval.node) = newnode(Return, NULL); }
-#line 1836 "claudecompiler.tab.c"
+#line 1843 "claudecompiler.tab.c"
     break;
 
   case 45: /* stmt_core: IDENTIFIER ASSIGN expr SEMICOLON  */
-#line 408 "claudecompiler.y"
+#line 415 "claudecompiler.y"
                                      {
         (yyval.node) = newnode(Assign, NULL);
         addchild((yyval.node), newnode(Identifier, (yyvsp[-3].lexeme)));
         addchild((yyval.node), (yyvsp[-1].node));
     }
-#line 1846 "claudecompiler.tab.c"
+#line 1853 "claudecompiler.tab.c"
     break;
 
   case 46: /* stmt_core: PRINT LPAR expr RPAR SEMICOLON  */
-#line 413 "claudecompiler.y"
+#line 420 "claudecompiler.y"
                                    {
         (yyval.node) = newnode(Print, NULL);
         addchild((yyval.node), (yyvsp[-2].node));
     }
-#line 1855 "claudecompiler.tab.c"
+#line 1862 "claudecompiler.tab.c"
     break;
 
   case 47: /* stmt_core: PRINT LPAR STRLIT RPAR SEMICOLON  */
-#line 417 "claudecompiler.y"
+#line 424 "claudecompiler.y"
                                      {
         (yyval.node) = newnode(Print, NULL);
         addchild((yyval.node), newnode(StrLit, (yyvsp[-2].lexeme)));
     }
-#line 1864 "claudecompiler.tab.c"
+#line 1871 "claudecompiler.tab.c"
     break;
 
   case 48: /* stmt_core: method_invocation SEMICOLON  */
-#line 421 "claudecompiler.y"
+#line 428 "claudecompiler.y"
                                 { (yyval.node) = (yyvsp[-1].node); }
-#line 1870 "claudecompiler.tab.c"
+#line 1877 "claudecompiler.tab.c"
     break;
 
   case 49: /* stmt_core: parse_args SEMICOLON  */
-#line 422 "claudecompiler.y"
+#line 429 "claudecompiler.y"
                          { (yyval.node) = (yyvsp[-1].node); }
-#line 1876 "claudecompiler.tab.c"
+#line 1883 "claudecompiler.tab.c"
     break;
 
   case 50: /* $@4: %empty  */
-#line 423 "claudecompiler.y"
+#line 430 "claudecompiler.y"
            {
         if (!suppress_errors && token_line != last_lex_error_line) {
             syntax_errors = 1;
@@ -1884,285 +1891,286 @@ yyreduce:
             syntax_error_count++;
         }
         suppress_errors = 1;
+        suppress_after_string = 1;
     }
-#line 1889 "claudecompiler.tab.c"
+#line 1897 "claudecompiler.tab.c"
     break;
 
   case 51: /* stmt_core: STRING $@4 error SEMICOLON  */
-#line 430 "claudecompiler.y"
+#line 438 "claudecompiler.y"
                       {
         yyerrok;
-        pending_error_after_block = 1;
+        pending_error_after_block = 0;
         (yyval.node) = newnode(Block, NULL);
     }
-#line 1899 "claudecompiler.tab.c"
+#line 1907 "claudecompiler.tab.c"
     break;
 
   case 52: /* stmt_core: SEMICOLON  */
-#line 435 "claudecompiler.y"
+#line 443 "claudecompiler.y"
               { (yyval.node) = newnode(Block, NULL); }
-#line 1905 "claudecompiler.tab.c"
+#line 1913 "claudecompiler.tab.c"
     break;
 
   case 53: /* stmt_core: error SEMICOLON  */
-#line 436 "claudecompiler.y"
+#line 444 "claudecompiler.y"
                     {
         yyerrok;
         suppress_errors = 1;
         (yyval.node) = newnode(Block, NULL);
     }
-#line 1915 "claudecompiler.tab.c"
+#line 1923 "claudecompiler.tab.c"
     break;
 
   case 54: /* stmt_list: %empty  */
-#line 444 "claudecompiler.y"
+#line 452 "claudecompiler.y"
     { (yyval.node) = make_holder(); }
-#line 1921 "claudecompiler.tab.c"
+#line 1929 "claudecompiler.tab.c"
     break;
 
   case 55: /* stmt_list: stmt_list stmt  */
-#line 445 "claudecompiler.y"
+#line 453 "claudecompiler.y"
                    {
         if (!is_empty_block((yyvsp[0].node)))
             addchild((yyvsp[-1].node), (yyvsp[0].node));
 
-        if (!hard_suppress_errors && !pending_error_after_block)
+        if (!hard_suppress_errors && !pending_error_after_block && !suppress_after_string)
             suppress_errors = 0;
 
         (yyval.node) = (yyvsp[-1].node);
     }
-#line 1935 "claudecompiler.tab.c"
+#line 1943 "claudecompiler.tab.c"
     break;
 
   case 57: /* assign_expr: IDENTIFIER ASSIGN assign_expr  */
-#line 459 "claudecompiler.y"
+#line 467 "claudecompiler.y"
                                   {
         (yyval.node) = newnode(Assign, NULL);
         addchild((yyval.node), newnode(Identifier, (yyvsp[-2].lexeme)));
         addchild((yyval.node), (yyvsp[0].node));
     }
-#line 1945 "claudecompiler.tab.c"
+#line 1953 "claudecompiler.tab.c"
     break;
 
   case 59: /* or_expr: or_expr OR and_expr  */
-#line 468 "claudecompiler.y"
+#line 476 "claudecompiler.y"
                         { (yyval.node) = newnode(Or, NULL); addchild((yyval.node), (yyvsp[-2].node)); addchild((yyval.node), (yyvsp[0].node)); }
-#line 1951 "claudecompiler.tab.c"
+#line 1959 "claudecompiler.tab.c"
     break;
 
   case 61: /* and_expr: and_expr AND xor_expr  */
-#line 473 "claudecompiler.y"
+#line 481 "claudecompiler.y"
                           { (yyval.node) = newnode(And, NULL); addchild((yyval.node), (yyvsp[-2].node)); addchild((yyval.node), (yyvsp[0].node)); }
-#line 1957 "claudecompiler.tab.c"
+#line 1965 "claudecompiler.tab.c"
     break;
 
   case 63: /* xor_expr: xor_expr XOR eq_expr  */
-#line 478 "claudecompiler.y"
+#line 486 "claudecompiler.y"
                          { (yyval.node) = newnode(Xor, NULL); addchild((yyval.node), (yyvsp[-2].node)); addchild((yyval.node), (yyvsp[0].node)); }
-#line 1963 "claudecompiler.tab.c"
+#line 1971 "claudecompiler.tab.c"
     break;
 
   case 65: /* eq_expr: eq_expr EQ rel_expr  */
-#line 483 "claudecompiler.y"
+#line 491 "claudecompiler.y"
                         { (yyval.node) = newnode(Eq, NULL); addchild((yyval.node), (yyvsp[-2].node)); addchild((yyval.node), (yyvsp[0].node)); }
-#line 1969 "claudecompiler.tab.c"
+#line 1977 "claudecompiler.tab.c"
     break;
 
   case 66: /* eq_expr: eq_expr NE rel_expr  */
-#line 484 "claudecompiler.y"
+#line 492 "claudecompiler.y"
                         { (yyval.node) = newnode(Ne, NULL); addchild((yyval.node), (yyvsp[-2].node)); addchild((yyval.node), (yyvsp[0].node)); }
-#line 1975 "claudecompiler.tab.c"
+#line 1983 "claudecompiler.tab.c"
     break;
 
   case 68: /* rel_expr: rel_expr LT shift_expr  */
-#line 489 "claudecompiler.y"
+#line 497 "claudecompiler.y"
                            { (yyval.node) = newnode(Lt, NULL); addchild((yyval.node), (yyvsp[-2].node)); addchild((yyval.node), (yyvsp[0].node)); }
-#line 1981 "claudecompiler.tab.c"
+#line 1989 "claudecompiler.tab.c"
     break;
 
   case 69: /* rel_expr: rel_expr GT shift_expr  */
-#line 490 "claudecompiler.y"
+#line 498 "claudecompiler.y"
                            { (yyval.node) = newnode(Gt, NULL); addchild((yyval.node), (yyvsp[-2].node)); addchild((yyval.node), (yyvsp[0].node)); }
-#line 1987 "claudecompiler.tab.c"
+#line 1995 "claudecompiler.tab.c"
     break;
 
   case 70: /* rel_expr: rel_expr LE shift_expr  */
-#line 491 "claudecompiler.y"
+#line 499 "claudecompiler.y"
                            { (yyval.node) = newnode(Le, NULL); addchild((yyval.node), (yyvsp[-2].node)); addchild((yyval.node), (yyvsp[0].node)); }
-#line 1993 "claudecompiler.tab.c"
+#line 2001 "claudecompiler.tab.c"
     break;
 
   case 71: /* rel_expr: rel_expr GE shift_expr  */
-#line 492 "claudecompiler.y"
+#line 500 "claudecompiler.y"
                            { (yyval.node) = newnode(Ge, NULL); addchild((yyval.node), (yyvsp[-2].node)); addchild((yyval.node), (yyvsp[0].node)); }
-#line 1999 "claudecompiler.tab.c"
+#line 2007 "claudecompiler.tab.c"
     break;
 
   case 73: /* shift_expr: shift_expr LSHIFT add_expr  */
-#line 497 "claudecompiler.y"
+#line 505 "claudecompiler.y"
                                { (yyval.node) = newnode(Lshift, NULL); addchild((yyval.node), (yyvsp[-2].node)); addchild((yyval.node), (yyvsp[0].node)); }
-#line 2005 "claudecompiler.tab.c"
+#line 2013 "claudecompiler.tab.c"
     break;
 
   case 74: /* shift_expr: shift_expr RSHIFT add_expr  */
-#line 498 "claudecompiler.y"
+#line 506 "claudecompiler.y"
                                { (yyval.node) = newnode(Rshift, NULL); addchild((yyval.node), (yyvsp[-2].node)); addchild((yyval.node), (yyvsp[0].node)); }
-#line 2011 "claudecompiler.tab.c"
+#line 2019 "claudecompiler.tab.c"
     break;
 
   case 76: /* add_expr: add_expr PLUS mul_expr  */
-#line 503 "claudecompiler.y"
+#line 511 "claudecompiler.y"
                            { (yyval.node) = newnode(Add, NULL); addchild((yyval.node), (yyvsp[-2].node)); addchild((yyval.node), (yyvsp[0].node)); }
-#line 2017 "claudecompiler.tab.c"
+#line 2025 "claudecompiler.tab.c"
     break;
 
   case 77: /* add_expr: add_expr MINUS mul_expr  */
-#line 504 "claudecompiler.y"
+#line 512 "claudecompiler.y"
                             { (yyval.node) = newnode(Sub, NULL); addchild((yyval.node), (yyvsp[-2].node)); addchild((yyval.node), (yyvsp[0].node)); }
-#line 2023 "claudecompiler.tab.c"
+#line 2031 "claudecompiler.tab.c"
     break;
 
   case 79: /* mul_expr: mul_expr STAR unary_expr  */
-#line 509 "claudecompiler.y"
+#line 517 "claudecompiler.y"
                              { (yyval.node) = newnode(Mul, NULL); addchild((yyval.node), (yyvsp[-2].node)); addchild((yyval.node), (yyvsp[0].node)); }
-#line 2029 "claudecompiler.tab.c"
+#line 2037 "claudecompiler.tab.c"
     break;
 
   case 80: /* mul_expr: mul_expr DIV unary_expr  */
-#line 510 "claudecompiler.y"
+#line 518 "claudecompiler.y"
                             { (yyval.node) = newnode(Div, NULL); addchild((yyval.node), (yyvsp[-2].node)); addchild((yyval.node), (yyvsp[0].node)); }
-#line 2035 "claudecompiler.tab.c"
+#line 2043 "claudecompiler.tab.c"
     break;
 
   case 81: /* mul_expr: mul_expr MOD unary_expr  */
-#line 511 "claudecompiler.y"
+#line 519 "claudecompiler.y"
                             { (yyval.node) = newnode(Mod, NULL); addchild((yyval.node), (yyvsp[-2].node)); addchild((yyval.node), (yyvsp[0].node)); }
-#line 2041 "claudecompiler.tab.c"
+#line 2049 "claudecompiler.tab.c"
     break;
 
   case 83: /* unary_expr: NOT unary_expr  */
-#line 516 "claudecompiler.y"
+#line 524 "claudecompiler.y"
                    { (yyval.node) = newnode(Not, NULL); addchild((yyval.node), (yyvsp[0].node)); }
-#line 2047 "claudecompiler.tab.c"
+#line 2055 "claudecompiler.tab.c"
     break;
 
   case 84: /* unary_expr: MINUS unary_expr  */
-#line 517 "claudecompiler.y"
+#line 525 "claudecompiler.y"
                      { (yyval.node) = newnode(Minus, NULL); addchild((yyval.node), (yyvsp[0].node)); }
-#line 2053 "claudecompiler.tab.c"
+#line 2061 "claudecompiler.tab.c"
     break;
 
   case 85: /* unary_expr: PLUS unary_expr  */
-#line 518 "claudecompiler.y"
+#line 526 "claudecompiler.y"
                     { (yyval.node) = newnode(Plus, NULL); addchild((yyval.node), (yyvsp[0].node)); }
-#line 2059 "claudecompiler.tab.c"
+#line 2067 "claudecompiler.tab.c"
     break;
 
   case 87: /* primary_expr: IDENTIFIER  */
-#line 523 "claudecompiler.y"
+#line 531 "claudecompiler.y"
                { (yyval.node) = newnode(Identifier, (yyvsp[0].lexeme)); }
-#line 2065 "claudecompiler.tab.c"
+#line 2073 "claudecompiler.tab.c"
     break;
 
   case 88: /* primary_expr: IDENTIFIER DOTLENGTH  */
-#line 524 "claudecompiler.y"
+#line 532 "claudecompiler.y"
                          { (yyval.node) = newnode(Length, NULL); addchild((yyval.node), newnode(Identifier, (yyvsp[-1].lexeme))); }
-#line 2071 "claudecompiler.tab.c"
+#line 2079 "claudecompiler.tab.c"
     break;
 
   case 89: /* primary_expr: NATURAL  */
-#line 525 "claudecompiler.y"
+#line 533 "claudecompiler.y"
             { (yyval.node) = newnode(Natural, (yyvsp[0].lexeme)); }
-#line 2077 "claudecompiler.tab.c"
+#line 2085 "claudecompiler.tab.c"
     break;
 
   case 90: /* primary_expr: DECIMAL  */
-#line 526 "claudecompiler.y"
+#line 534 "claudecompiler.y"
             { (yyval.node) = newnode(Decimal, (yyvsp[0].lexeme)); }
-#line 2083 "claudecompiler.tab.c"
+#line 2091 "claudecompiler.tab.c"
     break;
 
   case 91: /* primary_expr: BOOLLIT  */
-#line 527 "claudecompiler.y"
+#line 535 "claudecompiler.y"
             { (yyval.node) = newnode(BoolLit, (yyvsp[0].lexeme)); }
-#line 2089 "claudecompiler.tab.c"
+#line 2097 "claudecompiler.tab.c"
     break;
 
   case 94: /* primary_expr: LPAR expr RPAR  */
-#line 530 "claudecompiler.y"
+#line 538 "claudecompiler.y"
                    { (yyval.node) = (yyvsp[-1].node); }
-#line 2095 "claudecompiler.tab.c"
+#line 2103 "claudecompiler.tab.c"
     break;
 
   case 95: /* method_invocation: IDENTIFIER LPAR args_opt RPAR  */
-#line 534 "claudecompiler.y"
+#line 542 "claudecompiler.y"
                                   {
         (yyval.node) = newnode(Call, NULL);
         addchild((yyval.node), newnode(Identifier, (yyvsp[-3].lexeme)));
         append_holder((yyval.node), (yyvsp[-1].node));
         free_holder_only((yyvsp[-1].node));
     }
-#line 2106 "claudecompiler.tab.c"
+#line 2114 "claudecompiler.tab.c"
     break;
 
   case 96: /* method_invocation: IDENTIFIER LPAR error RPAR  */
-#line 540 "claudecompiler.y"
+#line 548 "claudecompiler.y"
                                {
         yyerrok;
         (yyval.node) = newnode(Call, NULL);
         addchild((yyval.node), newnode(Identifier, (yyvsp[-3].lexeme)));
     }
-#line 2116 "claudecompiler.tab.c"
+#line 2124 "claudecompiler.tab.c"
     break;
 
   case 97: /* args_opt: %empty  */
-#line 548 "claudecompiler.y"
+#line 556 "claudecompiler.y"
     { (yyval.node) = make_holder(); }
-#line 2122 "claudecompiler.tab.c"
+#line 2130 "claudecompiler.tab.c"
     break;
 
   case 99: /* expr_list: expr  */
-#line 553 "claudecompiler.y"
+#line 561 "claudecompiler.y"
          { (yyval.node) = make_holder(); addchild((yyval.node), (yyvsp[0].node)); }
-#line 2128 "claudecompiler.tab.c"
+#line 2136 "claudecompiler.tab.c"
     break;
 
   case 100: /* expr_list: expr_list COMMA expr  */
-#line 554 "claudecompiler.y"
+#line 562 "claudecompiler.y"
                          { addchild((yyvsp[-2].node), (yyvsp[0].node)); (yyval.node) = (yyvsp[-2].node); }
-#line 2134 "claudecompiler.tab.c"
+#line 2142 "claudecompiler.tab.c"
     break;
 
   case 101: /* parse_args: PARSEINT LPAR IDENTIFIER LSQ expr RSQ RPAR  */
-#line 557 "claudecompiler.y"
+#line 565 "claudecompiler.y"
                                                        {
     (yyval.node) = newnode(ParseArgs, NULL);
     addchild((yyval.node), newnode(Identifier, (yyvsp[-4].lexeme)));
     addchild((yyval.node), (yyvsp[-2].node));
 }
-#line 2144 "claudecompiler.tab.c"
+#line 2152 "claudecompiler.tab.c"
     break;
 
   case 102: /* type: INT  */
-#line 564 "claudecompiler.y"
+#line 572 "claudecompiler.y"
            { (yyval.node) = newnode(Int, NULL); }
-#line 2150 "claudecompiler.tab.c"
+#line 2158 "claudecompiler.tab.c"
     break;
 
   case 103: /* type: DOUBLE  */
-#line 565 "claudecompiler.y"
+#line 573 "claudecompiler.y"
            { (yyval.node) = newnode(Double, NULL); }
-#line 2156 "claudecompiler.tab.c"
+#line 2164 "claudecompiler.tab.c"
     break;
 
   case 104: /* type: BOOL  */
-#line 566 "claudecompiler.y"
+#line 574 "claudecompiler.y"
            { (yyval.node) = newnode(Bool, NULL); }
-#line 2162 "claudecompiler.tab.c"
+#line 2170 "claudecompiler.tab.c"
     break;
 
 
-#line 2166 "claudecompiler.tab.c"
+#line 2174 "claudecompiler.tab.c"
 
       default: break;
     }
@@ -2355,7 +2363,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 569 "claudecompiler.y"
+#line 577 "claudecompiler.y"
 
 
 int main(int argc, char **argv) {
