@@ -442,6 +442,19 @@ stmt_core:
     }
   | method_invocation SEMICOLON { $$ = $1; }
   | parse_args SEMICOLON { $$ = $1; }
+  | STRING {
+        if (!suppress_errors && token_line != last_lex_error_line) {
+            syntax_errors = 1;
+            printf("Line %d, col %d: syntax error: String\n", token_line, token_column);
+            syntax_error_count++;
+        }
+        suppress_errors = 1;
+        suppress_after_string = 1;
+    } error SEMICOLON {
+        yyerrok;
+        pending_error_after_block = 0;
+        $$ = newnode(Block, NULL);
+    }
   | SEMICOLON { $$ = newnode(Block, NULL); }
   | error SEMICOLON {
         yyerrok;

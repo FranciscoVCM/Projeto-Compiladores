@@ -8,7 +8,4 @@ Line 15, col 22: syntax error: =
 Line 16, col 2: syntax error: String
 Line 17, col 15: illegal character (.)
 Line 17, col 19: illegal character (.)
-Line 18, col 2: syntax error: int
-Line 19, col 2: syntax error: b
-Line 20, col 2: syntax error: c
 Line 22, col 37: unterminated comment
