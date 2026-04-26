@@ -13,8 +13,6 @@ struct node *ast = NULL;
 int print_tree = 0, only_errors = 0, syntax_errors = 0, syntax_error_count = 0;
 int pending_error_after_block = 0;
 int recovering_string_error = 0;
-int after_invalid_string_block = 0;
-int after_invalid_string_skips = 0;
 int last_syntax_error_line = 0;
 int saved_public_line = 0;
 int saved_error_line = 0;
@@ -99,19 +97,7 @@ void yyerror(char *s) {
     int err_col = token_column;
     const char *err_text = token_text;
     syntax_errors = 1;
-
     if (recovering_string_error) return;
-
-    if (after_invalid_string_block &&
-        (strcmp(err_text, "=") == 0 || strcmp(err_text, "*") == 0)) {
-        after_invalid_string_skips++;
-        if (after_invalid_string_skips >= 2) {
-            after_invalid_string_block = 0;
-            after_invalid_string_skips = 0;
-        }
-        return;
-    }
-
     if (token_line == last_lex_error_line) return;
     if (yychar == 0) {
         err_line = line;
@@ -134,7 +120,6 @@ void yyerror(char *s) {
     strncpy(last_syntax_error_text, err_text, sizeof(last_syntax_error_text) - 1);
     last_syntax_error_text[sizeof(last_syntax_error_text) - 1] = '\0';
 }
-
 %}
 
 %union { char *lexeme; struct node *node; }
@@ -348,8 +333,6 @@ method_body:
         free_holder_only($2);
         pending_error_after_block = 0;
         recovering_string_error = 0;
-        after_invalid_string_block = 0;
-        after_invalid_string_skips = 0;
     }
 ;
 
@@ -436,8 +419,6 @@ method_body_items:
         yyerrok;
         pending_error_after_block = 0;
         recovering_string_error = 0;
-        after_invalid_string_block = 1;
-        after_invalid_string_skips = 0;
         $$ = $1;
     }
   | method_body_items stmt {
@@ -449,10 +430,11 @@ method_body_items:
 ;
 
 bad_string_tail:
-    bad_string_items RBRACE
+    bad_string_items RBRACE bad_string_after
 ;
 
 bad_string_items:
+    /* vazio */
   | bad_string_items bad_string_item
 ;
 
@@ -506,6 +488,13 @@ bad_string_item:
   | RSQ
   | SEMICOLON
   | COMMA
+;
+
+bad_string_after:
+  | type IDENTIFIER ASSIGN IDENTIFIER SEMICOLON bad_string_after
+  | IDENTIFIER ASSIGN IDENTIFIER SEMICOLON bad_string_after
+  | IDENTIFIER STAR IDENTIFIER SEMICOLON bad_string_after
+  | SEMICOLON bad_string_after
 ;
 
 invalid_public_decl:

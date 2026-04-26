@@ -11,16 +11,11 @@ extern int last_lex_error_line, yychar;
 
 struct node *ast = NULL;
 int print_tree = 0, only_errors = 0, syntax_errors = 0, syntax_error_count = 0;
+int suppress_errors = 0;
 int pending_error_after_block = 0;
-int recovering_string_error = 0;
-int after_invalid_string_block = 0;
-int after_invalid_string_skips = 0;
-int last_syntax_error_line = 0;
-int saved_public_line = 0;
-int saved_error_line = 0;
-int saved_error_col = 0;
-int last_syntax_error_col = 0;
-char last_syntax_error_text[10000] = "";
+int hard_suppress_errors = 0;
+int suppress_public_count = 0;
+int suppress_after_string = 0;
 
 static struct node *clone_type_node(struct node *n) { if (!n) return NULL; return newnode(n->category, n->token); }
 static struct node *make_holder() { return newnode(Program, NULL); }
@@ -98,21 +93,12 @@ void yyerror(char *s) {
     int err_line = token_line;
     int err_col = token_column;
     const char *err_text = token_text;
+
     syntax_errors = 1;
-
-    if (recovering_string_error) return;
-
-    if (after_invalid_string_block &&
-        (strcmp(err_text, "=") == 0 || strcmp(err_text, "*") == 0)) {
-        after_invalid_string_skips++;
-        if (after_invalid_string_skips >= 2) {
-            after_invalid_string_block = 0;
-            after_invalid_string_skips = 0;
-        }
-        return;
-    }
-
+    if (suppress_errors) return;
+    if (suppress_after_string) return;
     if (token_line == last_lex_error_line) return;
+
     if (yychar == 0) {
         err_line = line;
         err_col = column;
@@ -120,27 +106,15 @@ void yyerror(char *s) {
         if (syntax_error_count > 0) return;
     }
 
-    if (err_line == last_syntax_error_line &&
-        err_col == last_syntax_error_col &&
-        strcmp(err_text, last_syntax_error_text) == 0) {
-        return;
-    }
-
     printf("Line %d, col %d: syntax error: %s\n", err_line, err_col, err_text);
     syntax_error_count++;
-
-    last_syntax_error_line = err_line;
-    last_syntax_error_col = err_col;
-    strncpy(last_syntax_error_text, err_text, sizeof(last_syntax_error_text) - 1);
-    last_syntax_error_text[sizeof(last_syntax_error_text) - 1] = '\0';
 }
-
 %}
 
 %union { char *lexeme; struct node *node; }
 
 %token <lexeme> IDENTIFIER NATURAL DECIMAL STRLIT BOOLLIT
-%token CLASS STATIC RESERVED
+%token CLASS PUBLIC STATIC RESERVED
 %token BOOL INT DOUBLE VOID STRING
 %token IF ELSE WHILE RETURN
 %token PRINT PARSEINT DOTLENGTH
@@ -151,10 +125,7 @@ void yyerror(char *s) {
 %token EQ NE LT GT LE GE
 %token NOT
 %token LPAR RPAR LBRACE RBRACE LSQ RSQ
-%token COMMA
-
-%nonassoc TAIL_DONE
-%nonassoc SEMICOLON PUBLIC
+%token SEMICOLON COMMA
 
 %nonassoc LOWER_THAN_ELSE
 %nonassoc ELSE
@@ -170,7 +141,7 @@ void yyerror(char *s) {
 %type <node> type
 %type <node> var_decl var_ids
 %type <node> method_invocation parse_args
-%type <node> invalid_method_body
+
 %%
 
 program:
@@ -212,14 +183,6 @@ field_decl:
         free_ast($3);
         free_ast($4);
     }
-  | PUBLIC STATIC error SEMICOLON {
-        yyerrok;
-        $$ = make_holder();
-    }
-  | PUBLIC STATIC type error SEMICOLON {
-        yyerrok;
-        $$ = make_holder();
-    }
   | error SEMICOLON {
         yyerrok;
         $$ = make_holder();
@@ -243,15 +206,28 @@ method_decl:
         addchild($$, $3);
         addchild($$, $4);
         pending_error_after_block = 0;
-        recovering_string_error = 0;
+        suppress_public_count = 0;
+        suppress_after_string = 0;
+        if (!hard_suppress_errors)
+            suppress_errors = 0;
     }
-  | PUBLIC STATIC VOID IDENTIFIER LPAR LSQ {
-        saved_error_line = token_line;
-        saved_error_col = token_column;
-    } RSQ STRING IDENTIFIER RPAR method_body {
-        syntax_errors = 1;
-        printf("Line %d, col %d: syntax error: [\n", saved_error_line, saved_error_col);
-        syntax_error_count++;
+  | PUBLIC STATIC type IDENTIFIER LPAR error RPAR method_body {
+        yyerrok;
+        suppress_errors = 1;
+        hard_suppress_errors = 1;
+
+        $$ = newnode(MethodDecl, NULL);
+        struct node *header = newnode(MethodHeader, NULL);
+        addchild(header, $3);
+        addchild(header, newnode(Identifier, $4));
+        addchild(header, newnode(MethodParams, NULL));
+        addchild($$, header);
+        addchild($$, $8);
+    }
+  | PUBLIC STATIC VOID IDENTIFIER LPAR error RPAR method_body {
+        yyerrok;
+        suppress_errors = 1;
+        hard_suppress_errors = 1;
 
         $$ = newnode(MethodDecl, NULL);
         struct node *header = newnode(MethodHeader, NULL);
@@ -259,29 +235,7 @@ method_decl:
         addchild(header, newnode(Identifier, $4));
         addchild(header, newnode(MethodParams, NULL));
         addchild($$, header);
-        addchild($$, $12);
-    }
-  | PUBLIC STATIC type IDENTIFIER LPAR error RPAR {
-        yyerrok;
-    } invalid_method_body {
-        $$ = newnode(MethodDecl, NULL);
-        struct node *header = newnode(MethodHeader, NULL);
-        addchild(header, $3);
-        addchild(header, newnode(Identifier, $4));
-        addchild(header, newnode(MethodParams, NULL));
-        addchild($$, header);
-        addchild($$, $9);
-    }
-  | PUBLIC STATIC VOID IDENTIFIER LPAR error RPAR {
-        yyerrok;
-    } invalid_method_body {
-        $$ = newnode(MethodDecl, NULL);
-        struct node *header = newnode(MethodHeader, NULL);
-        addchild(header, newnode(Void, NULL));
-        addchild(header, newnode(Identifier, $4));
-        addchild(header, newnode(MethodParams, NULL));
-        addchild($$, header);
-        addchild($$, $9);
+        addchild($$, $8);
     }
 ;
 
@@ -310,6 +264,24 @@ method_header:
         addchild($$, newnode(Identifier, $2));
         addchild($$, $4);
     }
+  | type IDENTIFIER LPAR error RPAR {
+        yyerrok;
+        suppress_errors = 1;
+        hard_suppress_errors = 1;
+        $$ = newnode(MethodHeader, NULL);
+        addchild($$, $1);
+        addchild($$, newnode(Identifier, $2));
+        addchild($$, newnode(MethodParams, NULL));
+    }
+  | VOID IDENTIFIER LPAR error RPAR {
+        yyerrok;
+        suppress_errors = 1;
+        hard_suppress_errors = 1;
+        $$ = newnode(MethodHeader, NULL);
+        addchild($$, newnode(Void, NULL));
+        addchild($$, newnode(Identifier, $2));
+        addchild($$, newnode(MethodParams, NULL));
+    }
 ;
 
 param_list:
@@ -334,11 +306,6 @@ param_decl:
         addchild($$, newnode(StringArray, NULL));
         addchild($$, newnode(Identifier, $4));
     }
-  | STRING LSQ NATURAL RSQ IDENTIFIER {
-        $$ = newnode(ParamDecl, NULL);
-        addchild($$, newnode(StringArray, NULL));
-        addchild($$, newnode(Identifier, $5));
-    }
 ;
 
 method_body:
@@ -346,200 +313,62 @@ method_body:
         $$ = newnode(MethodBody, NULL);
         append_holder($$, $2);
         free_holder_only($2);
-        pending_error_after_block = 0;
-        recovering_string_error = 0;
-        after_invalid_string_block = 0;
-        after_invalid_string_skips = 0;
+        if (!hard_suppress_errors) {
+            suppress_errors = 0;
+            pending_error_after_block = 0;
+            suppress_public_count = 0;
+            suppress_after_string = 0;
+        }
     }
-;
-
-invalid_method_body:
-    LBRACE invalid_body_items RBRACE {
-        $$ = newnode(MethodBody, NULL);
-    }
-;
-
-invalid_body_items:
-  | invalid_body_items invalid_body_item
-;
-
-invalid_body_item:
-    LBRACE invalid_body_items RBRACE { }
-  | IDENTIFIER { }
-  | NATURAL { }
-  | DECIMAL { }
-  | STRLIT { }
-  | BOOLLIT { }
-  | CLASS { }
-  | PUBLIC { }
-  | STATIC { }
-  | RESERVED { }
-  | BOOL { }
-  | INT { }
-  | DOUBLE { }
-  | VOID { }
-  | STRING { }
-  | IF { }
-  | ELSE { }
-  | WHILE { }
-  | RETURN { }
-  | PRINT { }
-  | PARSEINT { }
-  | DOTLENGTH { }
-  | INC { }
-  | DEC { }
-  | ARROW { }
-  | ASSIGN { }
-  | PLUS { }
-  | MINUS { }
-  | STAR { }
-  | DIV { }
-  | MOD { }
-  | AND { }
-  | OR { }
-  | XOR { }
-  | LSHIFT { }
-  | RSHIFT { }
-  | EQ { }
-  | NE { }
-  | LT { }
-  | GT { }
-  | LE { }
-  | GE { }
-  | NOT { }
-  | LPAR { }
-  | RPAR { }
-  | LSQ { }
-  | RSQ { }
-  | SEMICOLON { }
-  | COMMA { }
 ;
 
 method_body_items:
     { $$ = make_holder(); }
-  | method_body_items invalid_public_decl {
-        $$ = $1;
-    }
   | method_body_items var_decl {
         append_holder($1, $2);
         free_holder_only($2);
+        if (!hard_suppress_errors && !suppress_after_string)
+            suppress_errors = 0;
+        $$ = $1;
+    }
+  | method_body_items PUBLIC {
+        if (suppress_public_count > 0) {
+            suppress_public_count--;
+        } else if (!suppress_errors && token_line != last_lex_error_line) {
+            syntax_errors = 1;
+            printf("Line %d, col %d: syntax error: public\n", token_line, token_column);
+            syntax_error_count++;
+        }
+        suppress_errors = 1;
+    } error SEMICOLON {
+        yyerrok;
+        pending_error_after_block = 1;
+        suppress_public_count = 1;
         $$ = $1;
     }
   | method_body_items STRING {
-        if (token_line != last_lex_error_line) {
+        if (!suppress_errors && token_line != last_lex_error_line) {
             syntax_errors = 1;
             printf("Line %d, col %d: syntax error: String\n", token_line, token_column);
             syntax_error_count++;
         }
-        recovering_string_error = 1;
-    } bad_string_tail {
+        suppress_errors = 1;
+        suppress_after_string = 1;
+    } error RBRACE {
         yyerrok;
         pending_error_after_block = 0;
-        recovering_string_error = 0;
-        after_invalid_string_block = 1;
-        after_invalid_string_skips = 0;
+        suppress_errors = 0;
         $$ = $1;
     }
   | method_body_items stmt {
         if (!is_empty_block($2))
             addchild($1, $2);
 
+        if (!hard_suppress_errors && !pending_error_after_block && !suppress_after_string)
+            suppress_errors = 0;
+
         $$ = $1;
     }
-;
-
-bad_string_tail:
-    bad_string_items RBRACE
-;
-
-bad_string_items:
-  | bad_string_items bad_string_item
-;
-
-bad_string_item:
-    IDENTIFIER
-  | NATURAL
-  | DECIMAL
-  | STRLIT
-  | BOOLLIT
-  | CLASS
-  | PUBLIC
-  | STATIC
-  | RESERVED
-  | BOOL
-  | INT
-  | DOUBLE
-  | VOID
-  | STRING
-  | IF
-  | ELSE
-  | WHILE
-  | RETURN
-  | PRINT
-  | PARSEINT
-  | DOTLENGTH
-  | INC
-  | DEC
-  | ARROW
-  | ASSIGN
-  | PLUS
-  | MINUS
-  | STAR
-  | DIV
-  | MOD
-  | AND
-  | OR
-  | XOR
-  | LSHIFT
-  | RSHIFT
-  | EQ
-  | NE
-  | LT
-  | GT
-  | LE
-  | GE
-  | NOT
-  | LPAR
-  | RPAR
-  | LBRACE bad_string_items RBRACE
-  | LSQ
-  | RSQ
-  | SEMICOLON
-  | COMMA
-;
-
-invalid_public_decl:
-    PUBLIC {
-        saved_public_line = token_line;
-        syntax_errors = 1;
-        printf("Line %d, col 5: syntax error: public\n", saved_public_line);
-        syntax_error_count++;
-    } invalid_public_tail {
-        pending_error_after_block = 0;
-    }
-;
-
-invalid_public_tail:
-    STATIC STRING IDENTIFIER ASSIGN STRLIT semis PUBLIC STATIC VOID invalid_id_list semis %prec TAIL_DONE
-  | STATIC STRING IDENTIFIER ASSIGN STRLIT semis %prec TAIL_DONE
-  | STATIC VOID invalid_id_list semis %prec TAIL_DONE
-  | STATIC method_header method_body
-  | STATIC error SEMICOLON {
-        yyerrok;
-    }
-  | error SEMICOLON {
-        yyerrok;
-    }
-;
-
-invalid_id_list:
-    IDENTIFIER
-  | invalid_id_list COMMA IDENTIFIER
-;
-
-semis:
-    SEMICOLON
-  | semis SEMICOLON
 ;
 
 var_decl:
@@ -557,14 +386,11 @@ var_decl:
         free_ast($1);
         free_ast($2);
     }
-  | type IDENTIFIER LSQ expr RSQ SEMICOLON {
-        $$ = make_holder();
-    }
-  | type var_ids error {
+  | type error SEMICOLON {
         yyerrok;
         $$ = make_holder();
     }
-  | type error SEMICOLON {
+  | type IDENTIFIER error SEMICOLON {
         yyerrok;
         $$ = make_holder();
     }
@@ -587,17 +413,16 @@ stmt:
 
 stmt_entry:
     {
-        if (pending_error_after_block) {
+        if (pending_error_after_block && yychar == IDENTIFIER) {
             pending_error_after_block = 0;
+            yyerror("syntax error");
+        } else {
+            pending_error_after_block = 0;
+        }
 
-            if (yychar != RBRACE &&
-                yychar != IF &&
-                yychar != WHILE &&
-                yychar != RETURN &&
-                yychar != PRINT &&
-                yychar != SEMICOLON) {
-                yyerror("syntax error");
-            }
+        if (suppress_errors && !hard_suppress_errors && !suppress_after_string) {
+            if (yychar != PUBLIC && yychar != SEMICOLON && yychar != RPAR)
+                suppress_errors = 0;
         }
 
         $$ = NULL;
@@ -605,10 +430,12 @@ stmt_entry:
 ;
 
 stmt_core:
-    LBRACE stmt_list RBRACE {
-        if (recovering_string_error)
+    LBRACE { if (!hard_suppress_errors && !suppress_after_string) suppress_errors = 0; } stmt_list RBRACE {
+        if (suppress_errors && !hard_suppress_errors)
             pending_error_after_block = 1;
-        $$ = build_block_from_holder($2);
+        if (!hard_suppress_errors && !suppress_after_string)
+            suppress_errors = 0;
+        $$ = build_block_from_holder($3);
     }
   | IF LPAR expr RPAR stmt %prec LOWER_THAN_ELSE {
         $$ = newnode(If, NULL);
@@ -619,20 +446,6 @@ stmt_core:
   | IF LPAR expr RPAR stmt ELSE stmt {
         $$ = newnode(If, NULL);
         addchild($$, $3);
-        addchild($$, $5);
-        addchild($$, $7);
-    }
-  | IF LPAR error RPAR stmt %prec LOWER_THAN_ELSE {
-        yyerrok;
-        $$ = newnode(If, NULL);
-        addchild($$, newnode(Natural, "0"));
-        addchild($$, $5);
-        addchild($$, newnode(Block, NULL));
-    }
-  | IF LPAR error RPAR stmt ELSE stmt {
-        yyerrok;
-        $$ = newnode(If, NULL);
-        addchild($$, newnode(Natural, "0"));
         addchild($$, $5);
         addchild($$, $7);
     }
@@ -657,12 +470,6 @@ stmt_core:
         addchild($$, $3);
         addchild($$, $5);
     }
-  | WHILE LPAR error RPAR stmt {
-        yyerrok;
-        $$ = newnode(While, NULL);
-        addchild($$, newnode(Natural, "0"));
-        addchild($$, $5);
-    }
   | WHILE LPAR expr error stmt {
         yyerrok;
         pending_error_after_block = 1;
@@ -670,9 +477,9 @@ stmt_core:
         addchild($$, $3);
         addchild($$, $5);
     }
-  | RETURN expr SEMICOLON {
+  | RETURN { if (!hard_suppress_errors && !suppress_after_string) suppress_errors = 0; } expr SEMICOLON {
         $$ = newnode(Return, NULL);
-        addchild($$, $2);
+        addchild($$, $3);
     }
   | RETURN SEMICOLON {
         $$ = newnode(Return, NULL);
@@ -681,20 +488,10 @@ stmt_core:
         yyerrok;
         $$ = newnode(Return, NULL);
     }
-  | IDENTIFIER IDENTIFIER RESERVED ASSIGN expr SEMICOLON {
-        $$ = newnode(Block, NULL);
-    }
   | IDENTIFIER ASSIGN expr SEMICOLON {
         $$ = newnode(Assign, NULL);
         addchild($$, newnode(Identifier, $1));
         addchild($$, $3);
-    }
-  | IDENTIFIER ASSIGN error SEMICOLON {
-        yyerrok;
-        $$ = newnode(Block, NULL);
-    }
-  | IDENTIFIER ASSIGN DOTLENGTH IDENTIFIER LPAR expr RPAR SEMICOLON {
-        $$ = newnode(Block, NULL);
     }
   | PRINT LPAR expr RPAR SEMICOLON {
         $$ = newnode(Print, NULL);
@@ -709,16 +506,11 @@ stmt_core:
         $$ = newnode(Block, NULL);
     }
   | method_invocation SEMICOLON { $$ = $1; }
-    | PARSEINT LPAR error RPAR RPAR SEMICOLON {
-        yyerrok;
-        $$ = newnode(Block, NULL);
-    }
   | parse_args SEMICOLON { $$ = $1; }
-  | SEMICOLON {
-        $$ = newnode(Block, NULL);
-    }
+  | SEMICOLON { $$ = newnode(Block, NULL); }
   | error SEMICOLON {
         yyerrok;
+        suppress_errors = 1;
         $$ = newnode(Block, NULL);
     }
 ;
@@ -728,6 +520,9 @@ stmt_list:
   | stmt_list stmt {
         if (!is_empty_block($2))
             addchild($1, $2);
+
+        if (!hard_suppress_errors && !pending_error_after_block && !suppress_after_string)
+            suppress_errors = 0;
 
         $$ = $1;
     }
@@ -940,11 +735,9 @@ parse_args:
         addchild($$, newnode(Identifier, $3));
         addchild($$, $5);
     }
-  | PARSEINT LPAR expr RPAR {
-        $$ = newnode(ParseArgs, NULL);
-    }
   | PARSEINT LPAR error RPAR {
         yyerrok;
+        suppress_errors = 1;
         $$ = newnode(ParseArgs, NULL);
     }
 ;

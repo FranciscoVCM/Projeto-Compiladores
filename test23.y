@@ -11,10 +11,11 @@ extern int last_lex_error_line, yychar;
 
 struct node *ast = NULL;
 int print_tree = 0, only_errors = 0, syntax_errors = 0, syntax_error_count = 0;
+int suppress_errors = 0;
 int pending_error_after_block = 0;
-int recovering_string_error = 0;
-int after_invalid_string_block = 0;
-int after_invalid_string_skips = 0;
+int hard_suppress_errors = 0;
+int suppress_public_count = 0;
+int suppress_after_string = 0;
 int last_syntax_error_line = 0;
 int saved_public_line = 0;
 int saved_error_line = 0;
@@ -99,19 +100,7 @@ void yyerror(char *s) {
     int err_col = token_column;
     const char *err_text = token_text;
     syntax_errors = 1;
-
-    if (recovering_string_error) return;
-
-    if (after_invalid_string_block &&
-        (strcmp(err_text, "=") == 0 || strcmp(err_text, "*") == 0)) {
-        after_invalid_string_skips++;
-        if (after_invalid_string_skips >= 2) {
-            after_invalid_string_block = 0;
-            after_invalid_string_skips = 0;
-        }
-        return;
-    }
-
+    if (suppress_after_string) return;
     if (token_line == last_lex_error_line) return;
     if (yychar == 0) {
         err_line = line;
@@ -134,7 +123,6 @@ void yyerror(char *s) {
     strncpy(last_syntax_error_text, err_text, sizeof(last_syntax_error_text) - 1);
     last_syntax_error_text[sizeof(last_syntax_error_text) - 1] = '\0';
 }
-
 %}
 
 %union { char *lexeme; struct node *node; }
@@ -243,7 +231,9 @@ method_decl:
         addchild($$, $3);
         addchild($$, $4);
         pending_error_after_block = 0;
-        recovering_string_error = 0;
+        suppress_public_count = 0;
+        suppress_after_string = 0;
+        hard_suppress_errors = 0;
     }
   | PUBLIC STATIC VOID IDENTIFIER LPAR LSQ {
         saved_error_line = token_line;
@@ -271,6 +261,7 @@ method_decl:
         addchild(header, newnode(MethodParams, NULL));
         addchild($$, header);
         addchild($$, $9);
+        hard_suppress_errors = 0;
     }
   | PUBLIC STATIC VOID IDENTIFIER LPAR error RPAR {
         yyerrok;
@@ -282,6 +273,7 @@ method_decl:
         addchild(header, newnode(MethodParams, NULL));
         addchild($$, header);
         addchild($$, $9);
+        hard_suppress_errors = 0;
     }
 ;
 
@@ -346,10 +338,11 @@ method_body:
         $$ = newnode(MethodBody, NULL);
         append_holder($$, $2);
         free_holder_only($2);
-        pending_error_after_block = 0;
-        recovering_string_error = 0;
-        after_invalid_string_block = 0;
-        after_invalid_string_skips = 0;
+        if (!hard_suppress_errors) {
+            pending_error_after_block = 0;
+            suppress_public_count = 0;
+            suppress_after_string = 0;
+        }
     }
 ;
 
@@ -360,6 +353,7 @@ invalid_method_body:
 ;
 
 invalid_body_items:
+    /* vazio */
   | invalid_body_items invalid_body_item
 ;
 
@@ -431,13 +425,10 @@ method_body_items:
             printf("Line %d, col %d: syntax error: String\n", token_line, token_column);
             syntax_error_count++;
         }
-        recovering_string_error = 1;
-    } bad_string_tail {
+        suppress_after_string = 1;
+    } error RBRACE {
         yyerrok;
         pending_error_after_block = 0;
-        recovering_string_error = 0;
-        after_invalid_string_block = 1;
-        after_invalid_string_skips = 0;
         $$ = $1;
     }
   | method_body_items stmt {
@@ -446,66 +437,6 @@ method_body_items:
 
         $$ = $1;
     }
-;
-
-bad_string_tail:
-    bad_string_items RBRACE
-;
-
-bad_string_items:
-  | bad_string_items bad_string_item
-;
-
-bad_string_item:
-    IDENTIFIER
-  | NATURAL
-  | DECIMAL
-  | STRLIT
-  | BOOLLIT
-  | CLASS
-  | PUBLIC
-  | STATIC
-  | RESERVED
-  | BOOL
-  | INT
-  | DOUBLE
-  | VOID
-  | STRING
-  | IF
-  | ELSE
-  | WHILE
-  | RETURN
-  | PRINT
-  | PARSEINT
-  | DOTLENGTH
-  | INC
-  | DEC
-  | ARROW
-  | ASSIGN
-  | PLUS
-  | MINUS
-  | STAR
-  | DIV
-  | MOD
-  | AND
-  | OR
-  | XOR
-  | LSHIFT
-  | RSHIFT
-  | EQ
-  | NE
-  | LT
-  | GT
-  | LE
-  | GE
-  | NOT
-  | LPAR
-  | RPAR
-  | LBRACE bad_string_items RBRACE
-  | LSQ
-  | RSQ
-  | SEMICOLON
-  | COMMA
 ;
 
 invalid_public_decl:
@@ -606,7 +537,7 @@ stmt_entry:
 
 stmt_core:
     LBRACE stmt_list RBRACE {
-        if (recovering_string_error)
+        if (suppress_after_string)
             pending_error_after_block = 1;
         $$ = build_block_from_holder($2);
     }
