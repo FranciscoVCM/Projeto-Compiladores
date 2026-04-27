@@ -155,6 +155,7 @@ void yyerror(char *s) {
 %type <node> type
 %type <node> var_decl var_ids
 %type <node> method_invocation parse_args
+%type <node> invalid_method_body
 %type <node> bad_string_start
 %%
 
@@ -222,13 +223,6 @@ field_ids:
     }
 ;
 
-lbrace_save:
-    LBRACE {
-        saved_error_line = token_line;
-        saved_error_col = token_column;
-    }
-;
-
 method_decl:
     PUBLIC STATIC method_header method_body {
         $$ = newnode(MethodDecl, NULL);
@@ -252,100 +246,27 @@ method_decl:
         addchild($$, header);
         addchild($$, $12);
     }
-
-  /* missing ')' before method body, non-void with params */
-  | PUBLIC STATIC type IDENTIFIER LPAR param_list lbrace_save method_body_items RBRACE {
-        /* Para manter os testes públicos em 72, NÃO imprimir erro aqui.
-           Se quisermos ser estritamente corretos para Mooshak, o erro provável seria em "{". */
-        $$ = newnode(MethodDecl, NULL);
-
-        struct node *header = newnode(MethodHeader, NULL);
-        addchild(header, $3);
-        addchild(header, newnode(Identifier, $4));
-        addchild(header, $6);
-
-        struct node *body = newnode(MethodBody, NULL);
-        append_holder(body, $8);
-        free_holder_only($8);
-
-        addchild($$, header);
-        addchild($$, body);
-        pending_error_after_block = 0;
-    }
-
-  /* missing ')' before method body, non-void without params */
-  | PUBLIC STATIC type IDENTIFIER LPAR lbrace_save method_body_items RBRACE {
-        $$ = newnode(MethodDecl, NULL);
-
-        struct node *header = newnode(MethodHeader, NULL);
-        addchild(header, $3);
-        addchild(header, newnode(Identifier, $4));
-        addchild(header, newnode(MethodParams, NULL));
-
-        struct node *body = newnode(MethodBody, NULL);
-        append_holder(body, $7);
-        free_holder_only($7);
-
-        addchild($$, header);
-        addchild($$, body);
-        pending_error_after_block = 0;
-    }
-
-  /* missing ')' before method body, void with params */
-  | PUBLIC STATIC VOID IDENTIFIER LPAR param_list lbrace_save method_body_items RBRACE {
-        $$ = newnode(MethodDecl, NULL);
-
-        struct node *header = newnode(MethodHeader, NULL);
-        addchild(header, newnode(Void, NULL));
-        addchild(header, newnode(Identifier, $4));
-        addchild(header, $6);
-
-        struct node *body = newnode(MethodBody, NULL);
-        append_holder(body, $8);
-        free_holder_only($8);
-
-        addchild($$, header);
-        addchild($$, body);
-        pending_error_after_block = 0;
-    }
-
-  /* missing ')' before method body, void without params */
-  | PUBLIC STATIC VOID IDENTIFIER LPAR lbrace_save method_body_items RBRACE {
-        $$ = newnode(MethodDecl, NULL);
-
-        struct node *header = newnode(MethodHeader, NULL);
-        addchild(header, newnode(Void, NULL));
-        addchild(header, newnode(Identifier, $4));
-        addchild(header, newnode(MethodParams, NULL));
-
-        struct node *body = newnode(MethodBody, NULL);
-        append_holder(body, $7);
-        free_holder_only($7);
-
-        addchild($$, header);
-        addchild($$, body);
-        pending_error_after_block = 0;
-    }
-
-  | PUBLIC STATIC type IDENTIFIER LPAR error RPAR method_body {
+  | PUBLIC STATIC type IDENTIFIER LPAR error RPAR {
         yyerrok;
+    } invalid_method_body {
         $$ = newnode(MethodDecl, NULL);
         struct node *header = newnode(MethodHeader, NULL);
         addchild(header, $3);
         addchild(header, newnode(Identifier, $4));
         addchild(header, newnode(MethodParams, NULL));
         addchild($$, header);
-        addchild($$, $8);
+        addchild($$, $9);
     }
-  | PUBLIC STATIC VOID IDENTIFIER LPAR error RPAR method_body {
+  | PUBLIC STATIC VOID IDENTIFIER LPAR error RPAR {
         yyerrok;
+    } invalid_method_body {
         $$ = newnode(MethodDecl, NULL);
         struct node *header = newnode(MethodHeader, NULL);
         addchild(header, newnode(Void, NULL));
         addchild(header, newnode(Identifier, $4));
         addchild(header, newnode(MethodParams, NULL));
         addchild($$, header);
-        addchild($$, $8);
+        addchild($$, $9);
     }
 ;
 
@@ -412,6 +333,68 @@ method_body:
         free_holder_only($2);
         pending_error_after_block = 0;
     }
+;
+
+invalid_method_body:
+    LBRACE invalid_body_items RBRACE {
+        $$ = newnode(MethodBody, NULL);
+    }
+;
+
+invalid_body_items:
+  | invalid_body_items invalid_body_item
+;
+
+invalid_body_item:
+    LBRACE invalid_body_items RBRACE { }
+  | IDENTIFIER { }
+  | NATURAL { }
+  | DECIMAL { }
+  | STRLIT { }
+  | BOOLLIT { }
+  | CLASS { }
+  | PUBLIC { }
+  | STATIC { }
+  | RESERVED { }
+  | BOOL { }
+  | INT { }
+  | DOUBLE { }
+  | VOID { }
+  | STRING { }
+  | IF { }
+  | ELSE { }
+  | WHILE { }
+  | RETURN { }
+  | PRINT { }
+  | PARSEINT { }
+  | DOTLENGTH { }
+  | INC { }
+  | DEC { }
+  | ARROW { }
+  | ASSIGN { }
+  | PLUS { }
+  | MINUS { }
+  | STAR { }
+  | DIV { }
+  | MOD { }
+  | AND { }
+  | OR { }
+  | XOR { }
+  | LSHIFT { }
+  | RSHIFT { }
+  | EQ { }
+  | NE { }
+  | LT { }
+  | GT { }
+  | LE { }
+  | GE { }
+  | NOT { }
+  | LPAR { }
+  | RPAR { }
+  | LSQ { }
+  | RSQ { }
+  | SEMICOLON { }
+  | COMMA { }
 ;
 
 method_body_items:
@@ -542,13 +525,6 @@ semis:
   | semis SEMICOLON
 ;
 
-assign_save:
-    ASSIGN {
-        saved_error_line = token_line;
-        saved_error_col = token_column;
-    }
-;
-
 var_decl:
     type var_ids SEMICOLON {
         struct node_list *child;
@@ -565,14 +541,14 @@ var_decl:
         free_ast($2);
     }
   | type IDENTIFIER LSQ expr RSQ SEMICOLON {
-      $$ = make_holder();
-  }
-    | type IDENTIFIER assign_save expr SEMICOLON {
-      syntax_errors = 1;
-      printf("Line %d, col %d: syntax error: =\n", saved_error_line, saved_error_col);
-      syntax_error_count++;
-      $$ = make_holder();
-  }
+        $$ = make_holder();
+    }
+    | type IDENTIFIER ASSIGN expr SEMICOLON {
+        syntax_errors = 1;
+        printf("Line %d, col %d: syntax error: =\n", @3.first_line, @3.first_column);
+        syntax_error_count++;
+        $$ = make_holder();
+    }
   | type var_ids error {
         yyerrok;
         $$ = make_holder();
@@ -647,22 +623,6 @@ stmt_core:
         addchild($$, $5);
         addchild($$, $7);
     }
-    | IF LPAR expr RETURN expr SEMICOLON %prec LOWER_THAN_ELSE {
-        $$ = newnode(If, NULL);
-        addchild($$, $3);
-
-        struct node *ret = newnode(Return, NULL);
-        addchild(ret, $5);
-        addchild($$, ret);
-
-        addchild($$, newnode(Block, NULL));
-    }
-  | IF LPAR expr RETURN SEMICOLON %prec LOWER_THAN_ELSE {
-        $$ = newnode(If, NULL);
-        addchild($$, $3);
-        addchild($$, newnode(Return, NULL));
-        addchild($$, newnode(Block, NULL));
-    }
   | IF LPAR expr error stmt %prec LOWER_THAN_ELSE {
         yyerrok;
         pending_error_after_block = 1;
@@ -711,9 +671,6 @@ stmt_core:
   | IDENTIFIER IDENTIFIER RESERVED ASSIGN expr SEMICOLON {
         $$ = newnode(Block, NULL);
     }
-    | IDENTIFIER ASSIGN PARSEINT LPAR expr RPAR SEMICOLON {
-      $$ = newnode(Block, NULL);
-  }
   | IDENTIFIER ASSIGN expr SEMICOLON {
         $$ = newnode(Assign, NULL);
         addchild($$, newnode(Identifier, $1));
@@ -969,6 +926,9 @@ parse_args:
         $$ = newnode(ParseArgs, NULL);
         addchild($$, newnode(Identifier, $3));
         addchild($$, $5);
+    }
+  | PARSEINT LPAR expr RPAR {
+        $$ = newnode(ParseArgs, NULL);
     }
   | PARSEINT LPAR error RPAR {
         yyerrok;

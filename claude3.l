@@ -30,12 +30,13 @@ int last_lex_error_line = 0;
 
 int print_tokens = 0;
 extern int suppress_errors;
-extern int suppress_after_string;
 
 #define TOKEN(t) if(print_tokens) printf("%s\n", t);
 #define SET_TOKEN_TEXT(s) do { strncpy(token_text, (s), sizeof(token_text) - 1); token_text[sizeof(token_text) - 1] = '\0'; } while(0)
 
 %}
+
+%option noyywrap
 
 %X COMMENT STRING_STATE
 
@@ -87,10 +88,11 @@ alnum      [a-zA-Z0-9_$]
 }
 
 <COMMENT><<EOF>> {
-    printf("Line %d, col %d: unterminated comment\n",
-           comment_start_line, comment_start_column);
-    last_lex_error_line = comment_start_line;
-
+    if (!suppress_errors) {
+        printf("Line %d, col %d: unterminated comment\n",
+               comment_start_line, comment_start_column);
+        last_lex_error_line = comment_start_line;
+    }
     token_line = line;
     token_column = column;
     SET_TOKEN_TEXT("");
@@ -275,14 +277,6 @@ alnum      [a-zA-Z0-9_$]
     column += yyleng;
 }
 "System.out.print" { TOKEN("PRINT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return PRINT; }
-".parseInt" {
-    TOKEN("PARSEINT");
-    token_line = line;
-    token_column = column;
-    SET_TOKEN_TEXT(yytext);
-    column += yyleng;
-    return PARSEINT;
-}
 "Integer.parseInt" { TOKEN("PARSEINT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return PARSEINT; }
 ".length"          { TOKEN("DOTLENGTH"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return DOTLENGTH; }
 

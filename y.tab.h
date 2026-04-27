@@ -171,7 +171,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 140 "claudecompiler.y"
+#line 125 "claudecompiler.y"
  char *lexeme; struct node *node; 
 
 #line 178 "y.tab.h"
