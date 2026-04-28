@@ -256,9 +256,8 @@ static int decimal_mantissa_has_nonzero_digit(const char *clean) {
 static int decimal_out_of_bounds(const char *tok) {
     char *clean = remove_underscores(tok);
     int mantissa_has_nonzero;
-    long double v;
-
-    const long double half_true_min = 2.470328229206232720882843964341106861825e-324L;
+    double v;
+    int result = 0;
 
     if (clean == NULL)
         return 0;
@@ -266,19 +265,18 @@ static int decimal_out_of_bounds(const char *tok) {
     mantissa_has_nonzero = decimal_mantissa_has_nonzero_digit(clean);
 
     errno = 0;
-    v = strtold(clean, NULL);
+    v = strtod(clean, NULL);
+
+    if (v > DBL_MAX) {
+        result = 1;
+    }
+
+    else if (mantissa_has_nonzero && v == 0.0) {
+        result = 1;
+    }
+
     free(clean);
-
-    if (v > (long double)DBL_MAX)
-        return 1;
-
-    if (mantissa_has_nonzero && v > 0.0L && v < half_true_min)
-        return 1;
-
-    if (mantissa_has_nonzero && v == 0.0L)
-        return 1;
-
-    return 0;
+    return result;
 }
 
 static struct parameter_list *build_method_param_types(struct node *method_params) {
