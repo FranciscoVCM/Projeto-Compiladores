@@ -1,0 +1,43 @@
+===== Class Main Symbol Table =====
+main	(String[])	void
+
+===== Method main(String[]) Symbol Table =====
+return		void
+args		String[]	param
+i		int
+j		double
+
+Program
+..Identifier(Main)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......VarDecl
+........Int
+........Identifier(i)
+......Assign - int
+........Identifier(i) - int
+........Natural(3) - int
+......VarDecl
+........Double
+........Identifier(j)
+......Assign - double
+........Identifier(j) - double
+........Natural(4) - int
+......If
+........Eq - boolean
+..........Add - int
+............Identifier(i) - int
+............Natural(1) - int
+..........Identifier(j) - double
+........Print
+..........Identifier(j) - double
+........Block
+......Print
+........StrLit("\n") - String

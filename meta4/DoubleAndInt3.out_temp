@@ -1,0 +1,51 @@
+===== Class Main Symbol Table =====
+d		double
+test	(double)	double
+main	(String[])	void
+
+===== Method test(double) Symbol Table =====
+return		double
+n		double	param
+
+===== Method main(String[]) Symbol Table =====
+return		void
+args		String[]	param
+
+Program
+..Identifier(Main)
+..FieldDecl
+....Double
+....Identifier(d)
+..MethodDecl
+....MethodHeader
+......Double
+......Identifier(test)
+......MethodParams
+........ParamDecl
+..........Double
+..........Identifier(n)
+....MethodBody
+......Return
+........Identifier(n) - double
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......Print
+........Call - double
+..........Identifier(test) - (double)
+..........Natural(4) - int
+......Print
+........StrLit("\n") - String
+......Assign - double
+........Identifier(d) - double
+........Natural(2) - int
+......Print
+........Identifier(d) - double
+......Print
+........StrLit("\n") - String
