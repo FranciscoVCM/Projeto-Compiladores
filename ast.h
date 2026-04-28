@@ -27,13 +27,15 @@ enum category {
 };
 
 enum type {
-    none_type,
+    no_type,
     integer_type,
     double_type,
     bool_type,
+    string_type,
     string_array_type,
     void_type,
-    undef_type
+    undef_type,
+    none_type
 };
 
 struct node_list {
@@ -44,13 +46,14 @@ struct node_list {
 struct node {
     enum category category;
     char *token;
-    struct node_list *children;
 
     int line;
     int column;
 
     enum type type;
     char *annotation;
+
+    struct node_list *children;
 };
 
 struct node *newnode(enum category category, char *token);

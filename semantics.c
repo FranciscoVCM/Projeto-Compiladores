@@ -130,6 +130,22 @@ static struct symbol_list *search_symbol(struct symbol_list *table, char *name) 
     return NULL;
 }
 
+static struct symbol_list *search_global_field(char *name) {
+    struct symbol_list *s = global_table;
+
+    while (s != NULL) {
+        if (s->node != NULL &&
+            s->node->category == FieldDecl &&
+            strcmp(s->name, name) == 0) {
+            return s;
+        }
+
+        s = s->next;
+    }
+
+    return NULL;
+}
+
 static struct node *get_child(struct node *node, int index) {
     int i = 0;
     struct node_list *child;
@@ -150,6 +166,20 @@ static struct node *get_child(struct node *node, int index) {
 
 static int is_reserved_identifier(struct node *id) {
     return id != NULL && id->token != NULL && strcmp(id->token, "_") == 0;
+}
+
+static int is_numeric_type(enum type t) {
+    return t == integer_type || t == double_type;
+}
+
+static int is_scalar_assignable_type(enum type t) {
+    return t == integer_type || t == double_type || t == bool_type;
+}
+
+static enum type promoted_numeric_type(enum type left, enum type right) {
+    if (left == double_type || right == double_type)
+        return double_type;
+    return integer_type;
 }
 
 static void semantic_error_node(struct node *node, const char *msg) {
@@ -333,7 +363,7 @@ static void collect_field_decl(struct node *field_decl) {
         return;
     }
 
-    if (search_symbol(global_table, id->token) != NULL) {
+    if (search_global_field(id->token) != NULL) {
         semantic_error_symbol(id, "Symbol %s already defined", id->token);
         return;
     }
@@ -499,7 +529,7 @@ static enum type check_identifier_expr(struct node *expr, struct method_scope *s
         return expr->type;
     }
 
-    global = search_symbol(global_table, expr->token);
+    global = search_global_field(expr->token);
     if (global != NULL) {
         expr->type = global->type;
         return expr->type;
@@ -547,7 +577,10 @@ static enum type check_call(struct node *expr, struct method_scope *scope) {
         struct method_scope *compat = resolve_compatible_method_unique(id->token, arg_types, &ambiguous);
 
         if (ambiguous) {
-            semantic_error_symbol(id, "Reference to method %s is ambiguous", id->token);
+            char *call_sig = call_signature_string(id->token, arg_types);
+            semantic_error_symbol(id, "Reference to method %s is ambiguous", call_sig);
+            free(call_sig);
+
             id->type = undef_type;
             expr->type = undef_type;
             return expr->type;
@@ -574,16 +607,6 @@ static enum type check_call(struct node *expr, struct method_scope *scope) {
     id->type = undef_type;
     expr->type = undef_type;
     return expr->type;
-}
-
-static int is_numeric_type(enum type t) {
-    return t == integer_type || t == double_type;
-}
-
-static enum type promoted_numeric_type(enum type left, enum type right) {
-    if (left == double_type || right == double_type)
-        return double_type;
-    return integer_type;
 }
 
 static enum type check_binary_numeric(struct node *expr, struct method_scope *scope, const char *op, int allow_double) {
@@ -644,13 +667,10 @@ static enum type check_boolean_operator(struct node *expr, struct method_scope *
     enum type left = check_expression(get_child(expr, 0), scope);
     enum type right = check_expression(get_child(expr, 1), scope);
 
-    if (left == bool_type && right == bool_type) {
-        expr->type = bool_type;
-    } else {
+    if (!(left == bool_type && right == bool_type))
         semantic_error_op2(expr, op, left, right);
-        expr->type = undef_type;
-    }
 
+    expr->type = bool_type;
     return expr->type;
 }
 
@@ -673,6 +693,10 @@ static enum type check_expression(struct node *expr, struct method_scope *scope)
 
         case BoolLit:
             expr->type = bool_type;
+            return expr->type;
+
+        case StrLit:
+            expr->type = string_type;
             return expr->type;
 
         case Identifier:
@@ -711,8 +735,10 @@ static enum type check_expression(struct node *expr, struct method_scope *scope)
             enum type ltype = check_expression(lhs, scope);
             enum type rtype = check_expression(rhs, scope);
 
-            if (!(ltype == rtype || (ltype == double_type && rtype == integer_type)))
+            if (!(is_scalar_assignable_type(ltype) &&
+                  (ltype == rtype || (ltype == double_type && rtype == integer_type)))) {
                 semantic_error_op2(expr, "=", ltype, rtype);
+            }
 
             expr->type = ltype;
             return expr->type;
@@ -757,13 +783,10 @@ static enum type check_expression(struct node *expr, struct method_scope *scope)
         case Not: {
             enum type t = check_expression(get_child(expr, 0), scope);
 
-            if (t == bool_type) {
-                expr->type = bool_type;
-            } else {
+            if (t != bool_type)
                 semantic_error_op1(expr, "!", t);
-                expr->type = undef_type;
-            }
 
+            expr->type = bool_type;
             return expr->type;
         }
 
@@ -803,33 +826,35 @@ static void annotate_statement_or_decl(struct node *node, struct method_scope *s
             return;
 
         case Return: {
-            struct node *value = get_child(node, 0);
+    struct node *value = get_child(node, 0);
 
-            if (value == NULL) {
-                if (scope->return_type != void_type)
-                    semantic_error_stmt(node, void_type, "return");
-                return;
-            }
+    if (value == NULL) {
+        if (scope->return_type != void_type)
+            semantic_error_stmt(node, void_type, "return");
+        return;
+    }
 
-            {
-                enum type t = check_expression(value, scope);
+    {
+        enum type t = check_expression(value, scope);
 
-                if (!(t == scope->return_type ||
-                    (scope->return_type == double_type && t == integer_type))) {
-                    semantic_error_stmt(value, t, "return");
-                }
-            }
-
-            return;
+        if (scope->return_type == void_type) {
+            semantic_error_stmt(value, t, "return");
+        } else if (!(t == scope->return_type ||
+            (scope->return_type == double_type && t == integer_type))) {
+            semantic_error_stmt(value, t, "return");
         }
+    }
+
+    return;
+}
 
         case Print: {
             struct node *value = get_child(node, 0);
 
-            if (value != NULL && value->category != StrLit) {
+            if (value != NULL) {
                 enum type t = check_expression(value, scope);
 
-                if (!(t == integer_type || t == double_type || t == bool_type))
+                if (!(t == integer_type || t == double_type || t == bool_type || t == string_type))
                     semantic_error_stmt(value, t, "System.out.print");
             }
 
