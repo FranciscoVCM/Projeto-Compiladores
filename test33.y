@@ -17,6 +17,8 @@ int saved_public_line = 0;
 int saved_error_line = 0;
 int saved_error_col = 0;
 int last_syntax_error_col = 0;
+int saved_public_col = 0;
+char saved_error_text[10000] = "";
 char last_syntax_error_text[10000] = "";
 
 static struct node *clone_type_node(struct node *n) { if (!n) return NULL; return newnode(n->category, n->token); }
@@ -95,9 +97,9 @@ void yyerror(char *s) {
     int err_line = token_line;
     int err_col = token_column;
     const char *err_text = token_text;
-    syntax_errors = 1;
 
     if (token_line == last_lex_error_line) return;
+
     if (yychar == 0) {
         err_line = line;
         err_col = column;
@@ -110,6 +112,8 @@ void yyerror(char *s) {
         strcmp(err_text, last_syntax_error_text) == 0) {
         return;
     }
+
+    syntax_errors = 1;
 
     printf("Line %d, col %d: syntax error: %s\n", err_line, err_col, err_text);
     syntax_error_count++;
@@ -229,6 +233,15 @@ lbrace_save:
     }
 ;
 
+natural_save:
+    NATURAL {
+        saved_error_line = token_line;
+        saved_error_col = token_column;
+        strncpy(saved_error_text, token_text, sizeof(saved_error_text) - 1);
+        saved_error_text[sizeof(saved_error_text) - 1] = '\0';
+    }
+;
+
 method_decl:
     PUBLIC STATIC method_header method_body {
         $$ = newnode(MethodDecl, NULL);
@@ -253,10 +266,10 @@ method_decl:
         addchild($$, $12);
     }
 
-  /* missing ')' before method body, non-void with params */
   | PUBLIC STATIC type IDENTIFIER LPAR param_list lbrace_save method_body_items RBRACE {
-        /* Para manter os testes públicos em 72, NÃO imprimir erro aqui.
-           Se quisermos ser estritamente corretos para Mooshak, o erro provável seria em "{". */
+        syntax_errors = 1;
+        printf("Line %d, col %d: syntax error: {\n", saved_error_line, saved_error_col);
+        syntax_error_count++;
         $$ = newnode(MethodDecl, NULL);
 
         struct node *header = newnode(MethodHeader, NULL);
@@ -275,6 +288,9 @@ method_decl:
 
   /* missing ')' before method body, non-void without params */
   | PUBLIC STATIC type IDENTIFIER LPAR lbrace_save method_body_items RBRACE {
+        syntax_errors = 1;
+        printf("Line %d, col %d: syntax error: {\n", saved_error_line, saved_error_col);
+        syntax_error_count++;
         $$ = newnode(MethodDecl, NULL);
 
         struct node *header = newnode(MethodHeader, NULL);
@@ -293,6 +309,9 @@ method_decl:
 
   /* missing ')' before method body, void with params */
   | PUBLIC STATIC VOID IDENTIFIER LPAR param_list lbrace_save method_body_items RBRACE {
+        syntax_errors = 1;
+        printf("Line %d, col %d: syntax error: {\n", saved_error_line, saved_error_col);
+        syntax_error_count++;
         $$ = newnode(MethodDecl, NULL);
 
         struct node *header = newnode(MethodHeader, NULL);
@@ -311,6 +330,9 @@ method_decl:
 
   /* missing ')' before method body, void without params */
   | PUBLIC STATIC VOID IDENTIFIER LPAR lbrace_save method_body_items RBRACE {
+        syntax_errors = 1;
+        printf("Line %d, col %d: syntax error: {\n", saved_error_line, saved_error_col);
+        syntax_error_count++;
         $$ = newnode(MethodDecl, NULL);
 
         struct node *header = newnode(MethodHeader, NULL);
@@ -398,7 +420,12 @@ param_decl:
         addchild($$, newnode(StringArray, NULL));
         addchild($$, newnode(Identifier, $4));
     }
-  | STRING LSQ NATURAL RSQ IDENTIFIER {
+  | STRING LSQ natural_save RSQ IDENTIFIER {
+    syntax_errors = 1;
+    printf("Line %d, col %d: syntax error: %s\n",
+           saved_error_line, saved_error_col, saved_error_text);
+    syntax_error_count++;
+
     $$ = newnode(ParamDecl, NULL);
     addchild($$, newnode(StringArray, NULL));
     addchild($$, newnode(Identifier, $5));
@@ -511,8 +538,10 @@ bad_string_item:
 invalid_public_decl:
     PUBLIC {
         saved_public_line = token_line;
+        saved_public_col = token_column;
         syntax_errors = 1;
-        printf("Line %d, col 5: syntax error: public\n", saved_public_line);
+        printf("Line %d, col %d: syntax error: public\n",
+               saved_public_line, saved_public_col);
         syntax_error_count++;
     } invalid_public_tail {
         pending_error_after_block = 0;
@@ -564,7 +593,13 @@ var_decl:
         free_ast($1);
         free_ast($2);
     }
-  | type IDENTIFIER LSQ expr RSQ SEMICOLON {
+  | type IDENTIFIER LSQ {
+      saved_error_line = token_line;
+      saved_error_col = token_column;
+  } expr RSQ SEMICOLON {
+      syntax_errors = 1;
+      printf("Line %d, col %d: syntax error: [\n", saved_error_line, saved_error_col);
+      syntax_error_count++;
       $$ = make_holder();
   }
     | type IDENTIFIER assign_save expr SEMICOLON {
@@ -617,6 +652,13 @@ stmt_entry:
     }
 ;
 
+return_save:
+    RETURN {
+        saved_error_line = token_line;
+        saved_error_col = token_column;
+    }
+;
+
 stmt_core:
     LBRACE stmt_list RBRACE {
     $$ = build_block_from_holder($2);
@@ -647,7 +689,12 @@ stmt_core:
         addchild($$, $5);
         addchild($$, $7);
     }
-    | IF LPAR expr RETURN expr SEMICOLON %prec LOWER_THAN_ELSE {
+    | IF LPAR expr return_save expr SEMICOLON %prec LOWER_THAN_ELSE {
+        syntax_errors = 1;
+        printf("Line %d, col %d: syntax error: return\n",
+               saved_error_line, saved_error_col);
+        syntax_error_count++;
+
         $$ = newnode(If, NULL);
         addchild($$, $3);
 
@@ -657,7 +704,12 @@ stmt_core:
 
         addchild($$, newnode(Block, NULL));
     }
-  | IF LPAR expr RETURN SEMICOLON %prec LOWER_THAN_ELSE {
+  | IF LPAR expr return_save SEMICOLON %prec LOWER_THAN_ELSE {
+        syntax_errors = 1;
+        printf("Line %d, col %d: syntax error: return\n",
+               saved_error_line, saved_error_col);
+        syntax_error_count++;
+
         $$ = newnode(If, NULL);
         addchild($$, $3);
         addchild($$, newnode(Return, NULL));
@@ -711,9 +763,6 @@ stmt_core:
   | IDENTIFIER IDENTIFIER RESERVED ASSIGN expr SEMICOLON {
         $$ = newnode(Block, NULL);
     }
-    | IDENTIFIER ASSIGN PARSEINT LPAR expr RPAR SEMICOLON {
-      $$ = newnode(Block, NULL);
-  }
   | IDENTIFIER ASSIGN expr SEMICOLON {
         $$ = newnode(Assign, NULL);
         addchild($$, newnode(Identifier, $1));

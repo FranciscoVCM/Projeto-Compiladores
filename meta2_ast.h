@@ -1,62 +1,34 @@
-#ifndef _AST_H
-#define _AST_H
+#ifndef AST_H
+#define AST_H
 
 enum category {
     Program,
-
-    /* Declarations */
-    FieldDecl,
+    MethodDecl, FieldDecl,
+    MethodHeader, MethodBody, MethodParams, ParamDecl,
     VarDecl,
 
-    MethodDecl,
-    MethodHeader,
-    MethodParams,
-    ParamDecl,
-    MethodBody,
+    Bool, Int, Double, Void, StringArray,
 
-    /* Statements */
-    Block,
-    If,
-    While,
-    Return,
-    Call,
-    Print,
-    ParseArgs,
-    Assign,
+    Block, If, While, Return, Print,
+    Assign, Call, ParseArgs,
 
-    /* Operators */
-    Or,
-    And,
-    Eq,
-    Ne,
-    Lt,
-    Gt,
-    Le,
-    Ge,
-    Add,
-    Sub,
-    Mul,
-    Div,
-    Mod,
-    Lshift,
-    Rshift,
-    Xor,
-    Not,
-    Minus,
-    Plus,
+    Or, Xor, And,
+    Eq, Ne, Lt, Gt, Le, Ge,
+    Lshift, Rshift,
+    Add, Sub, Mul, Div, Mod,
+    Not, Minus, Plus,
     Length,
 
-    /* Terminals */
-    Bool,
-    BoolLit,
-    Double,
-    Decimal,
-    Identifier,
-    Int,
-    Natural,
-    StrLit,
-    StringArray,
-    Void
+    Identifier, Natural, Decimal, BoolLit, StrLit,
+
+    Empty,
+    ListNode,
+    Error
+};
+
+struct node_list {
+    struct node *node;
+    struct node_list *next;
 };
 
 struct node {
@@ -65,14 +37,15 @@ struct node {
     struct node_list *children;
 };
 
-struct node_list {
-    struct node *node;
-    struct node_list *next;
-};
-
 struct node *newnode(enum category category, char *token);
+struct node *copynode(struct node *n);
+
 void addchild(struct node *parent, struct node *child);
+void prependchild(struct node *parent, struct node *child);
+void freenode(struct node *n);
+int childcount(struct node *n);
+
 void print_ast(struct node *node, int depth);
-void free_ast(struct node *node);
+void show(struct node *node, int depth);
 
 #endif

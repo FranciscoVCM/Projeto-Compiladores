@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_CLAUDECOMPILER_TAB_H_INCLUDED
-# define YY_YY_CLAUDECOMPILER_TAB_H_INCLUDED
+#ifndef YY_YY_META2JUCOMPILER_TAB_H_INCLUDED
+# define YY_YY_META2JUCOMPILER_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -115,12 +115,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 179 "claudecompiler.y"
+#line 179 "meta2jucompiler.y"
 
     char *lexeme;
     struct node *node;
 
-#line 124 "claudecompiler.tab.h"
+#line 124 "meta2jucompiler.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -135,4 +135,4 @@ extern YYSTYPE yylval;
 int yyparse (void);
 
 
-#endif /* !YY_YY_CLAUDECOMPILER_TAB_H_INCLUDED  */
+#endif /* !YY_YY_META2JUCOMPILER_TAB_H_INCLUDED  */

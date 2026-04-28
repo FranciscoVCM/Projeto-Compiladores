@@ -260,14 +260,6 @@ alnum      [a-zA-Z0-9_$]
 }
 
 "System.out.print" { TOKEN("PRINT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return PRINT; }
-".parseInt" {
-    TOKEN("PARSEINT");
-    token_line = line;
-    token_column = column;
-    SET_TOKEN_TEXT(yytext);
-    column += yyleng;
-    return PARSEINT;
-}
 "Integer.parseInt" { TOKEN("PARSEINT"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return PARSEINT; }
 ".length"          { TOKEN("DOTLENGTH"); token_line = line; token_column = column; SET_TOKEN_TEXT(yytext); column += yyleng; return DOTLENGTH; }
 
