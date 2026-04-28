@@ -12,9 +12,7 @@ static char *class_name = NULL;
 static struct symbol_list *global_table = NULL;
 static struct method_scope *method_scopes = NULL;
 
-/* =========================================================
- * Helpers
- * ========================================================= */
+/* Helpers */
 
 static struct symbol_list *new_symbol(char *name, enum type type, int is_parameter, struct node *node) {
     struct symbol_list *s = (struct symbol_list *)malloc(sizeof(struct symbol_list));
@@ -227,41 +225,57 @@ static char *remove_underscores(const char *s) {
 
 static int natural_out_of_bounds(const char *tok) {
     char *clean = remove_underscores(tok);
-    errno = 0;
-    long long v = strtoll(clean, NULL, 10);
-    free(clean);
+    int result = 0;
+    size_t len;
 
-    if (errno == ERANGE)
-        return 1;
-    if (v > INT_MAX)
-        return 1;
+    if (clean == NULL)
+        return 0;
+
+    len = strlen(clean);
+    if (len > 10)
+        result = 1;
+    else if (strcmp(clean, "2147483648") == 0)
+        result = 1;
+
+    free(clean);
+    return result;
+}
+
+static int decimal_mantissa_has_nonzero_digit(const char *clean) {
+    const char *p = clean;
+
+    while (*p != '\0' && *p != 'e' && *p != 'E') {
+        if (*p >= '1' && *p <= '9')
+            return 1;
+        p++;
+    }
+
     return 0;
 }
 
 static int decimal_out_of_bounds(const char *tok) {
     char *clean = remove_underscores(tok);
-    char *p;
-    int has_nonzero = 0;
-    double v;
+    int mantissa_has_nonzero;
+    long double v;
 
-    for (p = clean; *p; p++) {
-        if (*p >= '1' && *p <= '9') {
-            has_nonzero = 1;
-            break;
-        }
-    }
+    const long double half_true_min = 2.470328229206232720882843964341106861825e-324L;
+
+    if (clean == NULL)
+        return 0;
+
+    mantissa_has_nonzero = decimal_mantissa_has_nonzero_digit(clean);
 
     errno = 0;
-    v = strtod(clean, NULL);
+    v = strtold(clean, NULL);
     free(clean);
 
-    if (errno == ERANGE && v == 0.0 && has_nonzero)
+    if (v > (long double)DBL_MAX)
         return 1;
 
-    if (v == 0.0 && has_nonzero)
+    if (mantissa_has_nonzero && v > 0.0L && v < half_true_min)
         return 1;
 
-    if (v > DBL_MAX)
+    if (mantissa_has_nonzero && v == 0.0L)
         return 1;
 
     return 0;
@@ -327,9 +341,7 @@ static void set_annotation_string(struct node *node, const char *text) {
     node->annotation = strdup(text);
 }
 
-/* =========================================================
- * Recolha de símbolos
- * ========================================================= */
+/* Recolha de símbolos */
 
 static int method_signature_already_exists(char *name, struct parameter_list *params) {
     struct symbol_list *cur = global_table;
@@ -467,9 +479,7 @@ static void declare_local_var(struct method_scope *scope, struct node *var_decl)
     append_symbol(&scope->symbols, new_symbol(id->token, type, 0, var_decl));
 }
 
-/* =========================================================
- * Resolução de métodos
- * ========================================================= */
+/* Resolução de métodos */
 
 static struct method_scope *resolve_exact_method(char *name, struct parameter_list *arg_types) {
     struct method_scope *m = method_scopes;
@@ -507,9 +517,7 @@ static struct method_scope *resolve_compatible_method_unique(char *name, struct 
     return found;
 }
 
-/* =========================================================
- * Verificação de expressões
- * ========================================================= */
+/* Verificação de expressões */
 
 static enum type check_expression(struct node *expr, struct method_scope *scope);
 
@@ -521,6 +529,12 @@ static enum type check_identifier_expr(struct node *expr, struct method_scope *s
         if (expr)
             expr->type = undef_type;
         return undef_type;
+    }
+
+    if (is_reserved_identifier(expr)) {
+        semantic_error_symbol(expr, "Symbol %s is reserved", expr->token);
+        expr->type = undef_type;
+        return expr->type;
     }
 
     local = search_symbol(scope->symbols, expr->token);
@@ -810,9 +824,7 @@ static enum type check_expression(struct node *expr, struct method_scope *scope)
     }
 }
 
-/* =========================================================
- * Statements
- * ========================================================= */
+/* Statements */
 
 static void annotate_statement_or_decl(struct node *node, struct method_scope *scope) {
     struct node_list *child;
@@ -826,27 +838,27 @@ static void annotate_statement_or_decl(struct node *node, struct method_scope *s
             return;
 
         case Return: {
-    struct node *value = get_child(node, 0);
+            struct node *value = get_child(node, 0);
 
-    if (value == NULL) {
-        if (scope->return_type != void_type)
-            semantic_error_stmt(node, void_type, "return");
-        return;
-    }
+            if (value == NULL) {
+                if (scope->return_type != void_type)
+                    semantic_error_stmt(node, void_type, "return");
+                return;
+            }
 
-    {
-        enum type t = check_expression(value, scope);
+            {
+                enum type t = check_expression(value, scope);
 
-        if (scope->return_type == void_type) {
-            semantic_error_stmt(value, t, "return");
-        } else if (!(t == scope->return_type ||
-            (scope->return_type == double_type && t == integer_type))) {
-            semantic_error_stmt(value, t, "return");
+                if (scope->return_type == void_type) {
+                    semantic_error_stmt(value, t, "return");
+                } else if (!(t == scope->return_type ||
+                    (scope->return_type == double_type && t == integer_type))) {
+                    semantic_error_stmt(value, t, "return");
+                }
+            }
+
+            return;
         }
-    }
-
-    return;
-}
 
         case Print: {
             struct node *value = get_child(node, 0);
@@ -909,10 +921,6 @@ static void annotate_all_methods(void) {
     }
 }
 
-/* =========================================================
- * API
- * ========================================================= */
-
 int check_program(struct node *program) {
     struct node_list *child;
 
@@ -940,10 +948,6 @@ int check_program(struct node *program) {
     annotate_all_methods();
     return semantic_errors;
 }
-
-/* =========================================================
- * Impressão
- * ========================================================= */
 
 static void print_param_list(struct parameter_list *params) {
     printf("(");

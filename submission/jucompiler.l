@@ -237,6 +237,9 @@ reserved    "++"|"--"|"null"|"Integer"|"System"|"abstract"|"assert"|"break"|"byt
 %%
 
 int main(int argc, char **argv) {
+    int semantic_mode = 0;
+    int semantic_errors_only = 0;
+
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-l") == 0) {
             lexical_only = 1;
@@ -245,12 +248,15 @@ int main(int argc, char **argv) {
             lexical_only = 1;
         } else if (strcmp(argv[i], "-t") == 0) {
             print_tree = 1;
+            parse_mode = 1;
         } else if (strcmp(argv[i], "-e2") == 0) {
             parse_mode = 1;
         } else if (strcmp(argv[i], "-s") == 0) {
             semantic_mode = 1;
+            parse_mode = 1;
         } else if (strcmp(argv[i], "-e3") == 0) {
             semantic_errors_only = 1;
+            parse_mode = 1;
         }
     }
 
@@ -259,7 +265,15 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    parse_mode = 1;
+    /*
+     * Sem flags, a Meta 3 espera o mesmo comportamento útil de -s:
+     * análise semântica + tabelas + AST, se não houver erros sintáticos.
+     */
+    if (argc == 1) {
+        semantic_mode = 1;
+        parse_mode = 1;
+    }
+
     yyparse();
 
     if (!syntax_errors && ast) {

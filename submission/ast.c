@@ -5,20 +5,24 @@
 
 struct node *newnode(enum category category, char *token) {
     struct node *n = malloc(sizeof(struct node));
-    if (!n) exit(1);
+    if (!n)
+        exit(1);
 
     n->category = category;
     n->token = token;
-    n->children = malloc(sizeof(struct node_list));
-    if (!n->children) exit(1);
-
-    n->children->node = NULL;
-    n->children->next = NULL;
 
     n->line = 0;
     n->column = 0;
-    n->type = none_type;
+
+    n->type = no_type;
     n->annotation = NULL;
+
+    n->children = malloc(sizeof(struct node_list));
+    if (!n->children)
+        exit(1);
+
+    n->children->node = NULL;
+    n->children->next = NULL;
 
     return n;
 }
@@ -26,7 +30,8 @@ struct node *newnode(enum category category, char *token) {
 struct node *copynode(struct node *n) {
     struct node *copy;
 
-    if (!n) return NULL;
+    if (!n)
+        return NULL;
 
     copy = newnode(n->category, n->token ? strdup(n->token) : NULL);
     copy->line = n->line;
@@ -40,7 +45,8 @@ struct node *copynode(struct node *n) {
 }
 
 void set_node_location(struct node *node, int line, int column) {
-    if (!node) return;
+    if (!node)
+        return;
 
     node->line = line;
     node->column = column;
@@ -50,10 +56,12 @@ void addchild(struct node *parent, struct node *child) {
     struct node_list *slot;
     struct node_list *new_child;
 
-    if (!parent || !child) return;
+    if (!parent || !child)
+        return;
 
     new_child = malloc(sizeof(struct node_list));
-    if (!new_child) exit(1);
+    if (!new_child)
+        exit(1);
 
     new_child->node = child;
     new_child->next = NULL;
@@ -68,10 +76,12 @@ void addchild(struct node *parent, struct node *child) {
 void prependchild(struct node *parent, struct node *child) {
     struct node_list *new_child;
 
-    if (!parent || !child) return;
+    if (!parent || !child)
+        return;
 
     new_child = malloc(sizeof(struct node_list));
-    if (!new_child) exit(1);
+    if (!new_child)
+        exit(1);
 
     new_child->node = child;
     new_child->next = parent->children->next;
@@ -82,7 +92,8 @@ int childcount(struct node *n) {
     int count = 0;
     struct node_list *child;
 
-    if (!n || !n->children) return 0;
+    if (!n || !n->children)
+        return 0;
 
     child = n->children->next;
     while (child) {
@@ -96,7 +107,8 @@ int childcount(struct node *n) {
 void freenode(struct node *n) {
     struct node_list *child;
 
-    if (!n) return;
+    if (!n)
+        return;
 
     child = n->children;
     while (child) {
@@ -104,9 +116,6 @@ void freenode(struct node *n) {
         free(child);
         child = next;
     }
-
-    if (n->token)
-        free(n->token);
 
     if (n->annotation)
         free(n->annotation);
@@ -117,21 +126,20 @@ void freenode(struct node *n) {
 void free_ast(struct node *n) {
     struct node_list *child;
 
-    if (!n) return;
+    if (!n)
+        return;
 
-    child = n->children;
-    while (child) {
-        struct node_list *next = child->next;
-
-        if (child->node)
+    if (n->children) {
+        child = n->children->next;
+        while (child) {
+            struct node_list *next = child->next;
             free_ast(child->node);
+            free(child);
+            child = next;
+        }
 
-        free(child);
-        child = next;
+        free(n->children);
     }
-
-    if (n->token)
-        free(n->token);
 
     if (n->annotation)
         free(n->annotation);
@@ -147,10 +155,12 @@ enum type category_to_type(enum category category) {
             return double_type;
         case Bool:
             return bool_type;
-        case StringArray:
-            return string_array_type;
         case Void:
             return void_type;
+        case StringArray:
+            return string_array_type;
+        case StrLit:
+            return string_type;
         default:
             return undef_type;
     }
@@ -164,6 +174,8 @@ const char *type_name(enum type type) {
             return "double";
         case bool_type:
             return "boolean";
+        case string_type:
+            return "String";
         case string_array_type:
             return "String[]";
         case void_type:
@@ -171,6 +183,8 @@ const char *type_name(enum type type) {
         case undef_type:
             return "undef";
         case none_type:
+            return "none";
+        case no_type:
         default:
             return "none";
     }
@@ -205,6 +219,7 @@ int is_expression_node(enum category category) {
         case Natural:
         case Decimal:
         case BoolLit:
+        case StrLit:
             return 1;
 
         default:
@@ -222,11 +237,13 @@ static const char *category_name(enum category category) {
         case MethodParams: return "MethodParams";
         case ParamDecl:    return "ParamDecl";
         case VarDecl:      return "VarDecl";
+
         case Bool:         return "Bool";
         case Int:          return "Int";
         case Double:       return "Double";
         case Void:         return "Void";
         case StringArray:  return "StringArray";
+
         case Block:        return "Block";
         case If:           return "If";
         case While:        return "While";
@@ -235,6 +252,7 @@ static const char *category_name(enum category category) {
         case Assign:       return "Assign";
         case Call:         return "Call";
         case ParseArgs:    return "ParseArgs";
+
         case Or:           return "Or";
         case Xor:          return "Xor";
         case And:          return "And";
@@ -255,12 +273,15 @@ static const char *category_name(enum category category) {
         case Minus:        return "Minus";
         case Plus:         return "Plus";
         case Length:       return "Length";
+
         case Identifier:   return "Identifier";
         case Natural:      return "Natural";
         case Decimal:      return "Decimal";
         case BoolLit:      return "BoolLit";
         case StrLit:       return "StrLit";
+
         case Error:        return "Error";
+
         case Empty:
         case ListNode:
             return NULL;
@@ -273,7 +294,8 @@ void print_ast(struct node *node, int depth) {
     const char *name;
     struct node_list *child;
 
-    if (!node) return;
+    if (!node)
+        return;
 
     name = category_name(node->category);
 
@@ -286,13 +308,17 @@ void print_ast(struct node *node, int depth) {
         if (node->token)
             printf("(%s)", node->token);
 
-        if (node->annotation)
+        if (node->annotation) {
             printf(" - %s", node->annotation);
-        else if (node->type != none_type)
+        } else if (is_expression_node(node->category) && node->type != no_type) {
             printf(" - %s", type_name(node->type));
+        }
 
         putchar('\n');
     }
+
+    if (!node->children)
+        return;
 
     child = node->children->next;
     while (child) {
