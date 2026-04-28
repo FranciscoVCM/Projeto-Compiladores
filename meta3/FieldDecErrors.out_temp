@@ -1,6 +1,6 @@
 Line 5, col 23: Symbol teste2 already defined
 Line 11, col 26: Cannot find symbol factorial(int)
-Line 11, col 26: Incompatible type undef in print statement
+Line 11, col 26: Incompatible type undef in System.out.print statement
 ===== Class ClassTeste Symbol Table =====
 teste0		int
 teste1		int

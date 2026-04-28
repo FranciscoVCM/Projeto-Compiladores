@@ -1,11 +1,6 @@
-Line 17, col 15: Operator % cannot be applied to types double, double
-Line 17, col 11: Operator = cannot be applied to types double, undef
-Line 21, col 15: Operator % cannot be applied to types double, int
-Line 21, col 11: Operator = cannot be applied to types double, undef
 Line 23, col 11: Operator = cannot be applied to types int, double
 Line 24, col 11: Operator = cannot be applied to types int, double
-Line 25, col 15: Operator % cannot be applied to types double, int
-Line 25, col 11: Operator = cannot be applied to types int, undef
+Line 25, col 11: Operator = cannot be applied to types int, double
 Line 27, col 15: Operator * cannot be applied to types double, boolean
 Line 27, col 11: Operator = cannot be applied to types double, undef
 Line 28, col 15: Operator / cannot be applied to types double, boolean
@@ -84,7 +79,7 @@ Program
 ..........Identifier(d) - double
 ......Assign - double
 ........Identifier(d) - double
-........Mod - undef
+........Mod - double
 ..........Identifier(d) - double
 ..........Identifier(d) - double
 ......Assign - double
@@ -99,7 +94,7 @@ Program
 ..........Identifier(i) - int
 ......Assign - double
 ........Identifier(d) - double
-........Mod - undef
+........Mod - double
 ..........Identifier(d) - double
 ..........Identifier(i) - int
 ......Assign - int
@@ -114,7 +109,7 @@ Program
 ..........Identifier(i) - int
 ......Assign - int
 ........Identifier(i) - int
-........Mod - undef
+........Mod - double
 ..........Identifier(d) - double
 ..........Identifier(i) - int
 ......Assign - double

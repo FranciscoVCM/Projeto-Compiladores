@@ -2,7 +2,7 @@ Line 6, col 20: Cannot find symbol factorial(int)
 Line 6, col 18: Operator * cannot be applied to types int, undef
 Line 6, col 18: Incompatible type undef in return statement
 Line 12, col 26: Cannot find symbol factorial(int)
-Line 12, col 26: Incompatible type undef in print statement
+Line 12, col 26: Incompatible type undef in System.out.print statement
 ===== Class Factorial Symbol Table =====
 factorial	(int,int,double)	int
 main	(String[])	void

@@ -7,17 +7,10 @@ Line 57, col 26: Symbol funcao already defined
 Line 72, col 27: Symbol ola56 already defined
 Line 10, col 9: Operator + cannot be applied to types boolean, boolean
 Line 10, col 15: Operator == cannot be applied to types undef, int
-Line 10, col 15: Incompatible type undef in if statement
 Line 13, col 6: Operator = cannot be applied to types boolean, int
-Line 62, col 26: Operator % cannot be applied to types double, int
-Line 62, col 15: Operator + cannot be applied to types int, undef
-Line 62, col 10: Operator = cannot be applied to types boolean, undef
-Line 63, col 26: Operator % cannot be applied to types double, int
-Line 63, col 15: Operator + cannot be applied to types int, undef
-Line 63, col 10: Operator = cannot be applied to types int, undef
-Line 64, col 26: Operator % cannot be applied to types double, int
-Line 64, col 15: Operator + cannot be applied to types int, undef
-Line 64, col 10: Operator = cannot be applied to types int, undef
+Line 62, col 10: Operator = cannot be applied to types boolean, double
+Line 63, col 10: Operator = cannot be applied to types int, double
+Line 64, col 10: Operator = cannot be applied to types int, double
 Line 66, col 13: Operator Integer.parseInt cannot be applied to types boolean, double
 ===== Class Java Symbol Table =====
 funcao2	(String[])	void
@@ -147,7 +140,7 @@ Program
 ........Identifier(d) - int
 ........Natural(1) - int
 ......If
-........Eq - undef
+........Eq - boolean
 ..........Add - undef
 ............Identifier(a) - boolean
 ............BoolLit(true) - boolean
@@ -396,11 +389,11 @@ Program
 ........Identifier(l)
 ......Assign - boolean
 ........Identifier(k) - boolean
-........Add - undef
+........Add - double
 ..........Add - int
 ............Natural(1) - int
 ............Natural(1) - int
-..........Mod - undef
+..........Mod - double
 ............Mul - double
 ..............Div - double
 ................Identifier(e) - double
@@ -410,11 +403,11 @@ Program
 ............Natural(10) - int
 ......Assign - int
 ........Identifier(a) - int
-........Add - undef
+........Add - double
 ..........Add - int
 ............Natural(1) - int
 ............Natural(1) - int
-..........Mod - undef
+..........Mod - double
 ............Mul - double
 ..............Div - double
 ................Identifier(e) - double
@@ -424,11 +417,11 @@ Program
 ............Natural(10) - int
 ......Assign - int
 ........Identifier(b) - int
-........Add - undef
+........Add - double
 ..........Add - int
 ............Natural(1) - int
 ............Natural(1) - int
-..........Mod - undef
+..........Mod - double
 ............Mul - double
 ..............Div - double
 ................Identifier(e) - double

@@ -1,4 +1,4 @@
-Line 4, col 26: Incompatible type String[] in print statement
+Line 4, col 26: Incompatible type String[] in System.out.print statement
 Line 5, col 27: Operator .length cannot be applied to type int
 Line 7, col 26: Operator Integer.parseInt cannot be applied to types String[], double
 Line 9, col 48: Cannot find symbol e

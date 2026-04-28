@@ -1,9 +1,3 @@
-Line 35, col 15: Operator % cannot be applied to types double, int
-Line 35, col 11: Operator = cannot be applied to types double, undef
-Line 41, col 15: Operator % cannot be applied to types int, double
-Line 41, col 11: Operator = cannot be applied to types double, undef
-Line 83, col 17: Operator % cannot be applied to types int, double
-Line 83, col 11: Operator = cannot be applied to types double, undef
 ===== Class LocalVariables Symbol Table =====
 factorial_mas_com_muitos_mais_carateres_para_ver_se_a_memoria_esta_bem		int
 factorial_mas_com_muitos_mais_carateres_para_ver_se_a_memoria_esta_bem	(int,int,double)	void
@@ -190,7 +184,7 @@ Program
 ..........Identifier(b) - int
 ......Assign - double
 ........Identifier(c) - double
-........Mod - undef
+........Mod - double
 ..........Identifier(c) - double
 ..........Identifier(b) - int
 ......Assign - double
@@ -215,7 +209,7 @@ Program
 ..........Identifier(c) - double
 ......Assign - double
 ........Identifier(c) - double
-........Mod - undef
+........Mod - double
 ..........Identifier(b) - int
 ..........Identifier(c) - double
 ......Assign - double
@@ -381,7 +375,7 @@ Program
 ..........Natural(2) - int
 ......Assign - double
 ........Identifier(c) - double
-........Mod - undef
+........Mod - double
 ..........Natural(2) - int
 ..........Decimal(2.0) - double
 ......Assign - boolean

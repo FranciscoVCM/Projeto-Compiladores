@@ -1,5 +1,3 @@
-Line 10, col 12: Operator % cannot be applied to types int, double
-Line 10, col 10: Operator = cannot be applied to types double, undef
 Line 16, col 9: Cannot find symbol operators()
 ===== Class Factorial Symbol Table =====
 operators	(int)	int
@@ -65,7 +63,7 @@ Program
 ............Decimal(1.0) - double
 ........Assign - double
 ..........Identifier(y) - double
-..........Mod - undef
+..........Mod - double
 ............Identifier(a) - int
 ............Identifier(y) - double
 ..MethodDecl

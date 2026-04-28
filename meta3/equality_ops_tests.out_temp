@@ -1,13 +1,9 @@
 Line 21, col 15: Operator == cannot be applied to types int, boolean
-Line 21, col 15: Incompatible type undef in if statement
 Line 22, col 15: Operator == cannot be applied to types double, boolean
-Line 22, col 15: Incompatible type undef in if statement
 Line 35, col 15: Operator != cannot be applied to types int, boolean
-Line 35, col 15: Incompatible type undef in if statement
 Line 36, col 15: Operator != cannot be applied to types double, boolean
-Line 36, col 15: Incompatible type undef in if statement
+Line 38, col 18: Operator == cannot be applied to types String[], String[]
 Line 39, col 18: Operator != cannot be applied to types String[], int
-Line 39, col 18: Incompatible type undef in if statement
 ===== Class equality_or_equity_question_mark Symbol Table =====
 main	(String[])	void
 
@@ -90,13 +86,13 @@ Program
 ........Block
 ........Block
 ......If
-........Eq - undef
+........Eq - boolean
 ..........Identifier(i) - int
 ..........Identifier(b) - boolean
 ........Block
 ........Block
 ......If
-........Eq - undef
+........Eq - boolean
 ..........Identifier(d) - double
 ..........Identifier(b) - boolean
 ........Block
@@ -144,13 +140,13 @@ Program
 ........Block
 ........Block
 ......If
-........Ne - undef
+........Ne - boolean
 ..........Identifier(i) - int
 ..........Identifier(b) - boolean
 ........Block
 ........Block
 ......If
-........Ne - undef
+........Ne - boolean
 ..........Identifier(d) - double
 ..........Identifier(b) - boolean
 ........Block
@@ -162,7 +158,7 @@ Program
 ........Block
 ........Block
 ......If
-........Ne - undef
+........Ne - boolean
 ..........Identifier(args) - String[]
 ..........Identifier(i) - int
 ........Block

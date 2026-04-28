@@ -1,4 +1,4 @@
-Line 7, col 26: Incompatible type void in print statement
+Line 7, col 26: Incompatible type void in System.out.print statement
 ===== Class Error Symbol Table =====
 a	(int)	void
 main	(String[])	void
