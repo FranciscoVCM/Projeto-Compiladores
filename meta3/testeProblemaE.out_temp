@@ -23,10 +23,10 @@ Line 66, col 13: Operator Integer.parseInt cannot be applied to types boolean, d
 funcao2	(String[])	void
 x	(double,int)	double
 main	(String[])	void
-a	boolean
+a		boolean
 funcao3	(int,int,double)	int
 funcao3	(int,int,boolean)	boolean
-funcao	boolean
+funcao		boolean
 funcao	(int,double)	int
 funcao	(double,int)	void
 funcao	(double,double)	double
@@ -35,78 +35,78 @@ maine	()	void
 ola56	(int)	int
 
 ===== Method funcao2(String[]) Symbol Table =====
-return	void
-args	String[]	param
-a	boolean
-b	boolean
-c	int
-d	int
+return		void
+args		String[]	param
+a		boolean
+b		boolean
+c		int
+d		int
 
 ===== Method x(double,int) Symbol Table =====
-return	double
-x	double	param
-a	int	param
+return		double
+x		double	param
+a		int	param
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
-x	int
-b	int
+return		void
+args		String[]	param
+x		int
+b		int
 
 ===== Method funcao3(int,int,double) Symbol Table =====
-return	int
-a	int	param
-b	int	param
-c	double	param
+return		int
+a		int	param
+b		int	param
+c		double	param
 
 ===== Method funcao3(int,int,boolean) Symbol Table =====
-return	boolean
-a	int	param
-b	int	param
-c	boolean	param
-x	int
-y	int
-z	int
-w	int
+return		boolean
+a		int	param
+b		int	param
+c		boolean	param
+x		int
+y		int
+z		int
+w		int
 
 ===== Method funcao(int,double) Symbol Table =====
-return	int
-i	int	param
+return		int
+i		int	param
 
 ===== Method funcao(double,int) Symbol Table =====
-return	void
-i	double	param
-funcao	int	param
-m	boolean
+return		void
+i		double	param
+funcao		int	param
+m		boolean
 
 ===== Method funcao(double,double) Symbol Table =====
-return	double
-i	double	param
-funcao	double	param
-m	int
+return		double
+i		double	param
+funcao		double	param
+m		int
 
 ===== Method funcao(int,int) Symbol Table =====
-return	int
-i	int	param
+return		int
+i		int	param
 
 ===== Method maine() Symbol Table =====
-return	void
-a	int
-b	int
-c	int
-d	int
-e	double
-f	double
-g	double
-h	double
-i	boolean
-j	boolean
-k	boolean
-l	boolean
+return		void
+a		int
+b		int
+c		int
+d		int
+e		double
+f		double
+g		double
+h		double
+i		boolean
+j		boolean
+k		boolean
+l		boolean
 
 ===== Method ola56(int) Symbol Table =====
-return	int
-x1	int	param
+return		int
+x1		int	param
 
 Program
 ..Identifier(Java)
@@ -333,7 +333,7 @@ Program
 ..........Identifier(m) - int
 ..........Natural(1) - int
 ........Call - int
-..........Identifier(funcao) - int
+..........Identifier(funcao) - (int,int)
 ..........Identifier(m) - int
 ..........Identifier(m) - int
 ........Block

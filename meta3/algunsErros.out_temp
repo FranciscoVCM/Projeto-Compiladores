@@ -37,38 +37,38 @@ main	(String[])	void
 ola	(String[])	void
 
 ===== Method main1() Symbol Table =====
-return	int
+return		int
 
 ===== Method main2() Symbol Table =====
-return	double
-a	int
+return		double
+a		int
 
 ===== Method main3() Symbol Table =====
-return	int
-a	double
+return		int
+a		double
 
 ===== Method cenas(String[]) Symbol Table =====
-return	int
-args	String[]	param
-x	int
-a	int
-xd	double
+return		int
+args		String[]	param
+x		int
+a		int
+xd		double
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
-i	int
-i2	int
-d	double
-b	boolean
-x	int
+return		void
+args		String[]	param
+i		int
+i2		int
+d		double
+b		boolean
+x		int
 
 ===== Method ola(String[]) Symbol Table =====
-return	void
-args	String[]	param
-a	int
-b	boolean
-c	double
+return		void
+args		String[]	param
+a		int
+b		boolean
+c		double
 
 Program
 ..Identifier(Alguns_Erros)
@@ -111,7 +111,7 @@ Program
 ..........Identifier(args)
 ....MethodBody
 ......Call - int
-........Identifier(cenas) - int
+........Identifier(cenas) - (String[])
 ........Identifier(args) - String[]
 ......VarDecl
 ........Int
@@ -238,5 +238,5 @@ Program
 ........Identifier(args) - String[]
 ......Return
 ........Call - void
-..........Identifier(ola) - void
+..........Identifier(ola) - (String[])
 ..........Identifier(args) - String[]

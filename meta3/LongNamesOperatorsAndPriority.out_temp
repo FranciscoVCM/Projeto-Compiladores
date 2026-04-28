@@ -5,47 +5,47 @@ Line 41, col 11: Operator = cannot be applied to types double, undef
 Line 83, col 17: Operator % cannot be applied to types int, double
 Line 83, col 11: Operator = cannot be applied to types double, undef
 ===== Class LocalVariables Symbol Table =====
-factorial_mas_com_muitos_mais_carateres_para_ver_se_a_memoria_esta_bem	int
+factorial_mas_com_muitos_mais_carateres_para_ver_se_a_memoria_esta_bem		int
 factorial_mas_com_muitos_mais_carateres_para_ver_se_a_memoria_esta_bem	(int,int,double)	void
 operators	(int,int)	int
 operators2	(int,int)	int
-n	boolean
+n		boolean
 priority	(String[])	void
 
 ===== Method factorial_mas_com_muitos_mais_carateres_para_ver_se_a_memoria_esta_bem(int,int,double) Symbol Table =====
-return	void
-n	int	param
-x	int	param
-y	double	param
-local_mas_com_muitos_mais_carateres_para_ver_se_a_memoria_esta_bem	int
+return		void
+n		int	param
+x		int	param
+y		double	param
+local_mas_com_muitos_mais_carateres_para_ver_se_a_memoria_esta_bem		int
 
 ===== Method operators(int,int) Symbol Table =====
-return	int
-n	int	param
-x	int	param
-a	int
-b	int
-c	double
-d	double
-e	boolean
-f	boolean
+return		int
+n		int	param
+x		int	param
+a		int
+b		int
+c		double
+d		double
+e		boolean
+f		boolean
 
 ===== Method operators2(int,int) Symbol Table =====
-return	int
-n	int	param
-x	int	param
-a	int
-b	int
-c	double
-d	double
-e	boolean
-f	boolean
+return		int
+n		int	param
+x		int	param
+a		int
+b		int
+c		double
+d		double
+e		boolean
+f		boolean
 
 ===== Method priority(String[]) Symbol Table =====
-return	void
-args	String[]	param
-n	double
-a	int
+return		void
+args		String[]	param
+n		double
+a		int
 
 Program
 ..Identifier(LocalVariables)

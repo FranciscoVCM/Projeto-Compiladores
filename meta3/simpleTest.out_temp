@@ -43,21 +43,21 @@ one	()	int
 two	()	double
 
 ===== Method main2() Symbol Table =====
-return	double
-a	int
-b	double
+return		double
+a		int
+b		double
 
 ===== Method main(String[]) Symbol Table =====
-return	int
-args	String[]	param
-argument	int
-iterator	double
+return		int
+args		String[]	param
+argument		int
+iterator		double
 
 ===== Method one() Symbol Table =====
-return	int
+return		int
 
 ===== Method two() Symbol Table =====
-return	double
+return		double
 
 Program
 ..Identifier(ThatsWhatSheSaid)
@@ -127,7 +127,7 @@ Program
 ..............Identifier(args) - String[]
 ..............Natural(1) - int
 ............Call - int
-..............Identifier(main) - int
+..............Identifier(main) - (String[])
 ..............Identifier(args) - String[]
 ..........And - undef
 ............BoolLit(true) - boolean
@@ -141,7 +141,7 @@ Program
 ................Identifier(args) - String[]
 ................Natural(1) - int
 ..............Call - int
-................Identifier(main) - int
+................Identifier(main) - (String[])
 ................Identifier(args) - String[]
 ............BoolLit(true) - boolean
 ..........Identifier(args) - String[]
@@ -158,7 +158,7 @@ Program
 ..........Ne - boolean
 ............Natural(2) - int
 ............Call - int
-..............Identifier(main) - int
+..............Identifier(main) - (String[])
 ..............Identifier(args) - String[]
 ......Assign - String[]
 ........Identifier(args) - String[]

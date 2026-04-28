@@ -15,10 +15,10 @@ Line 7, col 7: Operator = cannot be applied to types int, undef
 a	()	int
 
 ===== Method a() Symbol Table =====
-return	int
-a	int
-b	int
-c	int
+return		int
+a		int
+b		int
+c		int
 
 Program
 ..Identifier(Java)

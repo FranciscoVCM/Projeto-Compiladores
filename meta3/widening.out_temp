@@ -18,26 +18,26 @@ fun_di	(double,int)	int
 fun_ii	(int,int)	int
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
-i	int
-d	double
-b	boolean
+return		void
+args		String[]	param
+i		int
+d		double
+b		boolean
 
 ===== Method fun_dd(double,double) Symbol Table =====
-return	int
-a	double	param
-b	double	param
+return		int
+a		double	param
+b		double	param
 
 ===== Method fun_di(double,int) Symbol Table =====
-return	int
-a	double	param
-b	int	param
+return		int
+a		double	param
+b		int	param
 
 ===== Method fun_ii(int,int) Symbol Table =====
-return	int
-a	int	param
-b	int	param
+return		int
+a		int	param
+b		int	param
 
 Program
 ..Identifier(Narrow)
@@ -94,31 +94,31 @@ Program
 ......Assign - double
 ........Identifier(d) - double
 ........Call - int
-..........Identifier(fun_dd) - int
+..........Identifier(fun_dd) - (double,double)
 ..........Natural(1) - int
 ..........Natural(2) - int
 ......Assign - double
 ........Identifier(d) - double
 ........Call - int
-..........Identifier(fun_dd) - int
+..........Identifier(fun_dd) - (double,double)
 ..........Decimal(3.0) - double
 ..........Natural(4) - int
 ......Assign - double
 ........Identifier(d) - double
 ........Call - int
-..........Identifier(fun_dd) - int
+..........Identifier(fun_dd) - (double,double)
 ..........Decimal(5.0) - double
 ..........Decimal(6.0) - double
 ......Assign - double
 ........Identifier(d) - double
 ........Call - int
-..........Identifier(fun_di) - int
+..........Identifier(fun_di) - (double,int)
 ..........Natural(1) - int
 ..........Natural(1) - int
 ......Assign - double
 ........Identifier(d) - double
 ........Call - int
-..........Identifier(fun_di) - int
+..........Identifier(fun_di) - (double,int)
 ..........Decimal(1.0) - double
 ..........Natural(1) - int
 ......Assign - double
@@ -136,7 +136,7 @@ Program
 ......Assign - double
 ........Identifier(d) - double
 ........Call - int
-..........Identifier(fun_ii) - int
+..........Identifier(fun_ii) - (int,int)
 ..........Natural(1) - int
 ..........Natural(1) - int
 ......Assign - double

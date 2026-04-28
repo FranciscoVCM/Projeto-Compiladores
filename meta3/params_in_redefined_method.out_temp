@@ -4,13 +4,13 @@ a	(int,int)	void
 main	(String[])	void
 
 ===== Method a(int,int) Symbol Table =====
-return	void
-a	int	param
-b	int	param
+return		void
+a		int	param
+b		int	param
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
+return		void
+args		String[]	param
 
 Program
 ..Identifier(test)

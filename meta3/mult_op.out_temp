@@ -22,11 +22,11 @@ Line 33, col 11: Operator = cannot be applied to types double, undef
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
-i	int
-d	double
-b	boolean
+return		void
+args		String[]	param
+i		int
+d		double
+b		boolean
 
 Program
 ..Identifier(mult)

@@ -31,17 +31,17 @@ valid	(String[])	void
 main	(String[])	void
 
 ===== Method valid(String[]) Symbol Table =====
-return	void
-args	String[]	param
-x	int
-b	int
+return		void
+args		String[]	param
+x		int
+b		int
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
-i	int
-d	double
-b	boolean
+return		void
+args		String[]	param
+i		int
+d		double
+b		boolean
 
 Program
 ..Identifier(shift_errors)

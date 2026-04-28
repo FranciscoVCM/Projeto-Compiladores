@@ -23,9 +23,9 @@ Line 45, col 14: Number 1214748364__9 out of bounds
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
-a	int
+return		void
+args		String[]	param
+a		int
 
 Program
 ..Identifier(ClassTeste)

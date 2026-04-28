@@ -1,9 +1,11 @@
+Line 4, col 22: Number 0.002_4E-321 out of bounds
+Line 5, col 22: Number 0.5E-4965 out of bounds
 ===== Class Echo1 Symbol Table =====
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
-return	void
-args	String[]	param
+return		void
+args		String[]	param
 
 Program
 ..Identifier(Echo1)
