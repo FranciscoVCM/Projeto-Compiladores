@@ -70,9 +70,7 @@ if [[ -d meta3 ]]; then
         [[ -e "$inp" ]] || continue
 
         flag="-s"
-        if [[ "$inp" == *NoFlags.java ]]; then
-            flag=""
-        elif [[ "$inp" == *_e3.java ]]; then
+        if [[ "$inp" == *_e3.java ]]; then
             flag="-e3"
         fi
 
@@ -92,13 +90,22 @@ meta4_args() {
             echo "30"
             ;;
         length.java)
-            echo "10 20 30"
+            echo "1 3"
             ;;
         MultipleParametersCommandLine.java)
-            echo "1 2 3 4 5"
+            echo "1 2"
             ;;
         Factorial.java)
             echo "5"
+            ;;
+        complex.java)
+            echo "0"
+            ;;
+        randomTest.java)
+            echo "7"
+            ;;
+        strings_tests.java)
+            echo "1 2 3 4 5"
             ;;
         *)
             echo ""

@@ -14,7 +14,7 @@ declare i32 @atoi(i8*)
 
 define void @_main_StringArray(i32 %args.argc, i8** %args.argv) {
   %1 = fadd double 0.00000000000000000e+00, 0.000000e+00
-  %2 = fsub double 0.000000e+00, %1
+  %2 = fneg double %1
   %3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.fmt_double, i32 0, i32 0), double %2)
   %4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.0, i32 0, i32 0))
   %5 = add i32 0, 0
@@ -22,7 +22,7 @@ define void @_main_StringArray(i32 %args.argc, i8** %args.argv) {
   %7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_int, i32 0, i32 0), i32 %6)
   %8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.1, i32 0, i32 0))
   %9 = fadd double 2.99999999999999989e-01, 0.000000e+00
-  %10 = fsub double 0.000000e+00, %9
+  %10 = fneg double %9
   %11 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.fmt_double, i32 0, i32 0), double %10)
   %12 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.2, i32 0, i32 0))
   %13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.strlit.3, i32 0, i32 0))

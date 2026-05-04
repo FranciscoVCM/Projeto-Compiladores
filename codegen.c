@@ -742,8 +742,9 @@ static struct cg_value codegen_unary(struct node *expr) {
         case Minus:
             if (v.type == double_type) {
                 int tmp = temporary++;
-                printf("  %%%d = fsub double 0.000000e+00, %%%d\n", tmp, v.reg);
+                printf("  %%%d = fneg double %%%d\n", tmp, v.reg);
                 return make_value(double_type, tmp);
+
             } else {
                 int tmp = temporary++;
                 printf("  %%%d = sub i32 0, %%%d\n", tmp, v.reg);
@@ -765,6 +766,11 @@ static struct cg_value codegen_arithmetic(struct node *expr) {
     struct cg_value left = codegen_expression(getchild(expr, 0));
     struct cg_value right = codegen_expression(getchild(expr, 1));
     enum type result_type = expr->type;
+
+    if (expr->category != Mod &&
+        (left.type == double_type || right.type == double_type)) {
+        result_type = double_type;
+    }
     int tmp;
 
     if (result_type == double_type) {
@@ -1280,6 +1286,10 @@ static void codegen_statement(struct node *stmt) {
         return;
 
     switch (stmt->category) {
+        case VarDecl:
+            codegen_alloc_local_var(stmt);
+            break;
+
         case Assign:
         case Call:
         case ParseArgs:
@@ -1319,9 +1329,7 @@ static void codegen_body_statements(struct node *body) {
 
     child = body->children->next;
     while (child && !block_terminated) {
-        if (child->node->category != VarDecl)
-            codegen_statement(child->node);
-
+        codegen_statement(child->node);
         child = child->next;
     }
 }
@@ -1356,7 +1364,6 @@ static void codegen_method(struct node *method_decl) {
     printf(") {\n");
 
     codegen_alloc_parameters(params);
-    codegen_alloc_locals_from_body(body);
 
     codegen_body_statements(body);
 

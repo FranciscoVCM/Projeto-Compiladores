@@ -11,9 +11,9 @@ declare i32 @atoi(i8*)
 
 define void @_main_StringArray(i32 %args.argc, i8** %args.argv) {
   %i = alloca i32
-  %j = alloca double
   %1 = add i32 3, 0
   store i32 %1, i32* %i
+  %j = alloca double
   %2 = add i32 4, 0
   %3 = sitofp i32 %2 to double
   store double %3, double* %j

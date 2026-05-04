@@ -640,6 +640,22 @@ static enum type check_binary_numeric(struct node *expr, struct method_scope *sc
     return expr->type;
 }
 
+static enum type check_xor_operator(struct node *expr, struct method_scope *scope) {
+    enum type left = check_expression(get_child(expr, 0), scope);
+    enum type right = check_expression(get_child(expr, 1), scope);
+
+    if (left == bool_type && right == bool_type) {
+        expr->type = bool_type;
+        return expr->type;
+    }
+
+    if (!(left == integer_type && right == integer_type))
+        semantic_error_op2(expr, "^", left, right);
+
+    expr->type = integer_type;
+    return expr->type;
+}
+
 static enum type check_integer_operator(struct node *expr, struct method_scope *scope, const char *op) {
     enum type left = check_expression(get_child(expr, 0), scope);
     enum type right = check_expression(get_child(expr, 1), scope);
@@ -790,7 +806,7 @@ static enum type check_expression(struct node *expr, struct method_scope *scope)
         case Or:
             return check_boolean_operator(expr, scope, "||");
         case Xor:
-            return check_integer_operator(expr, scope, "^");
+            return check_xor_operator(expr, scope);
 
         case Not: {
             enum type t = check_expression(get_child(expr, 0), scope);

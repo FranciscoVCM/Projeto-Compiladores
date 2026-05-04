@@ -351,8 +351,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 64
-#define YY_END_OF_BUFFER 65
+#define YY_NUM_RULES 65
+#define YY_END_OF_BUFFER 66
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -362,21 +362,21 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[353] =
     {   0,
-        0,    0,    0,    0,    0,    0,    0,    0,   65,   63,
-       62,   61,   61,   18,   48,   45,   16,   63,   12,   22,
-        4,   20,    5,   15,   63,    6,   46,   46,   24,   14,
+        0,    0,    0,    0,    0,    0,    0,    0,   66,   64,
+       63,   62,   62,   18,   48,   45,   16,   64,   12,   22,
+        4,   20,    5,   15,   64,    6,   46,   46,   24,   14,
         3,    9,   45,   45,   13,   23,   28,   45,   45,   45,
        45,   45,   45,   45,   45,   45,   45,   45,   45,   45,
-       45,   45,   45,   10,   63,   21,   49,   52,   52,   53,
-       49,   60,   59,   59,   57,   56,   56,   57,   61,   17,
-       45,    2,   44,   25,   47,    0,   54,   58,   47,    0,
+       45,   45,   45,   10,   64,   21,   50,   53,   53,   54,
+       65,   61,   60,   60,   58,   57,   57,   58,   62,   17,
+       45,    2,   44,   25,   47,    0,   55,   59,   47,    0,
         0,    0,   46,    0,   26,   11,    7,    8,   27,   45,
        45,   45,   45,   45,   45,   45,   45,   45,   45,   45,
 
        45,   45,   44,   45,   45,   45,   45,   45,   45,   45,
        45,   34,   45,   45,   45,   45,   45,   45,   45,   45,
        45,   45,   45,   45,   45,   45,   45,   45,   45,   45,
-       45,   19,   52,   51,   50,   50,   49,   59,   56,   55,
+       45,   19,   53,   52,   51,   51,   49,   60,   57,   56,
        47,    0,    0,    0,   47,    0,    0,   47,   45,   45,
        45,   45,   45,   45,   45,   45,   45,   45,   45,   45,
        45,   45,   45,   45,   45,   45,   45,   45,   45,   44,
@@ -1290,9 +1290,17 @@ YY_RULE_SETUP
 }
 	YY_BREAK
 case 50:
-/* rule 50 can match eol */
 YY_RULE_SETUP
 #line 153 "jucompiler.l"
+{
+    column += yyleng;
+    strcat(str_buffer, yytext);
+}
+	YY_BREAK
+case 51:
+/* rule 51 can match eol */
+YY_RULE_SETUP
+#line 158 "jucompiler.l"
 {
     printf("Line %d, col %d: invalid escape sequence (\\)\n", line, column);
     lexical_errors++;
@@ -1303,9 +1311,9 @@ YY_RULE_SETUP
     BEGIN INITIAL;
 }
 	YY_BREAK
-case 51:
+case 52:
 YY_RULE_SETUP
-#line 163 "jucompiler.l"
+#line 168 "jucompiler.l"
 {
     printf("Line %d, col %d: invalid escape sequence (%s)\n", line, column, yytext);
     lexical_errors++;
@@ -1313,10 +1321,10 @@ YY_RULE_SETUP
     str_error = 1;
 }
 	YY_BREAK
-case 52:
-/* rule 52 can match eol */
+case 53:
+/* rule 53 can match eol */
 YY_RULE_SETUP
-#line 170 "jucompiler.l"
+#line 175 "jucompiler.l"
 {
     printf("Line %d, col %d: unterminated string literal\n", str_line, str_column);
     lexical_errors++;
@@ -1326,7 +1334,7 @@ YY_RULE_SETUP
 }
 	YY_BREAK
 case YY_STATE_EOF(STRING_STATE):
-#line 178 "jucompiler.l"
+#line 183 "jucompiler.l"
 {
     printf("Line %d, col %d: unterminated string literal\n", str_line, str_column);
     lexical_errors++;
@@ -1335,9 +1343,9 @@ case YY_STATE_EOF(STRING_STATE):
     return 1;
 }
 	YY_BREAK
-case 53:
+case 54:
 YY_RULE_SETUP
-#line 186 "jucompiler.l"
+#line 191 "jucompiler.l"
 {
     column += yyleng;
     strcat(str_buffer, yytext);
@@ -1366,9 +1374,9 @@ YY_RULE_SETUP
     BEGIN INITIAL;
 }
 	YY_BREAK
-case 54:
+case 55:
 YY_RULE_SETUP
-#line 214 "jucompiler.l"
+#line 219 "jucompiler.l"
 {
     comment_line = line;
     comment_column = column;
@@ -1377,7 +1385,7 @@ YY_RULE_SETUP
 }
 	YY_BREAK
 case YY_STATE_EOF(BLOCK_COMMENT):
-#line 221 "jucompiler.l"
+#line 226 "jucompiler.l"
 {
     printf("Line %d, col %d: unterminated comment\n", comment_line, comment_column);
     lexical_errors++;
@@ -1386,64 +1394,64 @@ case YY_STATE_EOF(BLOCK_COMMENT):
     break;
 }
 	YY_BREAK
-case 55:
+case 56:
 YY_RULE_SETUP
-#line 229 "jucompiler.l"
+#line 234 "jucompiler.l"
 { column += yyleng; BEGIN INITIAL; }
 	YY_BREAK
-case 56:
-/* rule 56 can match eol */
-YY_RULE_SETUP
-#line 230 "jucompiler.l"
-{ column = 1; line++; }
-	YY_BREAK
 case 57:
+/* rule 57 can match eol */
 YY_RULE_SETUP
-#line 231 "jucompiler.l"
-{ column += yyleng; }
+#line 235 "jucompiler.l"
+{ column = 1; line++; }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 233 "jucompiler.l"
-{ column += yyleng; BEGIN LINE_COMMENT; }
+#line 236 "jucompiler.l"
+{ column += yyleng; }
 	YY_BREAK
 case 59:
-/* rule 59 can match eol */
-YY_RULE_SETUP
-#line 234 "jucompiler.l"
-{ column = 1; line++; BEGIN INITIAL; }
-	YY_BREAK
-case 60:
-YY_RULE_SETUP
-#line 235 "jucompiler.l"
-{ column += yyleng; }
-	YY_BREAK
-case 61:
-/* rule 61 can match eol */
-YY_RULE_SETUP
-#line 237 "jucompiler.l"
-{ column = 1; line++; }
-	YY_BREAK
-case 62:
 YY_RULE_SETUP
 #line 238 "jucompiler.l"
+{ column += yyleng; BEGIN LINE_COMMENT; }
+	YY_BREAK
+case 60:
+/* rule 60 can match eol */
+YY_RULE_SETUP
+#line 239 "jucompiler.l"
+{ column = 1; line++; BEGIN INITIAL; }
+	YY_BREAK
+case 61:
+YY_RULE_SETUP
+#line 240 "jucompiler.l"
 { column += yyleng; }
+	YY_BREAK
+case 62:
+/* rule 62 can match eol */
+YY_RULE_SETUP
+#line 242 "jucompiler.l"
+{ column = 1; line++; }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 240 "jucompiler.l"
+#line 243 "jucompiler.l"
+{ column += yyleng; }
+	YY_BREAK
+case 64:
+YY_RULE_SETUP
+#line 245 "jucompiler.l"
 {
     printf("Line %d, col %d: illegal character (%s)\n", line, column, yytext);
     lexical_errors++;
     column += yyleng;
 }
 	YY_BREAK
-case 64:
+case 65:
 YY_RULE_SETUP
-#line 246 "jucompiler.l"
+#line 251 "jucompiler.l"
 ECHO;
 	YY_BREAK
-#line 1447 "lex.yy.c"
+#line 1455 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(LINE_COMMENT):
 	yyterminate();
@@ -2449,7 +2457,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 246 "jucompiler.l"
+#line 251 "jucompiler.l"
 
 
 int main(int argc, char **argv) {

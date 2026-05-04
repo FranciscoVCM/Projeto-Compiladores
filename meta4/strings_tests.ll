@@ -19,8 +19,8 @@ declare i32 @atoi(i8*)
 @i = global i32 0
 
 define void @_main_StringArray(i32 %args.argc, i8** %args.argv) {
-  %a = alloca i32
   %1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([7 x i8], [7 x i8]* @.strlit.0, i32 0, i32 0))
+  %a = alloca i32
   %2 = sub i32 %args.argc, 1
   store i32 %2, i32* %a
   %3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([22 x i8], [22 x i8]* @.strlit.1, i32 0, i32 0))

@@ -145,7 +145,12 @@ reserved    "++"|"--"|"null"|"Integer"|"System"|"abstract"|"assert"|"break"|"byt
     BEGIN STRING_STATE;
 }
 
-<STRING_STATE>\\[fnrt\\\"]|[^\r\n"] {
+<STRING_STATE>\\[fnrt\\\"] {
+    column += yyleng;
+    strcat(str_buffer, yytext);
+}
+
+<STRING_STATE>[^\\\r\n"] {
     column += yyleng;
     strcat(str_buffer, yytext);
 }

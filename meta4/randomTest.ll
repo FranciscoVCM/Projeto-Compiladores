@@ -40,8 +40,8 @@ L1print_false:
 L1print_end:
   %13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.0, i32 0, i32 0))
   %14 = fadd double 4.20000000000000000e+02, 0.000000e+00
-  %15 = fsub double 0.000000e+00, %14
-  %16 = fsub double 0.000000e+00, %15
+  %15 = fneg double %14
+  %16 = fneg double %15
   %17 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.fmt_double, i32 0, i32 0), double %16)
   %18 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.1, i32 0, i32 0))
   %19 = add i32 420, 0

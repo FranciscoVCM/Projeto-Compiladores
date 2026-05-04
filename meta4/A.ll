@@ -104,7 +104,7 @@ L2print_end:
   %45 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.fmt_double, i32 0, i32 0), double %44)
   %46 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.9, i32 0, i32 0))
   %47 = fadd double 2.20000000000000018e+00, 0.000000e+00
-  %48 = fsub double 0.000000e+00, %47
+  %48 = fneg double %47
   store double %48, double* %c
   %49 = load double, double* %c
   %50 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.fmt_double, i32 0, i32 0), double %49)
