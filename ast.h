@@ -63,6 +63,7 @@ void set_node_location(struct node *node, int line, int column);
 
 void addchild(struct node *parent, struct node *child);
 void prependchild(struct node *parent, struct node *child);
+struct node *getchild(struct node *parent, int index);
 void freenode(struct node *n);
 void free_ast(struct node *n);
 int childcount(struct node *n);

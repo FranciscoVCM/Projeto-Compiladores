@@ -88,6 +88,25 @@ void prependchild(struct node *parent, struct node *child) {
     parent->children->next = new_child;
 }
 
+struct node *getchild(struct node *parent, int index) {
+    int i = 0;
+    struct node_list *child;
+
+    if (!parent || !parent->children)
+        return NULL;
+
+    child = parent->children->next;
+    while (child != NULL) {
+        if (i == index)
+            return child->node;
+
+        i++;
+        child = child->next;
+    }
+
+    return NULL;
+}
+
 int childcount(struct node *n) {
     int count = 0;
     struct node_list *child;

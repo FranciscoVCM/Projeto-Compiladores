@@ -7,6 +7,7 @@
 #include "y.tab.h"
 #include "ast.h"
 #include "semantics.h"
+#include "codegen.h"
 
 extern YYSTYPE yylval;
 extern YYLTYPE yylloc;
@@ -28,6 +29,7 @@ int print_tree = 0;
 int parse_mode = 0;
 int lexical_only = 0;
 int syntax_errors = 0;
+int lexical_errors = 0;
 int semantic_mode = 0;
 int semantic_errors_only = 0;
 
@@ -150,7 +152,9 @@ reserved    "++"|"--"|"null"|"Integer"|"System"|"abstract"|"assert"|"break"|"byt
 
 <STRING_STATE>\\(\n|\r|\r\n) {
     printf("Line %d, col %d: invalid escape sequence (\\)\n", line, column);
+    lexical_errors++;
     printf("Line %d, col %d: unterminated string literal\n", str_line, str_column);
+    lexical_errors++;
     line++;
     column = 1;
     BEGIN INITIAL;
@@ -158,12 +162,14 @@ reserved    "++"|"--"|"null"|"Integer"|"System"|"abstract"|"assert"|"break"|"byt
 
 <STRING_STATE>\\. {
     printf("Line %d, col %d: invalid escape sequence (%s)\n", line, column, yytext);
+    lexical_errors++;
     column += yyleng;
     str_error = 1;
 }
 
 <STRING_STATE>(\n|\r|\r\n) {
     printf("Line %d, col %d: unterminated string literal\n", str_line, str_column);
+    lexical_errors++;
     line++;
     column = 1;
     BEGIN INITIAL;
@@ -171,6 +177,7 @@ reserved    "++"|"--"|"null"|"Integer"|"System"|"abstract"|"assert"|"break"|"byt
 
 <STRING_STATE><<EOF>> {
     printf("Line %d, col %d: unterminated string literal\n", str_line, str_column);
+    lexical_errors++;
     token_text[0] = '\0';
     BEGIN INITIAL;
     return 1;
@@ -213,6 +220,7 @@ reserved    "++"|"--"|"null"|"Integer"|"System"|"abstract"|"assert"|"break"|"byt
 
 <BLOCK_COMMENT><<EOF>> {
     printf("Line %d, col %d: unterminated comment\n", comment_line, comment_column);
+    lexical_errors++;
     token_text[0] = '\0';
     BEGIN INITIAL;
     break;
@@ -231,14 +239,14 @@ reserved    "++"|"--"|"null"|"Integer"|"System"|"abstract"|"assert"|"break"|"byt
 
 . {
     printf("Line %d, col %d: illegal character (%s)\n", line, column, yytext);
+    lexical_errors++;
     column += yyleng;
 }
 
 %%
 
 int main(int argc, char **argv) {
-    int semantic_mode = 0;
-    int semantic_errors_only = 0;
+    int codegen_mode = 0;
 
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-l") == 0) {
@@ -265,12 +273,8 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    /*
-     * Sem flags, a Meta 3 espera o mesmo comportamento útil de -s:
-     * análise semântica + tabelas + AST, se não houver erros sintáticos.
-     */
     if (argc == 1) {
-        semantic_mode = 1;
+        codegen_mode = 1;
         parse_mode = 1;
     }
 
@@ -283,9 +287,13 @@ int main(int argc, char **argv) {
             printf("\n");
             print_ast(ast, 0);
         } else if (semantic_errors_only) {
-            check_program(ast);
+            if (!lexical_errors)
+                check_program(ast);
         } else if (print_tree) {
             print_ast(ast, 0);
+        } else if (codegen_mode) {
+            if (!lexical_errors && check_program(ast) == 0)
+                codegen_program(ast);
         }
     }
 
