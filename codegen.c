@@ -1138,6 +1138,83 @@ static void codegen_return(struct node *ret) {
     block_terminated = 1;
 }
 
+static void codegen_statement(struct node *stmt);
+static void codegen_block_like(struct node *node);
+
+static void codegen_block_like(struct node *node) {
+    struct node_list *child;
+
+    if (!node || block_terminated)
+        return;
+
+    if (node->category != Block) {
+        codegen_statement(node);
+        return;
+    }
+
+    child = node->children->next;
+    while (child && !block_terminated) {
+        codegen_statement(child->node);
+        child = child->next;
+    }
+}
+
+static void codegen_if(struct node *if_node) {
+    int label = label_counter++;
+    struct node *condition = getchild(if_node, 0);
+    struct node *then_stmt = getchild(if_node, 1);
+    struct node *else_stmt = getchild(if_node, 2);
+    struct cg_value cond;
+
+    cond = codegen_expression(condition);
+
+    printf("  br i1 %%%d, label %%L%d_if_then, label %%L%d_if_else\n\n",
+           cond.reg, label, label);
+
+    printf("L%d_if_then:\n", label);
+    block_terminated = 0;
+    codegen_block_like(then_stmt);
+    if (!block_terminated)
+        printf("  br label %%L%d_if_end\n", label);
+    printf("\n");
+
+    printf("L%d_if_else:\n", label);
+    block_terminated = 0;
+    codegen_block_like(else_stmt);
+    if (!block_terminated)
+        printf("  br label %%L%d_if_end\n", label);
+    printf("\n");
+
+    printf("L%d_if_end:\n", label);
+    block_terminated = 0;
+}
+
+static void codegen_while(struct node *while_node) {
+    int label = label_counter++;
+    struct node *condition = getchild(while_node, 0);
+    struct node *body = getchild(while_node, 1);
+    struct cg_value cond;
+
+    printf("  br label %%L%d_while_cond\n\n", label);
+
+    printf("L%d_while_cond:\n", label);
+    cond = codegen_expression(condition);
+    printf("  br i1 %%%d, label %%L%d_while_body, label %%L%d_while_end\n\n",
+           cond.reg, label, label);
+
+    printf("L%d_while_body:\n", label);
+    block_terminated = 0;
+    codegen_block_like(body);
+
+    if (!block_terminated)
+        printf("  br label %%L%d_while_cond\n", label);
+
+    printf("\n");
+
+    printf("L%d_while_end:\n", label);
+    block_terminated = 0;
+}
+
 static void codegen_statement(struct node *stmt) {
     if (!stmt || block_terminated)
         return;
@@ -1157,14 +1234,17 @@ static void codegen_statement(struct node *stmt) {
             codegen_return(stmt);
             break;
 
-        case Block: {
-            struct node_list *child = stmt->children->next;
-            while (child && !block_terminated) {
-                codegen_statement(child->node);
-                child = child->next;
-            }
+        case If:
+            codegen_if(stmt);
             break;
-        }
+
+        case While:
+            codegen_while(stmt);
+            break;
+
+        case Block:
+            codegen_block_like(stmt);
+            break;
 
         default:
             break;
