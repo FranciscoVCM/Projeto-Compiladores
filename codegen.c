@@ -946,6 +946,7 @@ static struct cg_value codegen_call(struct node *call) {
     int formal_count = 0;
     int arg_count = 0;
     struct cg_value args[128];
+    struct node *arg_nodes[128];
     char *name;
     int tmp = -1;
 
@@ -956,10 +957,19 @@ static struct cg_value codegen_call(struct node *call) {
 
     for (int i = 1; getchild(call, i) != NULL; i++) {
         struct node *arg = getchild(call, i);
-        args[arg_count] = codegen_expression(arg);
 
-        if (arg_count < formal_count)
-            args[arg_count] = cast_value(args[arg_count], formal_types[arg_count]);
+        arg_nodes[arg_count] = arg;
+
+        if (arg_count < formal_count &&
+            formal_types[arg_count] == string_array_type &&
+            arg->category == Identifier) {
+            args[arg_count] = make_value(string_array_type, -1);
+        } else {
+            args[arg_count] = codegen_expression(arg);
+
+            if (arg_count < formal_count)
+                args[arg_count] = cast_value(args[arg_count], formal_types[arg_count]);
+        }
 
         arg_count++;
     }
@@ -973,11 +983,25 @@ static struct cg_value codegen_call(struct node *call) {
         printf("  %%%d = call %s %s(", tmp, llvm_type(call->type), name);
     }
 
-    for (int i = 0; i < arg_count; i++) {
-        if (i > 0)
-            printf(", ");
+    int printed_any = 0;
 
-        printf("%s %%%d", llvm_type(args[i].type), args[i].reg);
+    for (int i = 0; i < arg_count; i++) {
+        if (args[i].type == string_array_type &&
+            arg_nodes[i]->category == Identifier) {
+            if (printed_any)
+                printf(", ");
+
+            printf("i32 %%%s.argc, i8** %%%s.argv",
+                   arg_nodes[i]->token, arg_nodes[i]->token);
+
+            printed_any = 1;
+        } else {
+            if (printed_any)
+                printf(", ");
+
+            printf("%s %%%d", llvm_type(args[i].type), args[i].reg);
+            printed_any = 1;
+        }
     }
 
     printf(")\n");
