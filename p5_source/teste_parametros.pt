@@ -1,0 +1,2 @@
+f(integer x, double y) = x
+g(integer x, integer x) = x

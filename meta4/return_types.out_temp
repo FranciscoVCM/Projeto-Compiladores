@@ -1,0 +1,192 @@
+===== Class return_types Symbol Table =====
+main	(String[])	void
+fun_double	()	double
+fun_int	()	int
+fun_double_from_int	()	double
+fun_double_from_int_fun	()	double
+fun_double_from_int_var	()	double
+fun_double_from_args	(String[])	double
+fun_double_from_unary_plus	(String[])	double
+
+===== Method main(String[]) Symbol Table =====
+return		void
+uncommon_name		String[]	param
+d		double
+
+===== Method fun_double() Symbol Table =====
+return		double
+
+===== Method fun_int() Symbol Table =====
+return		int
+
+===== Method fun_double_from_int() Symbol Table =====
+return		double
+
+===== Method fun_double_from_int_fun() Symbol Table =====
+return		double
+
+===== Method fun_double_from_int_var() Symbol Table =====
+return		double
+d		double
+
+===== Method fun_double_from_args(String[]) Symbol Table =====
+return		double
+str_arr		String[]	param
+
+===== Method fun_double_from_unary_plus(String[]) Symbol Table =====
+return		double
+str_arr		String[]	param
+
+Program
+..Identifier(return_types)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(uncommon_name)
+....MethodBody
+......VarDecl
+........Double
+........Identifier(d)
+......Assign - double
+........Identifier(d) - double
+........Call - double
+..........Identifier(fun_double) - ()
+......Print
+........Identifier(d) - double
+......Print
+........StrLit("\n") - String
+......Assign - double
+........Identifier(d) - double
+........Call - int
+..........Identifier(fun_int) - ()
+......Print
+........Identifier(d) - double
+......Print
+........StrLit("\n") - String
+......Assign - double
+........Identifier(d) - double
+........Call - double
+..........Identifier(fun_double_from_int) - ()
+......Print
+........Identifier(d) - double
+......Print
+........StrLit("\n") - String
+......Assign - double
+........Identifier(d) - double
+........Call - double
+..........Identifier(fun_double_from_int_fun) - ()
+......Print
+........Identifier(d) - double
+......Print
+........StrLit("\n") - String
+......Assign - double
+........Identifier(d) - double
+........Call - double
+..........Identifier(fun_double_from_int_var) - ()
+......Print
+........Identifier(d) - double
+......Print
+........StrLit("\n") - String
+......Assign - double
+........Identifier(d) - double
+........Call - double
+..........Identifier(fun_double_from_args) - (String[])
+..........Identifier(uncommon_name) - String[]
+......Print
+........Identifier(d) - double
+......Print
+........StrLit("\n") - String
+......Assign - double
+........Identifier(d) - double
+........Call - double
+..........Identifier(fun_double_from_unary_plus) - (String[])
+..........Identifier(uncommon_name) - String[]
+......Print
+........Identifier(d) - double
+......Print
+........StrLit("\n") - String
+......Print
+........Decimal(1.3) - double
+......Print
+........StrLit("\n") - String
+..MethodDecl
+....MethodHeader
+......Double
+......Identifier(fun_double)
+......MethodParams
+....MethodBody
+......Return
+........Decimal(1.1) - double
+..MethodDecl
+....MethodHeader
+......Int
+......Identifier(fun_int)
+......MethodParams
+....MethodBody
+......Return
+........Natural(1) - int
+..MethodDecl
+....MethodHeader
+......Double
+......Identifier(fun_double_from_int)
+......MethodParams
+....MethodBody
+......Return
+........Natural(2) - int
+..MethodDecl
+....MethodHeader
+......Double
+......Identifier(fun_double_from_int_fun)
+......MethodParams
+....MethodBody
+......Return
+........Call - int
+..........Identifier(fun_int) - ()
+..MethodDecl
+....MethodHeader
+......Double
+......Identifier(fun_double_from_int_var)
+......MethodParams
+....MethodBody
+......VarDecl
+........Double
+........Identifier(d)
+......Assign - double
+........Identifier(d) - double
+........Natural(0) - int
+......Return
+........Add - double
+..........Add - double
+............Identifier(d) - double
+............Call - int
+..............Identifier(fun_int) - ()
+..........Call - double
+............Identifier(fun_double) - ()
+..MethodDecl
+....MethodHeader
+......Double
+......Identifier(fun_double_from_args)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(str_arr)
+....MethodBody
+......Return
+........Length - int
+..........Identifier(str_arr) - String[]
+..MethodDecl
+....MethodHeader
+......Double
+......Identifier(fun_double_from_unary_plus)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(str_arr)
+....MethodBody
+......Return
+........Plus - int
+..........Natural(1) - int

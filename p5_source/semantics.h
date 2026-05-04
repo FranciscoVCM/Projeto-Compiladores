@@ -3,17 +3,33 @@
 
 #include "ast.h"
 
-int check_program(struct node *program);
-
-struct symbol_list {
-	char *identifier;
-	enum type type;
-	struct node *node;
-	struct symbol_list *next;
+struct parameter_list {
+    enum type type;
+    struct parameter_list *next;
 };
 
-struct symbol_list *insert_symbol(struct symbol_list *symbol_table, char *identifier, enum type type, struct node *node);
-struct symbol_list *search_symbol(struct symbol_list *symbol_table, char *identifier);
-void show_symbol_table();
+struct symbol_list {
+    char *name;
+    enum type type;
+    int is_parameter;
+    struct parameter_list *params;
+    struct node *node;
+    struct symbol_list *next;
+};
+
+struct method_scope {
+    char *name;
+    enum type return_type;
+    struct parameter_list *params;
+    struct symbol_list *symbols;   /* return + params + var decls já encontradas */
+    struct node *method_decl;
+    struct node *body;
+    struct method_scope *next;
+};
+
+extern int semantic_errors;
+
+int check_program(struct node *program);
+void show_symbol_tables(void);
 
 #endif

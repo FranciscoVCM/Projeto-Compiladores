@@ -1,21 +1,81 @@
-// This file is part of the Petit compiler.
-// SPDX-License-Identifier: BSD-3-Clause
-
 #ifndef _AST_H
 #define _AST_H
 
-// the order of the enum and the #define must precisely match
-enum category {  Program,   Function,   Parameters,   Parameter,   Arguments,   Integer,   Double,   Identifier,   Natural,   Decimal,   Call,   If,   Add,   Sub,   Mul,   Div };
-#define names { "Program", "Function", "Parameters", "Parameter", "Arguments", "Integer", "Double", "Identifier", "Natural", "Decimal", "Call", "If", "Add", "Sub", "Mul", "Div" }
+enum category {
+    Program,
 
-enum type {integer_type, double_type, no_type};
-#define type_name(type) (type == integer_type ? "integer" : (type == double_type ? "double" : "none"))
-#define category_type(category) (category == Integer ? integer_type : (category == Double ? double_type : no_type))
+    /* Declarations */
+    FieldDecl,
+    VarDecl,
+
+    MethodDecl,
+    MethodHeader,
+    MethodParams,
+    ParamDecl,
+    MethodBody,
+
+    /* Statements */
+    Block,
+    If,
+    While,
+    Return,
+    Call,
+    Print,
+    ParseArgs,
+    Assign,
+
+    /* Operators */
+    Or,
+    And,
+    Eq,
+    Ne,
+    Lt,
+    Gt,
+    Le,
+    Ge,
+    Add,
+    Sub,
+    Mul,
+    Div,
+    Mod,
+    Lshift,
+    Rshift,
+    Xor,
+    Not,
+    Minus,
+    Plus,
+    Length,
+
+    /* Terminals */
+    Bool,
+    BoolLit,
+    Double,
+    Decimal,
+    Identifier,
+    Int,
+    Natural,
+    StrLit,
+    StringArray,
+    Void
+};
+
+enum type {
+    integer_type,
+    double_type,
+    bool_type,
+    string_array_type,
+    void_type,
+    undef_type,
+    none_type
+};
 
 struct node {
     enum category category;
     char *token;
     enum type type;
+    char *annotation;
+    int line;
+    int column;
     struct node_list *children;
 };
 
@@ -24,12 +84,18 @@ struct node_list {
     struct node_list *next;
 };
 
-struct node *newnode(enum category category, char *token);
+struct node *newnode2(enum category category, char *token);
+struct node *newnode4(enum category category, char *token, int line, int column);
+
+#define GET_NEWNODE_MACRO(_1,_2,_3,_4,NAME,...) NAME
+#define newnode(...) GET_NEWNODE_MACRO(__VA_ARGS__, newnode4, unused, newnode2)(__VA_ARGS__)
+
 void addchild(struct node *parent, struct node *child);
-struct node *getchild(struct node *parent, int position);
-struct node_list *newlist();
-void append(struct node_list *list, struct node *node);
-void addchildren(struct node *node, struct node_list *list);
-void show(struct node *root, int depth);
+void print_ast(struct node *node, int depth);
+void free_ast(struct node *node);
+
+const char *type_name(enum type type);
+enum type category_to_type(enum category category);
+int is_expression_node(enum category category);
 
 #endif

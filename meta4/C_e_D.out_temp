@@ -1,0 +1,149 @@
+===== Class CeD Symbol Table =====
+a		int
+main	(String[])	void
+b		int
+c		int
+d		int
+
+===== Method main(String[]) Symbol Table =====
+return		void
+args		String[]	param
+i		int
+a		int
+i1		int
+i2		int
+i3		int
+d		double
+
+Program
+..Identifier(CeD)
+..FieldDecl
+....Int
+....Identifier(a)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......Assign - int
+........Identifier(a) - int
+........Natural(2) - int
+......Print
+........Identifier(a) - int
+......Print
+........StrLit("\n") - String
+......VarDecl
+........Int
+........Identifier(i)
+......VarDecl
+........Int
+........Identifier(a)
+......VarDecl
+........Int
+........Identifier(i1)
+......VarDecl
+........Int
+........Identifier(i2)
+......VarDecl
+........Int
+........Identifier(i3)
+......VarDecl
+........Double
+........Identifier(d)
+......Assign - double
+........Identifier(d) - double
+........Assign - int
+..........Identifier(a) - int
+..........Add - int
+............Natural(0) - int
+............Natural(3) - int
+......Print
+........Identifier(a) - int
+......Print
+........StrLit("\n") - String
+......Print
+........Identifier(d) - double
+......Print
+........StrLit("\n") - String
+......Print
+........StrLit("Teste\tde \fstring\\\"\r%%") - String
+......Print
+........StrLit("\n") - String
+......Print
+........Or - boolean
+..........Gt - boolean
+............Assign - int
+..............Identifier(a) - int
+..............Add - int
+................Identifier(a) - int
+................Natural(1) - int
+............Natural(0) - int
+..........Gt - boolean
+............Assign - int
+..............Identifier(a) - int
+..............Add - int
+................Identifier(a) - int
+................Natural(3) - int
+............Natural(0) - int
+......Print
+........StrLit("\n") - String
+......Print
+........Identifier(a) - int
+......Print
+........StrLit("\n") - String
+......Print
+........And - boolean
+..........Lt - boolean
+............Assign - int
+..............Identifier(a) - int
+..............Add - int
+................Identifier(a) - int
+................Natural(1) - int
+............Natural(0) - int
+..........Lt - boolean
+............Assign - int
+..............Identifier(a) - int
+..............Add - int
+................Identifier(a) - int
+................Natural(3) - int
+............Natural(0) - int
+......Print
+........StrLit("\n") - String
+......Print
+........Identifier(a) - int
+......Print
+........StrLit("\n") - String
+......Assign - double
+........Identifier(d) - double
+........Decimal(123e-10) - double
+......Print
+........Identifier(d) - double
+......Print
+........StrLit("\n") - String
+......Assign - double
+........Identifier(d) - double
+........Decimal(.0e-10) - double
+......Print
+........Identifier(d) - double
+......Print
+........StrLit("\n") - String
+......Assign - double
+........Identifier(d) - double
+........Decimal(1.e0_1) - double
+......Print
+........Identifier(d) - double
+......Print
+........StrLit("\n") - String
+..FieldDecl
+....Int
+....Identifier(b)
+..FieldDecl
+....Int
+....Identifier(c)
+..FieldDecl
+....Int
+....Identifier(d)

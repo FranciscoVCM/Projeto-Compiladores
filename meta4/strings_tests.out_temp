@@ -1,0 +1,71 @@
+===== Class strings Symbol Table =====
+i		int
+main	(String[])	void
+
+===== Method main(String[]) Symbol Table =====
+return		void
+args		String[]	param
+a		int
+
+Program
+..Identifier(strings)
+..FieldDecl
+....Int
+....Identifier(i)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......Print
+........StrLit("\r\\\"\f\t\n") - String
+......VarDecl
+........Int
+........Identifier(a)
+......Assign - int
+........Identifier(a) - int
+........Length - int
+..........Identifier(args) - String[]
+......Print
+........StrLit("Number of arguments:\t") - String
+......Print
+........Identifier(a) - int
+......Print
+........StrLit("\n") - String
+......If
+........Gt - boolean
+..........Identifier(a) - int
+..........Natural(0) - int
+........While
+..........Gt - boolean
+............Add - int
+..............Identifier(a) - int
+..............Natural(1) - int
+............Assign - int
+..............Identifier(i) - int
+..............Add - int
+................Identifier(i) - int
+................Natural(1) - int
+..........Block
+............Print
+..............StrLit("Arg (") - String
+............Print
+..............Identifier(i) - int
+............Print
+..............StrLit("): ") - String
+............Print
+..............ParseArgs - int
+................Identifier(args) - String[]
+................Sub - int
+..................Identifier(i) - int
+..................Natural(1) - int
+............Print
+..............StrLit("\n") - String
+........Print
+..........StrLit("No arguments :(") - String
+......Print
+........StrLit("\n") - String

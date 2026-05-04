@@ -1,0 +1,4 @@
+f(integer n) = n + 1
+g(integer x) = f(x)
+h(integer y) = z(y)
+k(integer a) = f(a, a)

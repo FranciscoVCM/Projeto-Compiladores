@@ -1,0 +1,2662 @@
+Terminals unused in grammar
+
+    RESERVED
+    INC
+    DEC
+    ARROW
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: CLASS IDENTIFIER LBRACE class_body RBRACE
+
+    2 class_body: ε
+    3           | class_body class_member
+
+    4 class_member: field_decl
+    5             | method_decl
+    6             | SEMICOLON
+    7             | error SEMICOLON
+
+    8 field_decl: PUBLIC STATIC type field_ids SEMICOLON
+    9           | PUBLIC STATIC error SEMICOLON
+
+   10 field_ids: IDENTIFIER
+   11          | field_ids COMMA IDENTIFIER
+
+   12 method_decl: PUBLIC STATIC method_header method_body
+   13            | PUBLIC STATIC method_header error SEMICOLON
+
+   14 method_header: type IDENTIFIER LPAR RPAR
+   15              | type IDENTIFIER LPAR formal_params RPAR
+   16              | VOID IDENTIFIER LPAR RPAR
+   17              | VOID IDENTIFIER LPAR formal_params RPAR
+
+   18 formal_params: formal_param
+   19              | STRING LSQ RSQ IDENTIFIER
+   20              | STRING LSQ NATURAL RSQ IDENTIFIER
+   21              | formal_params COMMA formal_param
+
+   22 formal_param: type IDENTIFIER
+
+   23 method_body: LBRACE method_body_items RBRACE
+
+   24 method_body_items: ε
+   25                  | method_body_items var_decl
+   26                  | method_body_items stmt
+
+   27 var_decl: type var_ids SEMICOLON
+   28         | type error SEMICOLON
+
+   29 var_ids: IDENTIFIER
+   30        | var_ids COMMA IDENTIFIER
+
+   31 stmt: LBRACE stmt_list RBRACE
+   32     | IF LPAR expr RPAR stmt
+   33     | IF LPAR expr RPAR stmt ELSE stmt
+   34     | IF LPAR error RPAR stmt
+   35     | IF LPAR error RPAR stmt ELSE stmt
+   36     | IF LPAR expr error stmt
+   37     | IF LPAR expr error stmt ELSE stmt
+   38     | WHILE LPAR expr RPAR stmt
+   39     | WHILE LPAR error RPAR stmt
+   40     | RETURN expr SEMICOLON
+   41     | RETURN SEMICOLON
+   42     | RETURN error SEMICOLON
+   43     | method_invocation SEMICOLON
+   44     | IDENTIFIER ASSIGN expr SEMICOLON
+   45     | parse_args SEMICOLON
+   46     | PRINT LPAR expr RPAR SEMICOLON
+   47     | PRINT LPAR STRLIT RPAR SEMICOLON
+   48     | PRINT LPAR error RPAR SEMICOLON
+   49     | SEMICOLON
+   50     | error SEMICOLON
+
+   51 stmt_list: ε
+   52          | stmt_list stmt
+
+   53 expr: assignment_expr
+
+   54 assignment_expr: IDENTIFIER ASSIGN assignment_expr
+   55                | or_expr
+
+   56 or_expr: or_expr OR and_expr
+   57        | and_expr
+
+   58 and_expr: and_expr AND xor_expr
+   59         | xor_expr
+
+   60 xor_expr: xor_expr XOR equality_expr
+   61         | equality_expr
+
+   62 equality_expr: equality_expr EQ relational_expr
+   63              | equality_expr NE relational_expr
+   64              | relational_expr
+
+   65 relational_expr: relational_expr LT shift_expr
+   66                | relational_expr GT shift_expr
+   67                | relational_expr LE shift_expr
+   68                | relational_expr GE shift_expr
+   69                | shift_expr
+
+   70 shift_expr: shift_expr LSHIFT additive_expr
+   71           | shift_expr RSHIFT additive_expr
+   72           | additive_expr
+
+   73 additive_expr: additive_expr PLUS multiplicative_expr
+   74              | additive_expr MINUS multiplicative_expr
+   75              | multiplicative_expr
+
+   76 multiplicative_expr: multiplicative_expr STAR unary_expr
+   77                    | multiplicative_expr DIV unary_expr
+   78                    | multiplicative_expr MOD unary_expr
+   79                    | unary_expr
+
+   80 unary_expr: NOT unary_expr
+   81           | MINUS unary_expr
+   82           | PLUS unary_expr
+   83           | primary_expr
+
+   84 primary_expr: IDENTIFIER
+   85             | IDENTIFIER DOTLENGTH
+   86             | NATURAL
+   87             | DECIMAL
+   88             | BOOLLIT
+   89             | method_invocation
+   90             | parse_args
+   91             | LPAR expr RPAR
+   92             | LPAR error RPAR
+
+   93 method_invocation: IDENTIFIER LPAR args_opt RPAR
+   94                  | IDENTIFIER LPAR error RPAR
+
+   95 args_opt: ε
+   96         | expr_list
+
+   97 expr_list: expr
+   98          | expr_list COMMA expr
+   99          | expr_list COMMA error
+
+  100 parse_args: PARSEINT LPAR IDENTIFIER LSQ expr RSQ RPAR
+  101           | PARSEINT LPAR error RPAR
+
+  102 type: BOOL
+  103     | INT
+  104     | DOUBLE
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256) 7 9 13 28 34 35 36 37 39 42 48 50 92 94 99 101
+    IDENTIFIER <lexeme> (258) 1 10 11 14 15 16 17 19 20 22 29 30 44 54 84 85 93 94 100
+    NATURAL <lexeme> (259) 20 86
+    DECIMAL <lexeme> (260) 87
+    STRLIT <lexeme> (261) 47
+    BOOLLIT <lexeme> (262) 88
+    CLASS (263) 1
+    PUBLIC (264) 8 9 12 13
+    STATIC (265) 8 9 12 13
+    RESERVED (266)
+    BOOL (267) 102
+    INT (268) 103
+    DOUBLE (269) 104
+    VOID (270) 16 17
+    STRING (271) 19 20
+    IF (272) 32 33 34 35 36 37
+    ELSE (273) 33 35 37
+    WHILE (274) 38 39
+    RETURN (275) 40 41 42
+    PRINT (276) 46 47 48
+    PARSEINT (277) 100 101
+    DOTLENGTH (278) 85
+    INC (279)
+    DEC (280)
+    ARROW (281)
+    ASSIGN (282) 44 54
+    PLUS (283) 73 82
+    MINUS (284) 74 81
+    STAR (285) 76
+    DIV (286) 77
+    MOD (287) 78
+    AND (288) 58
+    OR (289) 56
+    XOR (290) 60
+    LSHIFT (291) 70
+    RSHIFT (292) 71
+    EQ (293) 62
+    NE (294) 63
+    LT (295) 65
+    GT (296) 66
+    LE (297) 67
+    GE (298) 68
+    NOT (299) 80
+    LPAR (300) 14 15 16 17 32 33 34 35 36 37 38 39 46 47 48 91 92 93 94 100 101
+    RPAR (301) 14 15 16 17 32 33 34 35 38 39 46 47 48 91 92 93 94 100 101
+    LBRACE (302) 1 23 31
+    RBRACE (303) 1 23 31
+    LSQ (304) 19 20 100
+    RSQ (305) 19 20 100
+    SEMICOLON (306) 6 7 8 9 13 27 28 40 41 42 43 44 45 46 47 48 49 50
+    COMMA (307) 11 21 30 98 99
+    UPLUS (308)
+    UMINUS (309)
+    LOWER_THAN_ELSE (310)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (56)
+        on left: 0
+    program <node> (57)
+        on left: 1
+        on right: 0
+    class_body <node> (58)
+        on left: 2 3
+        on right: 1 3
+    class_member <node> (59)
+        on left: 4 5 6 7
+        on right: 3
+    field_decl <node> (60)
+        on left: 8 9
+        on right: 4
+    field_ids <node> (61)
+        on left: 10 11
+        on right: 8 11
+    method_decl <node> (62)
+        on left: 12 13
+        on right: 5
+    method_header <node> (63)
+        on left: 14 15 16 17
+        on right: 12 13
+    formal_params <node> (64)
+        on left: 18 19 20 21
+        on right: 15 17 21
+    formal_param <node> (65)
+        on left: 22
+        on right: 18 21
+    method_body <node> (66)
+        on left: 23
+        on right: 12
+    method_body_items <node> (67)
+        on left: 24 25 26
+        on right: 23 25 26
+    var_decl <node> (68)
+        on left: 27 28
+        on right: 25
+    var_ids <node> (69)
+        on left: 29 30
+        on right: 27 30
+    stmt <node> (70)
+        on left: 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50
+        on right: 26 32 33 34 35 36 37 38 39 52
+    stmt_list <node> (71)
+        on left: 51 52
+        on right: 31 52
+    expr <node> (72)
+        on left: 53
+        on right: 32 33 36 37 38 40 44 46 91 97 98 100
+    assignment_expr <node> (73)
+        on left: 54 55
+        on right: 53 54
+    or_expr <node> (74)
+        on left: 56 57
+        on right: 55 56
+    and_expr <node> (75)
+        on left: 58 59
+        on right: 56 57 58
+    xor_expr <node> (76)
+        on left: 60 61
+        on right: 58 59 60
+    equality_expr <node> (77)
+        on left: 62 63 64
+        on right: 60 61 62 63
+    relational_expr <node> (78)
+        on left: 65 66 67 68 69
+        on right: 62 63 64 65 66 67 68
+    shift_expr <node> (79)
+        on left: 70 71 72
+        on right: 65 66 67 68 69 70 71
+    additive_expr <node> (80)
+        on left: 73 74 75
+        on right: 70 71 72 73 74
+    multiplicative_expr <node> (81)
+        on left: 76 77 78 79
+        on right: 73 74 75 76 77 78
+    unary_expr <node> (82)
+        on left: 80 81 82 83
+        on right: 76 77 78 79 80 81 82
+    primary_expr <node> (83)
+        on left: 84 85 86 87 88 89 90 91 92
+        on right: 83
+    method_invocation <node> (84)
+        on left: 93 94
+        on right: 43 89
+    args_opt <node> (85)
+        on left: 95 96
+        on right: 93
+    expr_list <node> (86)
+        on left: 97 98 99
+        on right: 96 98 99
+    parse_args <node> (87)
+        on left: 100 101
+        on right: 45 90
+    type <node> (88)
+        on left: 102 103 104
+        on right: 8 14 15 22 27 28
+
+
+State 0
+
+    0 $accept: • program $end
+
+    CLASS  shift, and go to state 1
+
+    program  go to state 2
+
+
+State 1
+
+    1 program: CLASS • IDENTIFIER LBRACE class_body RBRACE
+
+    IDENTIFIER  shift, and go to state 3
+
+
+State 2
+
+    0 $accept: program • $end
+
+    $end  shift, and go to state 4
+
+
+State 3
+
+    1 program: CLASS IDENTIFIER • LBRACE class_body RBRACE
+
+    LBRACE  shift, and go to state 5
+
+
+State 4
+
+    0 $accept: program $end •
+
+    $default  accept
+
+
+State 5
+
+    1 program: CLASS IDENTIFIER LBRACE • class_body RBRACE
+
+    $default  reduce using rule 2 (class_body)
+
+    class_body  go to state 6
+
+
+State 6
+
+    1 program: CLASS IDENTIFIER LBRACE class_body • RBRACE
+    3 class_body: class_body • class_member
+
+    error      shift, and go to state 7
+    PUBLIC     shift, and go to state 8
+    RBRACE     shift, and go to state 9
+    SEMICOLON  shift, and go to state 10
+
+    class_member  go to state 11
+    field_decl    go to state 12
+    method_decl   go to state 13
+
+
+State 7
+
+    7 class_member: error • SEMICOLON
+
+    SEMICOLON  shift, and go to state 14
+
+
+State 8
+
+    8 field_decl: PUBLIC • STATIC type field_ids SEMICOLON
+    9           | PUBLIC • STATIC error SEMICOLON
+   12 method_decl: PUBLIC • STATIC method_header method_body
+   13            | PUBLIC • STATIC method_header error SEMICOLON
+
+    STATIC  shift, and go to state 15
+
+
+State 9
+
+    1 program: CLASS IDENTIFIER LBRACE class_body RBRACE •
+
+    $default  reduce using rule 1 (program)
+
+
+State 10
+
+    6 class_member: SEMICOLON •
+
+    $default  reduce using rule 6 (class_member)
+
+
+State 11
+
+    3 class_body: class_body class_member •
+
+    $default  reduce using rule 3 (class_body)
+
+
+State 12
+
+    4 class_member: field_decl •
+
+    $default  reduce using rule 4 (class_member)
+
+
+State 13
+
+    5 class_member: method_decl •
+
+    $default  reduce using rule 5 (class_member)
+
+
+State 14
+
+    7 class_member: error SEMICOLON •
+
+    $default  reduce using rule 7 (class_member)
+
+
+State 15
+
+    8 field_decl: PUBLIC STATIC • type field_ids SEMICOLON
+    9           | PUBLIC STATIC • error SEMICOLON
+   12 method_decl: PUBLIC STATIC • method_header method_body
+   13            | PUBLIC STATIC • method_header error SEMICOLON
+
+    error   shift, and go to state 16
+    BOOL    shift, and go to state 17
+    INT     shift, and go to state 18
+    DOUBLE  shift, and go to state 19
+    VOID    shift, and go to state 20
+
+    method_header  go to state 21
+    type           go to state 22
+
+
+State 16
+
+    9 field_decl: PUBLIC STATIC error • SEMICOLON
+
+    SEMICOLON  shift, and go to state 23
+
+
+State 17
+
+  102 type: BOOL •
+
+    $default  reduce using rule 102 (type)
+
+
+State 18
+
+  103 type: INT •
+
+    $default  reduce using rule 103 (type)
+
+
+State 19
+
+  104 type: DOUBLE •
+
+    $default  reduce using rule 104 (type)
+
+
+State 20
+
+   16 method_header: VOID • IDENTIFIER LPAR RPAR
+   17              | VOID • IDENTIFIER LPAR formal_params RPAR
+
+    IDENTIFIER  shift, and go to state 24
+
+
+State 21
+
+   12 method_decl: PUBLIC STATIC method_header • method_body
+   13            | PUBLIC STATIC method_header • error SEMICOLON
+
+    error   shift, and go to state 25
+    LBRACE  shift, and go to state 26
+
+    method_body  go to state 27
+
+
+State 22
+
+    8 field_decl: PUBLIC STATIC type • field_ids SEMICOLON
+   14 method_header: type • IDENTIFIER LPAR RPAR
+   15              | type • IDENTIFIER LPAR formal_params RPAR
+
+    IDENTIFIER  shift, and go to state 28
+
+    field_ids  go to state 29
+
+
+State 23
+
+    9 field_decl: PUBLIC STATIC error SEMICOLON •
+
+    $default  reduce using rule 9 (field_decl)
+
+
+State 24
+
+   16 method_header: VOID IDENTIFIER • LPAR RPAR
+   17              | VOID IDENTIFIER • LPAR formal_params RPAR
+
+    LPAR  shift, and go to state 30
+
+
+State 25
+
+   13 method_decl: PUBLIC STATIC method_header error • SEMICOLON
+
+    SEMICOLON  shift, and go to state 31
+
+
+State 26
+
+   23 method_body: LBRACE • method_body_items RBRACE
+
+    $default  reduce using rule 24 (method_body_items)
+
+    method_body_items  go to state 32
+
+
+State 27
+
+   12 method_decl: PUBLIC STATIC method_header method_body •
+
+    $default  reduce using rule 12 (method_decl)
+
+
+State 28
+
+   10 field_ids: IDENTIFIER •
+   14 method_header: type IDENTIFIER • LPAR RPAR
+   15              | type IDENTIFIER • LPAR formal_params RPAR
+
+    LPAR  shift, and go to state 33
+
+    $default  reduce using rule 10 (field_ids)
+
+
+State 29
+
+    8 field_decl: PUBLIC STATIC type field_ids • SEMICOLON
+   11 field_ids: field_ids • COMMA IDENTIFIER
+
+    SEMICOLON  shift, and go to state 34
+    COMMA      shift, and go to state 35
+
+
+State 30
+
+   16 method_header: VOID IDENTIFIER LPAR • RPAR
+   17              | VOID IDENTIFIER LPAR • formal_params RPAR
+
+    BOOL    shift, and go to state 17
+    INT     shift, and go to state 18
+    DOUBLE  shift, and go to state 19
+    STRING  shift, and go to state 36
+    RPAR    shift, and go to state 37
+
+    formal_params  go to state 38
+    formal_param   go to state 39
+    type           go to state 40
+
+
+State 31
+
+   13 method_decl: PUBLIC STATIC method_header error SEMICOLON •
+
+    $default  reduce using rule 13 (method_decl)
+
+
+State 32
+
+   23 method_body: LBRACE method_body_items • RBRACE
+   25 method_body_items: method_body_items • var_decl
+   26                  | method_body_items • stmt
+
+    error       shift, and go to state 41
+    IDENTIFIER  shift, and go to state 42
+    BOOL        shift, and go to state 17
+    INT         shift, and go to state 18
+    DOUBLE      shift, and go to state 19
+    IF          shift, and go to state 43
+    WHILE       shift, and go to state 44
+    RETURN      shift, and go to state 45
+    PRINT       shift, and go to state 46
+    PARSEINT    shift, and go to state 47
+    LBRACE      shift, and go to state 48
+    RBRACE      shift, and go to state 49
+    SEMICOLON   shift, and go to state 50
+
+    var_decl           go to state 51
+    stmt               go to state 52
+    method_invocation  go to state 53
+    parse_args         go to state 54
+    type               go to state 55
+
+
+State 33
+
+   14 method_header: type IDENTIFIER LPAR • RPAR
+   15              | type IDENTIFIER LPAR • formal_params RPAR
+
+    BOOL    shift, and go to state 17
+    INT     shift, and go to state 18
+    DOUBLE  shift, and go to state 19
+    STRING  shift, and go to state 36
+    RPAR    shift, and go to state 56
+
+    formal_params  go to state 57
+    formal_param   go to state 39
+    type           go to state 40
+
+
+State 34
+
+    8 field_decl: PUBLIC STATIC type field_ids SEMICOLON •
+
+    $default  reduce using rule 8 (field_decl)
+
+
+State 35
+
+   11 field_ids: field_ids COMMA • IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 58
+
+
+State 36
+
+   19 formal_params: STRING • LSQ RSQ IDENTIFIER
+   20              | STRING • LSQ NATURAL RSQ IDENTIFIER
+
+    LSQ  shift, and go to state 59
+
+
+State 37
+
+   16 method_header: VOID IDENTIFIER LPAR RPAR •
+
+    $default  reduce using rule 16 (method_header)
+
+
+State 38
+
+   17 method_header: VOID IDENTIFIER LPAR formal_params • RPAR
+   21 formal_params: formal_params • COMMA formal_param
+
+    RPAR   shift, and go to state 60
+    COMMA  shift, and go to state 61
+
+
+State 39
+
+   18 formal_params: formal_param •
+
+    $default  reduce using rule 18 (formal_params)
+
+
+State 40
+
+   22 formal_param: type • IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 62
+
+
+State 41
+
+   50 stmt: error • SEMICOLON
+
+    SEMICOLON  shift, and go to state 63
+
+
+State 42
+
+   44 stmt: IDENTIFIER • ASSIGN expr SEMICOLON
+   93 method_invocation: IDENTIFIER • LPAR args_opt RPAR
+   94                  | IDENTIFIER • LPAR error RPAR
+
+    ASSIGN  shift, and go to state 64
+    LPAR    shift, and go to state 65
+
+
+State 43
+
+   32 stmt: IF • LPAR expr RPAR stmt
+   33     | IF • LPAR expr RPAR stmt ELSE stmt
+   34     | IF • LPAR error RPAR stmt
+   35     | IF • LPAR error RPAR stmt ELSE stmt
+   36     | IF • LPAR expr error stmt
+   37     | IF • LPAR expr error stmt ELSE stmt
+
+    LPAR  shift, and go to state 66
+
+
+State 44
+
+   38 stmt: WHILE • LPAR expr RPAR stmt
+   39     | WHILE • LPAR error RPAR stmt
+
+    LPAR  shift, and go to state 67
+
+
+State 45
+
+   40 stmt: RETURN • expr SEMICOLON
+   41     | RETURN • SEMICOLON
+   42     | RETURN • error SEMICOLON
+
+    error       shift, and go to state 68
+    IDENTIFIER  shift, and go to state 69
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+    SEMICOLON   shift, and go to state 77
+
+    expr                 go to state 78
+    assignment_expr      go to state 79
+    or_expr              go to state 80
+    and_expr             go to state 81
+    xor_expr             go to state 82
+    equality_expr        go to state 83
+    relational_expr      go to state 84
+    shift_expr           go to state 85
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 46
+
+   46 stmt: PRINT • LPAR expr RPAR SEMICOLON
+   47     | PRINT • LPAR STRLIT RPAR SEMICOLON
+   48     | PRINT • LPAR error RPAR SEMICOLON
+
+    LPAR  shift, and go to state 92
+
+
+State 47
+
+  100 parse_args: PARSEINT • LPAR IDENTIFIER LSQ expr RSQ RPAR
+  101           | PARSEINT • LPAR error RPAR
+
+    LPAR  shift, and go to state 93
+
+
+State 48
+
+   31 stmt: LBRACE • stmt_list RBRACE
+
+    $default  reduce using rule 51 (stmt_list)
+
+    stmt_list  go to state 94
+
+
+State 49
+
+   23 method_body: LBRACE method_body_items RBRACE •
+
+    $default  reduce using rule 23 (method_body)
+
+
+State 50
+
+   49 stmt: SEMICOLON •
+
+    $default  reduce using rule 49 (stmt)
+
+
+State 51
+
+   25 method_body_items: method_body_items var_decl •
+
+    $default  reduce using rule 25 (method_body_items)
+
+
+State 52
+
+   26 method_body_items: method_body_items stmt •
+
+    $default  reduce using rule 26 (method_body_items)
+
+
+State 53
+
+   43 stmt: method_invocation • SEMICOLON
+
+    SEMICOLON  shift, and go to state 95
+
+
+State 54
+
+   45 stmt: parse_args • SEMICOLON
+
+    SEMICOLON  shift, and go to state 96
+
+
+State 55
+
+   27 var_decl: type • var_ids SEMICOLON
+   28         | type • error SEMICOLON
+
+    error       shift, and go to state 97
+    IDENTIFIER  shift, and go to state 98
+
+    var_ids  go to state 99
+
+
+State 56
+
+   14 method_header: type IDENTIFIER LPAR RPAR •
+
+    $default  reduce using rule 14 (method_header)
+
+
+State 57
+
+   15 method_header: type IDENTIFIER LPAR formal_params • RPAR
+   21 formal_params: formal_params • COMMA formal_param
+
+    RPAR   shift, and go to state 100
+    COMMA  shift, and go to state 61
+
+
+State 58
+
+   11 field_ids: field_ids COMMA IDENTIFIER •
+
+    $default  reduce using rule 11 (field_ids)
+
+
+State 59
+
+   19 formal_params: STRING LSQ • RSQ IDENTIFIER
+   20              | STRING LSQ • NATURAL RSQ IDENTIFIER
+
+    NATURAL  shift, and go to state 101
+    RSQ      shift, and go to state 102
+
+
+State 60
+
+   17 method_header: VOID IDENTIFIER LPAR formal_params RPAR •
+
+    $default  reduce using rule 17 (method_header)
+
+
+State 61
+
+   21 formal_params: formal_params COMMA • formal_param
+
+    BOOL    shift, and go to state 17
+    INT     shift, and go to state 18
+    DOUBLE  shift, and go to state 19
+
+    formal_param  go to state 103
+    type          go to state 40
+
+
+State 62
+
+   22 formal_param: type IDENTIFIER •
+
+    $default  reduce using rule 22 (formal_param)
+
+
+State 63
+
+   50 stmt: error SEMICOLON •
+
+    $default  reduce using rule 50 (stmt)
+
+
+State 64
+
+   44 stmt: IDENTIFIER ASSIGN • expr SEMICOLON
+
+    IDENTIFIER  shift, and go to state 69
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    expr                 go to state 104
+    assignment_expr      go to state 79
+    or_expr              go to state 80
+    and_expr             go to state 81
+    xor_expr             go to state 82
+    equality_expr        go to state 83
+    relational_expr      go to state 84
+    shift_expr           go to state 85
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 65
+
+   93 method_invocation: IDENTIFIER LPAR • args_opt RPAR
+   94                  | IDENTIFIER LPAR • error RPAR
+
+    error       shift, and go to state 105
+    IDENTIFIER  shift, and go to state 69
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    RPAR  reduce using rule 95 (args_opt)
+
+    expr                 go to state 106
+    assignment_expr      go to state 79
+    or_expr              go to state 80
+    and_expr             go to state 81
+    xor_expr             go to state 82
+    equality_expr        go to state 83
+    relational_expr      go to state 84
+    shift_expr           go to state 85
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    args_opt             go to state 107
+    expr_list            go to state 108
+    parse_args           go to state 91
+
+
+State 66
+
+   32 stmt: IF LPAR • expr RPAR stmt
+   33     | IF LPAR • expr RPAR stmt ELSE stmt
+   34     | IF LPAR • error RPAR stmt
+   35     | IF LPAR • error RPAR stmt ELSE stmt
+   36     | IF LPAR • expr error stmt
+   37     | IF LPAR • expr error stmt ELSE stmt
+
+    error       shift, and go to state 109
+    IDENTIFIER  shift, and go to state 69
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    expr                 go to state 110
+    assignment_expr      go to state 79
+    or_expr              go to state 80
+    and_expr             go to state 81
+    xor_expr             go to state 82
+    equality_expr        go to state 83
+    relational_expr      go to state 84
+    shift_expr           go to state 85
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 67
+
+   38 stmt: WHILE LPAR • expr RPAR stmt
+   39     | WHILE LPAR • error RPAR stmt
+
+    error       shift, and go to state 111
+    IDENTIFIER  shift, and go to state 69
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    expr                 go to state 112
+    assignment_expr      go to state 79
+    or_expr              go to state 80
+    and_expr             go to state 81
+    xor_expr             go to state 82
+    equality_expr        go to state 83
+    relational_expr      go to state 84
+    shift_expr           go to state 85
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 68
+
+   42 stmt: RETURN error • SEMICOLON
+
+    SEMICOLON  shift, and go to state 113
+
+
+State 69
+
+   54 assignment_expr: IDENTIFIER • ASSIGN assignment_expr
+   84 primary_expr: IDENTIFIER •
+   85             | IDENTIFIER • DOTLENGTH
+   93 method_invocation: IDENTIFIER • LPAR args_opt RPAR
+   94                  | IDENTIFIER • LPAR error RPAR
+
+    DOTLENGTH  shift, and go to state 114
+    ASSIGN     shift, and go to state 115
+    LPAR       shift, and go to state 65
+
+    $default  reduce using rule 84 (primary_expr)
+
+
+State 70
+
+   86 primary_expr: NATURAL •
+
+    $default  reduce using rule 86 (primary_expr)
+
+
+State 71
+
+   87 primary_expr: DECIMAL •
+
+    $default  reduce using rule 87 (primary_expr)
+
+
+State 72
+
+   88 primary_expr: BOOLLIT •
+
+    $default  reduce using rule 88 (primary_expr)
+
+
+State 73
+
+   82 unary_expr: PLUS • unary_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    unary_expr         go to state 117
+    primary_expr       go to state 89
+    method_invocation  go to state 90
+    parse_args         go to state 91
+
+
+State 74
+
+   81 unary_expr: MINUS • unary_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    unary_expr         go to state 118
+    primary_expr       go to state 89
+    method_invocation  go to state 90
+    parse_args         go to state 91
+
+
+State 75
+
+   80 unary_expr: NOT • unary_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    unary_expr         go to state 119
+    primary_expr       go to state 89
+    method_invocation  go to state 90
+    parse_args         go to state 91
+
+
+State 76
+
+   91 primary_expr: LPAR • expr RPAR
+   92             | LPAR • error RPAR
+
+    error       shift, and go to state 120
+    IDENTIFIER  shift, and go to state 69
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    expr                 go to state 121
+    assignment_expr      go to state 79
+    or_expr              go to state 80
+    and_expr             go to state 81
+    xor_expr             go to state 82
+    equality_expr        go to state 83
+    relational_expr      go to state 84
+    shift_expr           go to state 85
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 77
+
+   41 stmt: RETURN SEMICOLON •
+
+    $default  reduce using rule 41 (stmt)
+
+
+State 78
+
+   40 stmt: RETURN expr • SEMICOLON
+
+    SEMICOLON  shift, and go to state 122
+
+
+State 79
+
+   53 expr: assignment_expr •
+
+    $default  reduce using rule 53 (expr)
+
+
+State 80
+
+   55 assignment_expr: or_expr •
+   56 or_expr: or_expr • OR and_expr
+
+    OR  shift, and go to state 123
+
+    $default  reduce using rule 55 (assignment_expr)
+
+
+State 81
+
+   57 or_expr: and_expr •
+   58 and_expr: and_expr • AND xor_expr
+
+    AND  shift, and go to state 124
+
+    $default  reduce using rule 57 (or_expr)
+
+
+State 82
+
+   59 and_expr: xor_expr •
+   60 xor_expr: xor_expr • XOR equality_expr
+
+    XOR  shift, and go to state 125
+
+    $default  reduce using rule 59 (and_expr)
+
+
+State 83
+
+   61 xor_expr: equality_expr •
+   62 equality_expr: equality_expr • EQ relational_expr
+   63              | equality_expr • NE relational_expr
+
+    EQ  shift, and go to state 126
+    NE  shift, and go to state 127
+
+    $default  reduce using rule 61 (xor_expr)
+
+
+State 84
+
+   64 equality_expr: relational_expr •
+   65 relational_expr: relational_expr • LT shift_expr
+   66                | relational_expr • GT shift_expr
+   67                | relational_expr • LE shift_expr
+   68                | relational_expr • GE shift_expr
+
+    LT  shift, and go to state 128
+    GT  shift, and go to state 129
+    LE  shift, and go to state 130
+    GE  shift, and go to state 131
+
+    $default  reduce using rule 64 (equality_expr)
+
+
+State 85
+
+   69 relational_expr: shift_expr •
+   70 shift_expr: shift_expr • LSHIFT additive_expr
+   71           | shift_expr • RSHIFT additive_expr
+
+    LSHIFT  shift, and go to state 132
+    RSHIFT  shift, and go to state 133
+
+    $default  reduce using rule 69 (relational_expr)
+
+
+State 86
+
+   72 shift_expr: additive_expr •
+   73 additive_expr: additive_expr • PLUS multiplicative_expr
+   74              | additive_expr • MINUS multiplicative_expr
+
+    PLUS   shift, and go to state 134
+    MINUS  shift, and go to state 135
+
+    $default  reduce using rule 72 (shift_expr)
+
+
+State 87
+
+   75 additive_expr: multiplicative_expr •
+   76 multiplicative_expr: multiplicative_expr • STAR unary_expr
+   77                    | multiplicative_expr • DIV unary_expr
+   78                    | multiplicative_expr • MOD unary_expr
+
+    STAR  shift, and go to state 136
+    DIV   shift, and go to state 137
+    MOD   shift, and go to state 138
+
+    $default  reduce using rule 75 (additive_expr)
+
+
+State 88
+
+   79 multiplicative_expr: unary_expr •
+
+    $default  reduce using rule 79 (multiplicative_expr)
+
+
+State 89
+
+   83 unary_expr: primary_expr •
+
+    $default  reduce using rule 83 (unary_expr)
+
+
+State 90
+
+   89 primary_expr: method_invocation •
+
+    $default  reduce using rule 89 (primary_expr)
+
+
+State 91
+
+   90 primary_expr: parse_args •
+
+    $default  reduce using rule 90 (primary_expr)
+
+
+State 92
+
+   46 stmt: PRINT LPAR • expr RPAR SEMICOLON
+   47     | PRINT LPAR • STRLIT RPAR SEMICOLON
+   48     | PRINT LPAR • error RPAR SEMICOLON
+
+    error       shift, and go to state 139
+    IDENTIFIER  shift, and go to state 69
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    STRLIT      shift, and go to state 140
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    expr                 go to state 141
+    assignment_expr      go to state 79
+    or_expr              go to state 80
+    and_expr             go to state 81
+    xor_expr             go to state 82
+    equality_expr        go to state 83
+    relational_expr      go to state 84
+    shift_expr           go to state 85
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 93
+
+  100 parse_args: PARSEINT LPAR • IDENTIFIER LSQ expr RSQ RPAR
+  101           | PARSEINT LPAR • error RPAR
+
+    error       shift, and go to state 142
+    IDENTIFIER  shift, and go to state 143
+
+
+State 94
+
+   31 stmt: LBRACE stmt_list • RBRACE
+   52 stmt_list: stmt_list • stmt
+
+    error       shift, and go to state 41
+    IDENTIFIER  shift, and go to state 42
+    IF          shift, and go to state 43
+    WHILE       shift, and go to state 44
+    RETURN      shift, and go to state 45
+    PRINT       shift, and go to state 46
+    PARSEINT    shift, and go to state 47
+    LBRACE      shift, and go to state 48
+    RBRACE      shift, and go to state 144
+    SEMICOLON   shift, and go to state 50
+
+    stmt               go to state 145
+    method_invocation  go to state 53
+    parse_args         go to state 54
+
+
+State 95
+
+   43 stmt: method_invocation SEMICOLON •
+
+    $default  reduce using rule 43 (stmt)
+
+
+State 96
+
+   45 stmt: parse_args SEMICOLON •
+
+    $default  reduce using rule 45 (stmt)
+
+
+State 97
+
+   28 var_decl: type error • SEMICOLON
+
+    SEMICOLON  shift, and go to state 146
+
+
+State 98
+
+   29 var_ids: IDENTIFIER •
+
+    $default  reduce using rule 29 (var_ids)
+
+
+State 99
+
+   27 var_decl: type var_ids • SEMICOLON
+   30 var_ids: var_ids • COMMA IDENTIFIER
+
+    SEMICOLON  shift, and go to state 147
+    COMMA      shift, and go to state 148
+
+
+State 100
+
+   15 method_header: type IDENTIFIER LPAR formal_params RPAR •
+
+    $default  reduce using rule 15 (method_header)
+
+
+State 101
+
+   20 formal_params: STRING LSQ NATURAL • RSQ IDENTIFIER
+
+    RSQ  shift, and go to state 149
+
+
+State 102
+
+   19 formal_params: STRING LSQ RSQ • IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 150
+
+
+State 103
+
+   21 formal_params: formal_params COMMA formal_param •
+
+    $default  reduce using rule 21 (formal_params)
+
+
+State 104
+
+   44 stmt: IDENTIFIER ASSIGN expr • SEMICOLON
+
+    SEMICOLON  shift, and go to state 151
+
+
+State 105
+
+   94 method_invocation: IDENTIFIER LPAR error • RPAR
+
+    RPAR  shift, and go to state 152
+
+
+State 106
+
+   97 expr_list: expr •
+
+    $default  reduce using rule 97 (expr_list)
+
+
+State 107
+
+   93 method_invocation: IDENTIFIER LPAR args_opt • RPAR
+
+    RPAR  shift, and go to state 153
+
+
+State 108
+
+   96 args_opt: expr_list •
+   98 expr_list: expr_list • COMMA expr
+   99          | expr_list • COMMA error
+
+    COMMA  shift, and go to state 154
+
+    $default  reduce using rule 96 (args_opt)
+
+
+State 109
+
+   34 stmt: IF LPAR error • RPAR stmt
+   35     | IF LPAR error • RPAR stmt ELSE stmt
+
+    RPAR  shift, and go to state 155
+
+
+State 110
+
+   32 stmt: IF LPAR expr • RPAR stmt
+   33     | IF LPAR expr • RPAR stmt ELSE stmt
+   36     | IF LPAR expr • error stmt
+   37     | IF LPAR expr • error stmt ELSE stmt
+
+    error  shift, and go to state 156
+    RPAR   shift, and go to state 157
+
+
+State 111
+
+   39 stmt: WHILE LPAR error • RPAR stmt
+
+    RPAR  shift, and go to state 158
+
+
+State 112
+
+   38 stmt: WHILE LPAR expr • RPAR stmt
+
+    RPAR  shift, and go to state 159
+
+
+State 113
+
+   42 stmt: RETURN error SEMICOLON •
+
+    $default  reduce using rule 42 (stmt)
+
+
+State 114
+
+   85 primary_expr: IDENTIFIER DOTLENGTH •
+
+    $default  reduce using rule 85 (primary_expr)
+
+
+State 115
+
+   54 assignment_expr: IDENTIFIER ASSIGN • assignment_expr
+
+    IDENTIFIER  shift, and go to state 69
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    assignment_expr      go to state 160
+    or_expr              go to state 80
+    and_expr             go to state 81
+    xor_expr             go to state 82
+    equality_expr        go to state 83
+    relational_expr      go to state 84
+    shift_expr           go to state 85
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 116
+
+   84 primary_expr: IDENTIFIER •
+   85             | IDENTIFIER • DOTLENGTH
+   93 method_invocation: IDENTIFIER • LPAR args_opt RPAR
+   94                  | IDENTIFIER • LPAR error RPAR
+
+    DOTLENGTH  shift, and go to state 114
+    LPAR       shift, and go to state 65
+
+    $default  reduce using rule 84 (primary_expr)
+
+
+State 117
+
+   82 unary_expr: PLUS unary_expr •
+
+    $default  reduce using rule 82 (unary_expr)
+
+
+State 118
+
+   81 unary_expr: MINUS unary_expr •
+
+    $default  reduce using rule 81 (unary_expr)
+
+
+State 119
+
+   80 unary_expr: NOT unary_expr •
+
+    $default  reduce using rule 80 (unary_expr)
+
+
+State 120
+
+   92 primary_expr: LPAR error • RPAR
+
+    RPAR  shift, and go to state 161
+
+
+State 121
+
+   91 primary_expr: LPAR expr • RPAR
+
+    RPAR  shift, and go to state 162
+
+
+State 122
+
+   40 stmt: RETURN expr SEMICOLON •
+
+    $default  reduce using rule 40 (stmt)
+
+
+State 123
+
+   56 or_expr: or_expr OR • and_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    and_expr             go to state 163
+    xor_expr             go to state 82
+    equality_expr        go to state 83
+    relational_expr      go to state 84
+    shift_expr           go to state 85
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 124
+
+   58 and_expr: and_expr AND • xor_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    xor_expr             go to state 164
+    equality_expr        go to state 83
+    relational_expr      go to state 84
+    shift_expr           go to state 85
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 125
+
+   60 xor_expr: xor_expr XOR • equality_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    equality_expr        go to state 165
+    relational_expr      go to state 84
+    shift_expr           go to state 85
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 126
+
+   62 equality_expr: equality_expr EQ • relational_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    relational_expr      go to state 166
+    shift_expr           go to state 85
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 127
+
+   63 equality_expr: equality_expr NE • relational_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    relational_expr      go to state 167
+    shift_expr           go to state 85
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 128
+
+   65 relational_expr: relational_expr LT • shift_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    shift_expr           go to state 168
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 129
+
+   66 relational_expr: relational_expr GT • shift_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    shift_expr           go to state 169
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 130
+
+   67 relational_expr: relational_expr LE • shift_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    shift_expr           go to state 170
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 131
+
+   68 relational_expr: relational_expr GE • shift_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    shift_expr           go to state 171
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 132
+
+   70 shift_expr: shift_expr LSHIFT • additive_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    additive_expr        go to state 172
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 133
+
+   71 shift_expr: shift_expr RSHIFT • additive_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    additive_expr        go to state 173
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 134
+
+   73 additive_expr: additive_expr PLUS • multiplicative_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    multiplicative_expr  go to state 174
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 135
+
+   74 additive_expr: additive_expr MINUS • multiplicative_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    multiplicative_expr  go to state 175
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 136
+
+   76 multiplicative_expr: multiplicative_expr STAR • unary_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    unary_expr         go to state 176
+    primary_expr       go to state 89
+    method_invocation  go to state 90
+    parse_args         go to state 91
+
+
+State 137
+
+   77 multiplicative_expr: multiplicative_expr DIV • unary_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    unary_expr         go to state 177
+    primary_expr       go to state 89
+    method_invocation  go to state 90
+    parse_args         go to state 91
+
+
+State 138
+
+   78 multiplicative_expr: multiplicative_expr MOD • unary_expr
+
+    IDENTIFIER  shift, and go to state 116
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    unary_expr         go to state 178
+    primary_expr       go to state 89
+    method_invocation  go to state 90
+    parse_args         go to state 91
+
+
+State 139
+
+   48 stmt: PRINT LPAR error • RPAR SEMICOLON
+
+    RPAR  shift, and go to state 179
+
+
+State 140
+
+   47 stmt: PRINT LPAR STRLIT • RPAR SEMICOLON
+
+    RPAR  shift, and go to state 180
+
+
+State 141
+
+   46 stmt: PRINT LPAR expr • RPAR SEMICOLON
+
+    RPAR  shift, and go to state 181
+
+
+State 142
+
+  101 parse_args: PARSEINT LPAR error • RPAR
+
+    RPAR  shift, and go to state 182
+
+
+State 143
+
+  100 parse_args: PARSEINT LPAR IDENTIFIER • LSQ expr RSQ RPAR
+
+    LSQ  shift, and go to state 183
+
+
+State 144
+
+   31 stmt: LBRACE stmt_list RBRACE •
+
+    $default  reduce using rule 31 (stmt)
+
+
+State 145
+
+   52 stmt_list: stmt_list stmt •
+
+    $default  reduce using rule 52 (stmt_list)
+
+
+State 146
+
+   28 var_decl: type error SEMICOLON •
+
+    $default  reduce using rule 28 (var_decl)
+
+
+State 147
+
+   27 var_decl: type var_ids SEMICOLON •
+
+    $default  reduce using rule 27 (var_decl)
+
+
+State 148
+
+   30 var_ids: var_ids COMMA • IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 184
+
+
+State 149
+
+   20 formal_params: STRING LSQ NATURAL RSQ • IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 185
+
+
+State 150
+
+   19 formal_params: STRING LSQ RSQ IDENTIFIER •
+
+    $default  reduce using rule 19 (formal_params)
+
+
+State 151
+
+   44 stmt: IDENTIFIER ASSIGN expr SEMICOLON •
+
+    $default  reduce using rule 44 (stmt)
+
+
+State 152
+
+   94 method_invocation: IDENTIFIER LPAR error RPAR •
+
+    $default  reduce using rule 94 (method_invocation)
+
+
+State 153
+
+   93 method_invocation: IDENTIFIER LPAR args_opt RPAR •
+
+    $default  reduce using rule 93 (method_invocation)
+
+
+State 154
+
+   98 expr_list: expr_list COMMA • expr
+   99          | expr_list COMMA • error
+
+    error       shift, and go to state 186
+    IDENTIFIER  shift, and go to state 69
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    expr                 go to state 187
+    assignment_expr      go to state 79
+    or_expr              go to state 80
+    and_expr             go to state 81
+    xor_expr             go to state 82
+    equality_expr        go to state 83
+    relational_expr      go to state 84
+    shift_expr           go to state 85
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 155
+
+   34 stmt: IF LPAR error RPAR • stmt
+   35     | IF LPAR error RPAR • stmt ELSE stmt
+
+    error       shift, and go to state 41
+    IDENTIFIER  shift, and go to state 42
+    IF          shift, and go to state 43
+    WHILE       shift, and go to state 44
+    RETURN      shift, and go to state 45
+    PRINT       shift, and go to state 46
+    PARSEINT    shift, and go to state 47
+    LBRACE      shift, and go to state 48
+    SEMICOLON   shift, and go to state 50
+
+    stmt               go to state 188
+    method_invocation  go to state 53
+    parse_args         go to state 54
+
+
+State 156
+
+   36 stmt: IF LPAR expr error • stmt
+   37     | IF LPAR expr error • stmt ELSE stmt
+
+    error       shift, and go to state 41
+    IDENTIFIER  shift, and go to state 42
+    IF          shift, and go to state 43
+    WHILE       shift, and go to state 44
+    RETURN      shift, and go to state 45
+    PRINT       shift, and go to state 46
+    PARSEINT    shift, and go to state 47
+    LBRACE      shift, and go to state 48
+    SEMICOLON   shift, and go to state 50
+
+    stmt               go to state 189
+    method_invocation  go to state 53
+    parse_args         go to state 54
+
+
+State 157
+
+   32 stmt: IF LPAR expr RPAR • stmt
+   33     | IF LPAR expr RPAR • stmt ELSE stmt
+
+    error       shift, and go to state 41
+    IDENTIFIER  shift, and go to state 42
+    IF          shift, and go to state 43
+    WHILE       shift, and go to state 44
+    RETURN      shift, and go to state 45
+    PRINT       shift, and go to state 46
+    PARSEINT    shift, and go to state 47
+    LBRACE      shift, and go to state 48
+    SEMICOLON   shift, and go to state 50
+
+    stmt               go to state 190
+    method_invocation  go to state 53
+    parse_args         go to state 54
+
+
+State 158
+
+   39 stmt: WHILE LPAR error RPAR • stmt
+
+    error       shift, and go to state 41
+    IDENTIFIER  shift, and go to state 42
+    IF          shift, and go to state 43
+    WHILE       shift, and go to state 44
+    RETURN      shift, and go to state 45
+    PRINT       shift, and go to state 46
+    PARSEINT    shift, and go to state 47
+    LBRACE      shift, and go to state 48
+    SEMICOLON   shift, and go to state 50
+
+    stmt               go to state 191
+    method_invocation  go to state 53
+    parse_args         go to state 54
+
+
+State 159
+
+   38 stmt: WHILE LPAR expr RPAR • stmt
+
+    error       shift, and go to state 41
+    IDENTIFIER  shift, and go to state 42
+    IF          shift, and go to state 43
+    WHILE       shift, and go to state 44
+    RETURN      shift, and go to state 45
+    PRINT       shift, and go to state 46
+    PARSEINT    shift, and go to state 47
+    LBRACE      shift, and go to state 48
+    SEMICOLON   shift, and go to state 50
+
+    stmt               go to state 192
+    method_invocation  go to state 53
+    parse_args         go to state 54
+
+
+State 160
+
+   54 assignment_expr: IDENTIFIER ASSIGN assignment_expr •
+
+    $default  reduce using rule 54 (assignment_expr)
+
+
+State 161
+
+   92 primary_expr: LPAR error RPAR •
+
+    $default  reduce using rule 92 (primary_expr)
+
+
+State 162
+
+   91 primary_expr: LPAR expr RPAR •
+
+    $default  reduce using rule 91 (primary_expr)
+
+
+State 163
+
+   56 or_expr: or_expr OR and_expr •
+   58 and_expr: and_expr • AND xor_expr
+
+    AND  shift, and go to state 124
+
+    $default  reduce using rule 56 (or_expr)
+
+
+State 164
+
+   58 and_expr: and_expr AND xor_expr •
+   60 xor_expr: xor_expr • XOR equality_expr
+
+    XOR  shift, and go to state 125
+
+    $default  reduce using rule 58 (and_expr)
+
+
+State 165
+
+   60 xor_expr: xor_expr XOR equality_expr •
+   62 equality_expr: equality_expr • EQ relational_expr
+   63              | equality_expr • NE relational_expr
+
+    EQ  shift, and go to state 126
+    NE  shift, and go to state 127
+
+    $default  reduce using rule 60 (xor_expr)
+
+
+State 166
+
+   62 equality_expr: equality_expr EQ relational_expr •
+   65 relational_expr: relational_expr • LT shift_expr
+   66                | relational_expr • GT shift_expr
+   67                | relational_expr • LE shift_expr
+   68                | relational_expr • GE shift_expr
+
+    LT  shift, and go to state 128
+    GT  shift, and go to state 129
+    LE  shift, and go to state 130
+    GE  shift, and go to state 131
+
+    $default  reduce using rule 62 (equality_expr)
+
+
+State 167
+
+   63 equality_expr: equality_expr NE relational_expr •
+   65 relational_expr: relational_expr • LT shift_expr
+   66                | relational_expr • GT shift_expr
+   67                | relational_expr • LE shift_expr
+   68                | relational_expr • GE shift_expr
+
+    LT  shift, and go to state 128
+    GT  shift, and go to state 129
+    LE  shift, and go to state 130
+    GE  shift, and go to state 131
+
+    $default  reduce using rule 63 (equality_expr)
+
+
+State 168
+
+   65 relational_expr: relational_expr LT shift_expr •
+   70 shift_expr: shift_expr • LSHIFT additive_expr
+   71           | shift_expr • RSHIFT additive_expr
+
+    LSHIFT  shift, and go to state 132
+    RSHIFT  shift, and go to state 133
+
+    $default  reduce using rule 65 (relational_expr)
+
+
+State 169
+
+   66 relational_expr: relational_expr GT shift_expr •
+   70 shift_expr: shift_expr • LSHIFT additive_expr
+   71           | shift_expr • RSHIFT additive_expr
+
+    LSHIFT  shift, and go to state 132
+    RSHIFT  shift, and go to state 133
+
+    $default  reduce using rule 66 (relational_expr)
+
+
+State 170
+
+   67 relational_expr: relational_expr LE shift_expr •
+   70 shift_expr: shift_expr • LSHIFT additive_expr
+   71           | shift_expr • RSHIFT additive_expr
+
+    LSHIFT  shift, and go to state 132
+    RSHIFT  shift, and go to state 133
+
+    $default  reduce using rule 67 (relational_expr)
+
+
+State 171
+
+   68 relational_expr: relational_expr GE shift_expr •
+   70 shift_expr: shift_expr • LSHIFT additive_expr
+   71           | shift_expr • RSHIFT additive_expr
+
+    LSHIFT  shift, and go to state 132
+    RSHIFT  shift, and go to state 133
+
+    $default  reduce using rule 68 (relational_expr)
+
+
+State 172
+
+   70 shift_expr: shift_expr LSHIFT additive_expr •
+   73 additive_expr: additive_expr • PLUS multiplicative_expr
+   74              | additive_expr • MINUS multiplicative_expr
+
+    PLUS   shift, and go to state 134
+    MINUS  shift, and go to state 135
+
+    $default  reduce using rule 70 (shift_expr)
+
+
+State 173
+
+   71 shift_expr: shift_expr RSHIFT additive_expr •
+   73 additive_expr: additive_expr • PLUS multiplicative_expr
+   74              | additive_expr • MINUS multiplicative_expr
+
+    PLUS   shift, and go to state 134
+    MINUS  shift, and go to state 135
+
+    $default  reduce using rule 71 (shift_expr)
+
+
+State 174
+
+   73 additive_expr: additive_expr PLUS multiplicative_expr •
+   76 multiplicative_expr: multiplicative_expr • STAR unary_expr
+   77                    | multiplicative_expr • DIV unary_expr
+   78                    | multiplicative_expr • MOD unary_expr
+
+    STAR  shift, and go to state 136
+    DIV   shift, and go to state 137
+    MOD   shift, and go to state 138
+
+    $default  reduce using rule 73 (additive_expr)
+
+
+State 175
+
+   74 additive_expr: additive_expr MINUS multiplicative_expr •
+   76 multiplicative_expr: multiplicative_expr • STAR unary_expr
+   77                    | multiplicative_expr • DIV unary_expr
+   78                    | multiplicative_expr • MOD unary_expr
+
+    STAR  shift, and go to state 136
+    DIV   shift, and go to state 137
+    MOD   shift, and go to state 138
+
+    $default  reduce using rule 74 (additive_expr)
+
+
+State 176
+
+   76 multiplicative_expr: multiplicative_expr STAR unary_expr •
+
+    $default  reduce using rule 76 (multiplicative_expr)
+
+
+State 177
+
+   77 multiplicative_expr: multiplicative_expr DIV unary_expr •
+
+    $default  reduce using rule 77 (multiplicative_expr)
+
+
+State 178
+
+   78 multiplicative_expr: multiplicative_expr MOD unary_expr •
+
+    $default  reduce using rule 78 (multiplicative_expr)
+
+
+State 179
+
+   48 stmt: PRINT LPAR error RPAR • SEMICOLON
+
+    SEMICOLON  shift, and go to state 193
+
+
+State 180
+
+   47 stmt: PRINT LPAR STRLIT RPAR • SEMICOLON
+
+    SEMICOLON  shift, and go to state 194
+
+
+State 181
+
+   46 stmt: PRINT LPAR expr RPAR • SEMICOLON
+
+    SEMICOLON  shift, and go to state 195
+
+
+State 182
+
+  101 parse_args: PARSEINT LPAR error RPAR •
+
+    $default  reduce using rule 101 (parse_args)
+
+
+State 183
+
+  100 parse_args: PARSEINT LPAR IDENTIFIER LSQ • expr RSQ RPAR
+
+    IDENTIFIER  shift, and go to state 69
+    NATURAL     shift, and go to state 70
+    DECIMAL     shift, and go to state 71
+    BOOLLIT     shift, and go to state 72
+    PARSEINT    shift, and go to state 47
+    PLUS        shift, and go to state 73
+    MINUS       shift, and go to state 74
+    NOT         shift, and go to state 75
+    LPAR        shift, and go to state 76
+
+    expr                 go to state 196
+    assignment_expr      go to state 79
+    or_expr              go to state 80
+    and_expr             go to state 81
+    xor_expr             go to state 82
+    equality_expr        go to state 83
+    relational_expr      go to state 84
+    shift_expr           go to state 85
+    additive_expr        go to state 86
+    multiplicative_expr  go to state 87
+    unary_expr           go to state 88
+    primary_expr         go to state 89
+    method_invocation    go to state 90
+    parse_args           go to state 91
+
+
+State 184
+
+   30 var_ids: var_ids COMMA IDENTIFIER •
+
+    $default  reduce using rule 30 (var_ids)
+
+
+State 185
+
+   20 formal_params: STRING LSQ NATURAL RSQ IDENTIFIER •
+
+    $default  reduce using rule 20 (formal_params)
+
+
+State 186
+
+   99 expr_list: expr_list COMMA error •
+
+    $default  reduce using rule 99 (expr_list)
+
+
+State 187
+
+   98 expr_list: expr_list COMMA expr •
+
+    $default  reduce using rule 98 (expr_list)
+
+
+State 188
+
+   34 stmt: IF LPAR error RPAR stmt •
+   35     | IF LPAR error RPAR stmt • ELSE stmt
+
+    ELSE  shift, and go to state 197
+
+    $default  reduce using rule 34 (stmt)
+
+
+State 189
+
+   36 stmt: IF LPAR expr error stmt •
+   37     | IF LPAR expr error stmt • ELSE stmt
+
+    ELSE  shift, and go to state 198
+
+    $default  reduce using rule 36 (stmt)
+
+
+State 190
+
+   32 stmt: IF LPAR expr RPAR stmt •
+   33     | IF LPAR expr RPAR stmt • ELSE stmt
+
+    ELSE  shift, and go to state 199
+
+    $default  reduce using rule 32 (stmt)
+
+
+State 191
+
+   39 stmt: WHILE LPAR error RPAR stmt •
+
+    $default  reduce using rule 39 (stmt)
+
+
+State 192
+
+   38 stmt: WHILE LPAR expr RPAR stmt •
+
+    $default  reduce using rule 38 (stmt)
+
+
+State 193
+
+   48 stmt: PRINT LPAR error RPAR SEMICOLON •
+
+    $default  reduce using rule 48 (stmt)
+
+
+State 194
+
+   47 stmt: PRINT LPAR STRLIT RPAR SEMICOLON •
+
+    $default  reduce using rule 47 (stmt)
+
+
+State 195
+
+   46 stmt: PRINT LPAR expr RPAR SEMICOLON •
+
+    $default  reduce using rule 46 (stmt)
+
+
+State 196
+
+  100 parse_args: PARSEINT LPAR IDENTIFIER LSQ expr • RSQ RPAR
+
+    RSQ  shift, and go to state 200
+
+
+State 197
+
+   35 stmt: IF LPAR error RPAR stmt ELSE • stmt
+
+    error       shift, and go to state 41
+    IDENTIFIER  shift, and go to state 42
+    IF          shift, and go to state 43
+    WHILE       shift, and go to state 44
+    RETURN      shift, and go to state 45
+    PRINT       shift, and go to state 46
+    PARSEINT    shift, and go to state 47
+    LBRACE      shift, and go to state 48
+    SEMICOLON   shift, and go to state 50
+
+    stmt               go to state 201
+    method_invocation  go to state 53
+    parse_args         go to state 54
+
+
+State 198
+
+   37 stmt: IF LPAR expr error stmt ELSE • stmt
+
+    error       shift, and go to state 41
+    IDENTIFIER  shift, and go to state 42
+    IF          shift, and go to state 43
+    WHILE       shift, and go to state 44
+    RETURN      shift, and go to state 45
+    PRINT       shift, and go to state 46
+    PARSEINT    shift, and go to state 47
+    LBRACE      shift, and go to state 48
+    SEMICOLON   shift, and go to state 50
+
+    stmt               go to state 202
+    method_invocation  go to state 53
+    parse_args         go to state 54
+
+
+State 199
+
+   33 stmt: IF LPAR expr RPAR stmt ELSE • stmt
+
+    error       shift, and go to state 41
+    IDENTIFIER  shift, and go to state 42
+    IF          shift, and go to state 43
+    WHILE       shift, and go to state 44
+    RETURN      shift, and go to state 45
+    PRINT       shift, and go to state 46
+    PARSEINT    shift, and go to state 47
+    LBRACE      shift, and go to state 48
+    SEMICOLON   shift, and go to state 50
+
+    stmt               go to state 203
+    method_invocation  go to state 53
+    parse_args         go to state 54
+
+
+State 200
+
+  100 parse_args: PARSEINT LPAR IDENTIFIER LSQ expr RSQ • RPAR
+
+    RPAR  shift, and go to state 204
+
+
+State 201
+
+   35 stmt: IF LPAR error RPAR stmt ELSE stmt •
+
+    $default  reduce using rule 35 (stmt)
+
+
+State 202
+
+   37 stmt: IF LPAR expr error stmt ELSE stmt •
+
+    $default  reduce using rule 37 (stmt)
+
+
+State 203
+
+   33 stmt: IF LPAR expr RPAR stmt ELSE stmt •
+
+    $default  reduce using rule 33 (stmt)
+
+
+State 204
+
+  100 parse_args: PARSEINT LPAR IDENTIFIER LSQ expr RSQ RPAR •
+
+    $default  reduce using rule 100 (parse_args)

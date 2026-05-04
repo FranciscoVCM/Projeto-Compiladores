@@ -1,0 +1,36 @@
+===== Class fluxControl1 Symbol Table =====
+a	(int)	int
+b	(int)	int
+
+===== Method a(int) Symbol Table =====
+return		int
+input		int	param
+
+===== Method b(int) Symbol Table =====
+return		int
+input		int	param
+
+Program
+..Identifier(fluxControl1)
+..MethodDecl
+....MethodHeader
+......Int
+......Identifier(a)
+......MethodParams
+........ParamDecl
+..........Int
+..........Identifier(input)
+....MethodBody
+......Return
+........Identifier(input) - int
+..MethodDecl
+....MethodHeader
+......Int
+......Identifier(b)
+......MethodParams
+........ParamDecl
+..........Int
+..........Identifier(input)
+....MethodBody
+......Return
+........Identifier(input) - int

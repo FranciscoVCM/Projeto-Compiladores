@@ -1,0 +1,98 @@
+===== Class test Symbol Table =====
+b		boolean
+main	(String[])	void
+falseB	()	boolean
+
+===== Method main(String[]) Symbol Table =====
+return		void
+args		String[]	param
+
+===== Method falseB() Symbol Table =====
+return		boolean
+
+Program
+..Identifier(test)
+..FieldDecl
+....Bool
+....Identifier(b)
+..MethodDecl
+....MethodHeader
+......Void
+......Identifier(main)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Identifier(args)
+....MethodBody
+......Assign - boolean
+........Identifier(b) - boolean
+........Not - boolean
+..........BoolLit(true) - boolean
+......Print
+........Not - boolean
+..........Not - boolean
+............Not - boolean
+..............Not - boolean
+................Not - boolean
+..................Not - boolean
+....................Not - boolean
+......................Identifier(b) - boolean
+......Print
+........StrLit("\n") - String
+......Print
+........Minus - double
+..........Minus - double
+............Decimal(420.0) - double
+......Print
+........StrLit("\n") - String
+......Print
+........Not - boolean
+..........Gt - boolean
+............Minus - int
+..............Plus - int
+................Minus - int
+..................Plus - int
+....................Minus - int
+......................Plus - int
+........................Minus - int
+..........................Plus - int
+............................Minus - int
+..............................Natural(420) - int
+............Minus - int
+..............Natural(421) - int
+......Print
+........StrLit("\n") - String
+......Print
+........Not - boolean
+..........Eq - boolean
+............BoolLit(false) - boolean
+............Call - boolean
+..............Identifier(falseB) - ()
+......Print
+........StrLit("\n") - String
+......Print
+........Minus - int
+..........Plus - int
+............Minus - int
+..............Plus - int
+................Minus - int
+..................ParseArgs - int
+....................Identifier(args) - String[]
+....................Minus - int
+......................Minus - int
+........................Add - int
+..........................Sub - int
+............................Natural(1) - int
+............................Natural(1) - int
+..........................Natural(0) - int
+......Print
+........StrLit("\n") - String
+..MethodDecl
+....MethodHeader
+......Bool
+......Identifier(falseB)
+......MethodParams
+....MethodBody
+......Return
+........Not - boolean
+..........BoolLit(true) - boolean
