@@ -1,0 +1,1 @@
+times(integer a, integer b) = a * b

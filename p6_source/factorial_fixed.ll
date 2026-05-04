@@ -28,11 +28,9 @@ L1end:
 }
 
 define i32 @_main(i32 %i) {
-  %1 = add i32 0, 0
-  %2 = call i32 @_read(i32 %1)
-  %3 = call i32 @_factorial(i32 %2)
-  %4 = call i32 @_write(i32 %3)
-  ret i32 %4
+  %1 = add i32 5, 0
+  %2 = call i32 @_factorial(i32 %1)
+  ret i32 %2
 }
 
 define i32 @main() {
