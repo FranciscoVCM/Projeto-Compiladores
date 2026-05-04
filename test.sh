@@ -80,18 +80,72 @@ if [[ -d meta3 ]]; then
     done
 fi
 
+meta4_args() {
+    case "$(basename "$1")" in
+        fluxControl1.java)
+            echo "15"
+            ;;
+        fluxControl2.java)
+            echo "30"
+            ;;
+        fluxControl3.java)
+            echo "30"
+            ;;
+        length.java)
+            echo "10 20 30"
+            ;;
+        MultipleParametersCommandLine.java)
+            echo "1 2 3 4 5"
+            ;;
+        Factorial.java)
+            echo "5"
+            ;;
+        *)
+            echo ""
+            ;;
+    esac
+}
+
+run_meta4_test() {
+    inp="$1"
+
+    total=$((total + 1))
+    echo "$inp"
+
+    out=${inp%.java}.out
+    tmp=${inp%.java}.out_temp
+    ll=${inp%.java}.ll
+
+    args_string="$(meta4_args "$inp")"
+
+    if "$exe" < "$inp" > "$ll"; then
+        if [[ -n "$args_string" ]]; then
+            # shellcheck disable=SC2086
+            if ! lli "$ll" $args_string > "$tmp"; then
+                echo " Runtime Error, failed to execute LLVM '$ll'"
+                return
+            fi
+        else
+            if ! lli "$ll" > "$tmp"; then
+                echo " Runtime Error, failed to execute LLVM '$ll'"
+                return
+            fi
+        fi
+
+        if ! diff -q "$out" "$tmp" > /dev/null; then
+            echo " Wrong Answer, run 'diff $out $tmp' to see the differences"
+        else
+            accepted=$((accepted + 1))
+        fi
+    else
+        echo " Runtime Error, failed to generate LLVM for '$inp'"
+    fi
+}
+
 if [[ -d meta4 ]]; then
     for inp in meta4/*.java; do
         [[ -e "$inp" ]] || continue
-
-        flag="-s"
-        if [[ "$inp" == *NoFlags.java ]]; then
-            flag=""
-        elif [[ "$inp" == *_e4.java ]]; then
-            flag="-e4"
-        fi
-
-        run_test "$inp" "$flag"
+        run_meta4_test "$inp"
     done
 fi
 

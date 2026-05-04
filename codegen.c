@@ -843,16 +843,52 @@ static struct cg_value codegen_shift_or_xor(struct node *expr) {
 }
 
 static struct cg_value codegen_boolean_binary(struct node *expr) {
-    struct cg_value left = codegen_expression(getchild(expr, 0));
-    struct cg_value right = codegen_expression(getchild(expr, 1));
-    int tmp = temporary++;
+    int label = label_counter++;
+    int result_ptr = temporary++;
+    struct cg_value left;
+    struct cg_value right;
+    int result;
 
-    if (expr->category == And)
-        printf("  %%%d = and i1 %%%d, %%%d\n", tmp, left.reg, right.reg);
-    else
-        printf("  %%%d = or i1 %%%d, %%%d\n", tmp, left.reg, right.reg);
+    printf("  %%%d = alloca i1\n", result_ptr);
 
-    return make_value(bool_type, tmp);
+    left = codegen_expression(getchild(expr, 0));
+
+    if (expr->category == Or) {
+
+        printf("  br i1 %%%d, label %%L%d_or_true, label %%L%d_or_right\n\n",
+               left.reg, label, label);
+
+        printf("L%d_or_true:\n", label);
+        printf("  store i1 1, i1* %%%d\n", result_ptr);
+        printf("  br label %%L%d_or_end\n\n", label);
+
+        printf("L%d_or_right:\n", label);
+        right = codegen_expression(getchild(expr, 1));
+        printf("  store i1 %%%d, i1* %%%d\n", right.reg, result_ptr);
+        printf("  br label %%L%d_or_end\n\n", label);
+
+        printf("L%d_or_end:\n", label);
+    } else {
+
+        printf("  br i1 %%%d, label %%L%d_and_right, label %%L%d_and_false\n\n",
+               left.reg, label, label);
+
+        printf("L%d_and_right:\n", label);
+        right = codegen_expression(getchild(expr, 1));
+        printf("  store i1 %%%d, i1* %%%d\n", right.reg, result_ptr);
+        printf("  br label %%L%d_and_end\n\n", label);
+
+        printf("L%d_and_false:\n", label);
+        printf("  store i1 0, i1* %%%d\n", result_ptr);
+        printf("  br label %%L%d_and_end\n\n", label);
+
+        printf("L%d_and_end:\n", label);
+    }
+
+    result = temporary++;
+    printf("  %%%d = load i1, i1* %%%d\n", result, result_ptr);
+
+    return make_value(bool_type, result);
 }
 
 static struct cg_value codegen_relational(struct node *expr) {

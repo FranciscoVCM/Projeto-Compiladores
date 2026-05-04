@@ -1,35 +1,4 @@
-===== Class test Symbol Table =====
-main	(String[])	void
-
-===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-
-Program
-..Identifier(test)
-..MethodDecl
-....MethodHeader
-......Void
-......Identifier(main)
-......MethodParams
-........ParamDecl
-..........StringArray
-..........Identifier(args)
-....MethodBody
-......Print
-........Minus - double
-..........Decimal(.0) - double
-......Print
-........StrLit("\n") - String
-......Print
-........Minus - int
-..........Natural(0) - int
-......Print
-........StrLit("\n") - String
-......Print
-........Minus - double
-..........Decimal(.3) - double
-......Print
-........StrLit("\n") - String
-......Print
-........StrLit("%%%%\n") - String
+0.0000000000000000e+00
+0
+-2.9999999999999999e-01
+%%%%
