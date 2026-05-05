@@ -14,6 +14,7 @@ declare i32 @atoi(i8*)
 
 define i1 @_bool() {
   %i = alloca i1
+  store i1 0, i1* %i
   %1 = icmp ne i1 1, 0
   store i1 %1, i1* %i
   %2 = load i1, i1* %i
@@ -35,6 +36,7 @@ L1print_end:
 
 define i32 @_integer() {
   %i = alloca i32
+  store i32 0, i32* %i
   %1 = add i32 1, 0
   store i32 %1, i32* %i
   %2 = load i32, i32* %i
@@ -46,6 +48,7 @@ define i32 @_integer() {
 
 define double @_real() {
   %i = alloca double
+  store double 0.000000e+00, double* %i
   %1 = fadd double 1.00000000000000000e+00, 0.000000e+00
   store double %1, double* %i
   %2 = load double, double* %i

@@ -16,7 +16,13 @@ declare i32 @atoi(i8*)
 
 define void @_main_StringArray(i32 %args.argc, i8** %args.argv) {
   %n1 = alloca double
+  store double 0.000000e+00, double* %n1
   %n2 = alloca double
+  store double 0.000000e+00, double* %n2
+  %n3 = alloca i32
+  store i32 0, i32* %n3
+  %n4 = alloca i32
+  store i32 0, i32* %n4
   %1 = add i32 11, 0
   %2 = sub i32 0, %1
   %3 = sitofp i32 %2 to double
@@ -30,8 +36,6 @@ define void @_main_StringArray(i32 %args.argc, i8** %args.argv) {
   %9 = fdiv double %7, %8
   %10 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.fmt_double, i32 0, i32 0), double %9)
   %11 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.0, i32 0, i32 0))
-  %n3 = alloca i32
-  %n4 = alloca i32
   %12 = add i32 11, 0
   %13 = sub i32 0, %12
   store i32 %13, i32* %n3

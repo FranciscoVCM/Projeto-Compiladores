@@ -15,15 +15,19 @@ define i32 @_b_int(i32 %input.param) {
   %input = alloca i32
   store i32 %input.param, i32* %input
   %k = alloca i32
+  store i32 0, i32* %k
+  %i = alloca i32
+  store i32 0, i32* %i
+  %g = alloca i32
+  store i32 0, i32* %g
+  %is_pair = alloca i32
+  store i32 0, i32* %is_pair
   %1 = add i32 0, 0
   store i32 %1, i32* %k
-  %i = alloca i32
-  %g = alloca i32
   %2 = add i32 0, 0
   store i32 %2, i32* %i
   %3 = add i32 0, 0
   store i32 %3, i32* %g
-  %is_pair = alloca i32
   %4 = add i32 0, 0
   store i32 %4, i32* %is_pair
   br label %L1_while_cond
@@ -144,6 +148,7 @@ L1_while_end:
 
 define void @_main_StringArray(i32 %args.argc, i8** %args.argv) {
   %aux1 = alloca i32
+  store i32 0, i32* %aux1
   %1 = add i32 40, 0
   store i32 %1, i32* %aux1
   %2 = load i32, i32* %aux1

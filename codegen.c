@@ -22,6 +22,7 @@ struct cg_var {
     enum type type;
     char *ptr;
     int is_global;
+    int active;
     struct cg_var *next;
 };
 
@@ -50,7 +51,7 @@ static void clear_local_vars(void) {
 }
 
 static void add_cg_var(struct cg_var **list, const char *name, enum type type,
-                       const char *ptr, int is_global) {
+                       const char *ptr, int is_global, int active) {
     struct cg_var *v = malloc(sizeof(struct cg_var));
     if (!v)
         exit(1);
@@ -59,6 +60,7 @@ static void add_cg_var(struct cg_var **list, const char *name, enum type type,
     v->type = type;
     v->ptr = strdup_safe(ptr);
     v->is_global = is_global;
+    v->active = active;
     v->next = NULL;
 
     if (*list == NULL) {
@@ -75,7 +77,7 @@ static struct cg_var *find_local_var(const char *name) {
     struct cg_var *v = local_vars;
 
     while (v) {
-        if (strcmp(v->name, name) == 0)
+        if (v->active && strcmp(v->name, name) == 0)
             return v;
         v = v->next;
     }
@@ -104,6 +106,18 @@ static struct cg_var *find_var(const char *name) {
     return find_global_var(name);
 }
 
+static void activate_local_var(const char *name) {
+    struct cg_var *v = local_vars;
+
+    while (v) {
+        if (!v->active && strcmp(v->name, name) == 0) {
+            v->active = 1;
+            return;
+        }
+
+        v = v->next;
+    }
+}
 
 struct cg_string {
     struct node *node;
@@ -475,7 +489,7 @@ static void codegen_global_field(struct node *field_decl) {
     {
         char ptr[512];
         snprintf(ptr, sizeof(ptr), "@%s", id->token);
-        add_cg_var(&global_vars, id->token, type, ptr, 1);
+        add_cg_var(&global_vars, id->token, type, ptr, 1, 1);
     }
 }
 
@@ -534,7 +548,7 @@ static void codegen_alloc_parameter(struct node *param) {
     if (type == string_array_type) {
         char ptr[512];
         snprintf(ptr, sizeof(ptr), "%%%s.argv", id->token);
-        add_cg_var(&local_vars, id->token, type, ptr, 0);
+        add_cg_var(&local_vars, id->token, type, ptr, 0, 1);
         return;
     }
 
@@ -545,7 +559,7 @@ static void codegen_alloc_parameter(struct node *param) {
     {
         char ptr[512];
         snprintf(ptr, sizeof(ptr), "%%%s", id->token);
-        add_cg_var(&local_vars, id->token, type, ptr, 0);
+        add_cg_var(&local_vars, id->token, type, ptr, 0, 1);
     }
 }
 
@@ -571,25 +585,33 @@ static void codegen_alloc_local_var(struct node *var_decl) {
         return;
 
     printf("  %%%s = alloca %s\n", id->token, llvm_type(type));
+    printf("  store %s %s, %s* %%%s\n",
+           llvm_type(type), llvm_zero(type), llvm_type(type), id->token);
 
     {
         char ptr[512];
         snprintf(ptr, sizeof(ptr), "%%%s", id->token);
-        add_cg_var(&local_vars, id->token, type, ptr, 0);
+        add_cg_var(&local_vars, id->token, type, ptr, 0, 0);
     }
 }
 
-static void codegen_alloc_locals_from_body(struct node *body) {
+static void codegen_alloc_locals_from_body(struct node *node) {
     struct node_list *child;
 
-    if (!body || !body->children)
+    if (!node)
         return;
 
-    child = body->children->next;
-    while (child) {
-        if (child->node->category == VarDecl)
-            codegen_alloc_local_var(child->node);
+    if (node->category == VarDecl) {
+        codegen_alloc_local_var(node);
+        return;
+    }
 
+    if (!node->children)
+        return;
+
+    child = node->children->next;
+    while (child) {
+        codegen_alloc_locals_from_body(child->node);
         child = child->next;
     }
 }
@@ -680,10 +702,16 @@ static struct cg_value codegen_parseargs(struct node *expr) {
     struct node *id = getchild(expr, 0);
     struct node *index_expr = getchild(expr, 1);
     struct cg_value index;
+
+    int label;
+    int valid_low;
     int plus_one;
+    int valid_high;
+    int valid;
     int idx64;
     int ptr;
     int str;
+    int safe_str;
     int result;
 
     if (!id || !index_expr)
@@ -691,8 +719,25 @@ static struct cg_value codegen_parseargs(struct node *expr) {
 
     index = codegen_expression(index_expr);
 
+    label = label_counter++;
+
+    valid_low = temporary++;
+    printf("  %%%d = icmp sge i32 %%%d, 0\n", valid_low, index.reg);
+
     plus_one = temporary++;
     printf("  %%%d = add i32 %%%d, 1\n", plus_one, index.reg);
+
+    valid_high = temporary++;
+    printf("  %%%d = icmp slt i32 %%%d, %%%s.argc\n",
+           valid_high, plus_one, id->token);
+
+    valid = temporary++;
+    printf("  %%%d = and i1 %%%d, %%%d\n", valid, valid_low, valid_high);
+
+    printf("  br i1 %%%d, label %%L%d_parse_ok, label %%L%d_parse_bad\n\n",
+           valid, label, label);
+
+    printf("L%d_parse_ok:\n", label);
 
     idx64 = temporary++;
     printf("  %%%d = sext i32 %%%d to i64\n", idx64, plus_one);
@@ -704,8 +749,20 @@ static struct cg_value codegen_parseargs(struct node *expr) {
     str = temporary++;
     printf("  %%%d = load i8*, i8** %%%d\n", str, ptr);
 
+    printf("  br label %%L%d_parse_end\n\n", label);
+
+    printf("L%d_parse_bad:\n", label);
+    printf("  br label %%L%d_parse_end\n\n", label);
+
+    printf("L%d_parse_end:\n", label);
+
+    safe_str = temporary++;
+    printf("  %%%d = phi i8* [ %%%d, %%L%d_parse_ok ], "
+           "[ getelementptr inbounds ([1 x i8], [1 x i8]* @.empty_str, i32 0, i32 0), %%L%d_parse_bad ]\n",
+           safe_str, str, label, label);
+
     result = temporary++;
-    printf("  %%%d = call i32 @atoi(i8* %%%d)\n", result, str);
+    printf("  %%%d = call i32 @atoi(i8* %%%d)\n", result, safe_str);
 
     return make_value(integer_type, result);
 }
@@ -766,12 +823,11 @@ static struct cg_value codegen_arithmetic(struct node *expr) {
     struct cg_value left = codegen_expression(getchild(expr, 0));
     struct cg_value right = codegen_expression(getchild(expr, 1));
     enum type result_type = expr->type;
+    int tmp;
 
-    if (expr->category != Mod &&
-        (left.type == double_type || right.type == double_type)) {
+    if (left.type == double_type || right.type == double_type) {
         result_type = double_type;
     }
-    int tmp;
 
     if (result_type == double_type) {
         left = cast_value(left, double_type);
@@ -783,45 +839,104 @@ static struct cg_value codegen_arithmetic(struct node *expr) {
             case Add:
                 printf("  %%%d = fadd double %%%d, %%%d\n", tmp, left.reg, right.reg);
                 break;
+
             case Sub:
                 printf("  %%%d = fsub double %%%d, %%%d\n", tmp, left.reg, right.reg);
                 break;
+
             case Mul:
                 printf("  %%%d = fmul double %%%d, %%%d\n", tmp, left.reg, right.reg);
                 break;
+
             case Div:
                 printf("  %%%d = fdiv double %%%d, %%%d\n", tmp, left.reg, right.reg);
                 break;
+
+            case Mod:
+                printf("  %%%d = frem double %%%d, %%%d\n", tmp, left.reg, right.reg);
+                break;
+
             default:
+                printf("  %%%d = fadd double 0.000000e+00, 0.000000e+00\n", tmp);
                 break;
         }
 
         return make_value(double_type, tmp);
     }
 
-    tmp = temporary++;
-
     switch (expr->category) {
         case Add:
+            tmp = temporary++;
             printf("  %%%d = add i32 %%%d, %%%d\n", tmp, left.reg, right.reg);
-            break;
-        case Sub:
-            printf("  %%%d = sub i32 %%%d, %%%d\n", tmp, left.reg, right.reg);
-            break;
-        case Mul:
-            printf("  %%%d = mul i32 %%%d, %%%d\n", tmp, left.reg, right.reg);
-            break;
-        case Div:
-            printf("  %%%d = sdiv i32 %%%d, %%%d\n", tmp, left.reg, right.reg);
-            break;
-        case Mod:
-            printf("  %%%d = srem i32 %%%d, %%%d\n", tmp, left.reg, right.reg);
-            break;
-        default:
-            break;
-    }
+            return make_value(integer_type, tmp);
 
-    return make_value(integer_type, tmp);
+        case Sub:
+            tmp = temporary++;
+            printf("  %%%d = sub i32 %%%d, %%%d\n", tmp, left.reg, right.reg);
+            return make_value(integer_type, tmp);
+
+        case Mul:
+            tmp = temporary++;
+            printf("  %%%d = mul i32 %%%d, %%%d\n", tmp, left.reg, right.reg);
+            return make_value(integer_type, tmp);
+
+        case Div: {
+            int label = label_counter++;
+            int is_zero = temporary++;
+            int div_value;
+            int result;
+
+            printf("  %%%d = icmp eq i32 %%%d, 0\n", is_zero, right.reg);
+            printf("  br i1 %%%d, label %%L%d_div_zero, label %%L%d_div_ok\n\n",
+                   is_zero, label, label);
+
+            printf("L%d_div_ok:\n", label);
+            div_value = temporary++;
+            printf("  %%%d = sdiv i32 %%%d, %%%d\n", div_value, left.reg, right.reg);
+            printf("  br label %%L%d_div_end\n\n", label);
+
+            printf("L%d_div_zero:\n", label);
+            printf("  br label %%L%d_div_end\n\n", label);
+
+            printf("L%d_div_end:\n", label);
+            result = temporary++;
+            printf("  %%%d = phi i32 [ %%%d, %%L%d_div_ok ], [ 0, %%L%d_div_zero ]\n",
+                   result, div_value, label, label);
+
+            return make_value(integer_type, result);
+        }
+
+        case Mod: {
+            int label = label_counter++;
+            int is_zero = temporary++;
+            int mod_value;
+            int result;
+
+            printf("  %%%d = icmp eq i32 %%%d, 0\n", is_zero, right.reg);
+            printf("  br i1 %%%d, label %%L%d_mod_zero, label %%L%d_mod_ok\n\n",
+                   is_zero, label, label);
+
+            printf("L%d_mod_ok:\n", label);
+            mod_value = temporary++;
+            printf("  %%%d = srem i32 %%%d, %%%d\n", mod_value, left.reg, right.reg);
+            printf("  br label %%L%d_mod_end\n\n", label);
+
+            printf("L%d_mod_zero:\n", label);
+            printf("  br label %%L%d_mod_end\n\n", label);
+
+            printf("L%d_mod_end:\n", label);
+            result = temporary++;
+            printf("  %%%d = phi i32 [ %%%d, %%L%d_mod_ok ], [ 0, %%L%d_mod_zero ]\n",
+                   result, mod_value, label, label);
+
+            return make_value(integer_type, result);
+        }
+
+        default:
+            tmp = temporary++;
+            printf("  %%%d = add i32 0, 0\n", tmp);
+            return make_value(integer_type, tmp);
+    }
 }
 
 static struct cg_value codegen_shift_or_xor(struct node *expr) {
@@ -1286,9 +1401,14 @@ static void codegen_statement(struct node *stmt) {
         return;
 
     switch (stmt->category) {
-        case VarDecl:
-            codegen_alloc_local_var(stmt);
+        case VarDecl: {
+            struct node *id = getchild(stmt, 1);
+
+            if (id && id->token)
+                activate_local_var(id->token);
+
             break;
+        }
 
         case Assign:
         case Call:
@@ -1364,6 +1484,7 @@ static void codegen_method(struct node *method_decl) {
     printf(") {\n");
 
     codegen_alloc_parameters(params);
+    codegen_alloc_locals_from_body(body);
 
     codegen_body_statements(body);
 
@@ -1436,6 +1557,7 @@ void codegen_program(struct node *program) {
     printf("@.fmt_str = private constant [3 x i8] c\"%%s\\00\"\n");
     printf("@.str_true = private constant [5 x i8] c\"true\\00\"\n");
     printf("@.str_false = private constant [6 x i8] c\"false\\00\"\n");
+    printf("@.empty_str = private constant [1 x i8] c\"\\00\"\n");
 
     if (string_literals)
         printf("\n");

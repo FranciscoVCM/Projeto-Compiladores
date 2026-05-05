@@ -18,6 +18,7 @@ declare i32 @atoi(i8*)
 
 define void @_main_StringArray(i32 %uncommon_name.argc, i8** %uncommon_name.argv) {
   %d = alloca double
+  store double 0.000000e+00, double* %d
   %1 = call double @_fun_double()
   store double %1, double* %d
   %2 = load double, double* %d
@@ -84,6 +85,7 @@ define double @_fun_double_from_int_fun() {
 
 define double @_fun_double_from_int_var() {
   %d = alloca double
+  store double 0.000000e+00, double* %d
   %1 = add i32 0, 0
   %2 = sitofp i32 %1 to double
   store double %2, double* %d

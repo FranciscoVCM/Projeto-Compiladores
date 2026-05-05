@@ -33,6 +33,7 @@ L1_if_end:
 
 define void @_main_StringArray(i32 %args.argc, i8** %args.argv) {
   %argument = alloca i32
+  store i32 0, i32* %argument
   %1 = add i32 7, 0
   store i32 %1, i32* %argument
   %2 = load i32, i32* %argument
