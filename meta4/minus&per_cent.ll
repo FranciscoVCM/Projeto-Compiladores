@@ -6,6 +6,7 @@ declare i32 @atoi(i8*)
 @.fmt_str = private constant [3 x i8] c"%s\00"
 @.str_true = private constant [5 x i8] c"true\00"
 @.str_false = private constant [6 x i8] c"false\00"
+@.empty_str = private constant [1 x i8] c"\00"
 
 @.strlit.0 = private constant [2 x i8] c"\0A\00"
 @.strlit.1 = private constant [2 x i8] c"\0A\00"

@@ -13,25 +13,39 @@ declare i32 @atoi(i8*)
 define void @_main_StringArray(i32 %args.argc, i8** %args.argv) {
   %i = alloca i32
   store i32 0, i32* %i
-  %j = alloca double
-  store double 0.000000e+00, double* %j
-  %1 = add i32 3, 0
+  %1 = add i32 0, 0
   store i32 %1, i32* %i
-  %2 = add i32 4, 0
-  %3 = sitofp i32 %2 to double
-  store double %3, double* %j
-  %4 = load i32, i32* %i
-  %5 = load double, double* %j
-  %6 = sitofp i32 %4 to double
-  %7 = fadd double %6, %5
-  store double %7, double* %j
-  %8 = load i32, i32* %i
-  %9 = load double, double* %j
-  %10 = sitofp i32 %8 to double
-  %11 = fdiv double %10, %9
-  store double %11, double* %j
-  %12 = load double, double* %j
-  %13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.fmt_double, i32 0, i32 0), double %12)
+  br label %L1_while_cond
+
+L1_while_cond:
+  %2 = load i32, i32* %i
+  %3 = add i32 100000, 0
+  %4 = icmp slt i32 %2, %3
+  br i1 %4, label %L2_and_right, label %L2_and_false
+
+L2_and_right:
+  %5 = add i32 1, 0
+  %6 = add i32 1, 0
+  %7 = icmp eq i32 %5, %6
+  br label %L2_and_end
+
+L2_and_false:
+  br label %L2_and_end
+
+L2_and_end:
+  %8 = phi i1 [ %7, %L2_and_right ], [ 0, %L2_and_false ]
+  br i1 %8, label %L1_while_body, label %L1_while_end
+
+L1_while_body:
+  %9 = load i32, i32* %i
+  %10 = add i32 1, 0
+  %11 = add i32 %9, %10
+  store i32 %11, i32* %i
+  br label %L1_while_cond
+
+L1_while_end:
+  %12 = load i32, i32* %i
+  %13 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_int, i32 0, i32 0), i32 %12)
   %14 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.0, i32 0, i32 0))
   ret void
 }

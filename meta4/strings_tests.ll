@@ -6,6 +6,7 @@ declare i32 @atoi(i8*)
 @.fmt_str = private constant [3 x i8] c"%s\00"
 @.str_true = private constant [5 x i8] c"true\00"
 @.str_false = private constant [6 x i8] c"false\00"
+@.empty_str = private constant [1 x i8] c"\00"
 
 @.strlit.0 = private constant [7 x i8] c"\0D\5C\22\0C\09\0A\00"
 @.strlit.1 = private constant [22 x i8] c"Number of arguments:\09\00"
@@ -55,24 +56,37 @@ L2_while_body:
   %21 = load i32, i32* @i
   %22 = add i32 1, 0
   %23 = sub i32 %21, %22
-  %24 = add i32 %23, 1
-  %25 = sext i32 %24 to i64
-  %26 = getelementptr inbounds i8*, i8** %args.argv, i64 %25
-  %27 = load i8*, i8** %26
-  %28 = call i32 @atoi(i8* %27)
-  %29 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_int, i32 0, i32 0), i32 %28)
-  %30 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.5, i32 0, i32 0))
+  %24 = icmp sge i32 %23, 0
+  %25 = add i32 %23, 1
+  %26 = icmp slt i32 %25, %args.argc
+  %27 = and i1 %24, %26
+  br i1 %27, label %L3_parse_ok, label %L3_parse_bad
+
+L3_parse_ok:
+  %28 = sext i32 %25 to i64
+  %29 = getelementptr inbounds i8*, i8** %args.argv, i64 %28
+  %30 = load i8*, i8** %29
+  br label %L3_parse_end
+
+L3_parse_bad:
+  br label %L3_parse_end
+
+L3_parse_end:
+  %31 = phi i8* [ %30, %L3_parse_ok ], [ getelementptr inbounds ([1 x i8], [1 x i8]* @.empty_str, i32 0, i32 0), %L3_parse_bad ]
+  %32 = call i32 @atoi(i8* %31)
+  %33 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_int, i32 0, i32 0), i32 %32)
+  %34 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.5, i32 0, i32 0))
   br label %L2_while_cond
 
 L2_while_end:
   br label %L1_if_end
 
 L1_if_else:
-  %31 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.strlit.6, i32 0, i32 0))
+  %35 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.strlit.6, i32 0, i32 0))
   br label %L1_if_end
 
 L1_if_end:
-  %32 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.7, i32 0, i32 0))
+  %36 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.7, i32 0, i32 0))
   ret void
 }
 

@@ -11,6 +11,12 @@ static int label_counter = 1;
 static int string_counter = 0;
 static enum type current_return_type = no_type;
 static int block_terminated = 0;
+static char current_block_label[64] = "entry";
+
+static void set_current_block_label(const char *name) {
+    strncpy(current_block_label, name, sizeof(current_block_label) - 1);
+    current_block_label[sizeof(current_block_label) - 1] = '\0';
+}
 
 struct cg_value {
     enum type type;
@@ -756,6 +762,12 @@ static struct cg_value codegen_parseargs(struct node *expr) {
 
     printf("L%d_parse_end:\n", label);
 
+    {
+       char end_label[64];
+        snprintf(end_label, sizeof(end_label), "L%d_parse_end", label);
+        set_current_block_label(end_label);
+    }
+
     safe_str = temporary++;
     printf("  %%%d = phi i8* [ %%%d, %%L%d_parse_ok ], "
            "[ getelementptr inbounds ([1 x i8], [1 x i8]* @.empty_str, i32 0, i32 0), %%L%d_parse_bad ]\n",
@@ -825,9 +837,8 @@ static struct cg_value codegen_arithmetic(struct node *expr) {
     enum type result_type = expr->type;
     int tmp;
 
-    if (left.type == double_type || right.type == double_type) {
+    if (left.type == double_type || right.type == double_type)
         result_type = double_type;
-    }
 
     if (result_type == double_type) {
         left = cast_value(left, double_type);
@@ -839,25 +850,20 @@ static struct cg_value codegen_arithmetic(struct node *expr) {
             case Add:
                 printf("  %%%d = fadd double %%%d, %%%d\n", tmp, left.reg, right.reg);
                 break;
-
             case Sub:
                 printf("  %%%d = fsub double %%%d, %%%d\n", tmp, left.reg, right.reg);
                 break;
-
             case Mul:
                 printf("  %%%d = fmul double %%%d, %%%d\n", tmp, left.reg, right.reg);
                 break;
-
             case Div:
                 printf("  %%%d = fdiv double %%%d, %%%d\n", tmp, left.reg, right.reg);
                 break;
-
             case Mod:
                 printf("  %%%d = frem double %%%d, %%%d\n", tmp, left.reg, right.reg);
                 break;
-
             default:
-                printf("  %%%d = fadd double 0.000000e+00, 0.000000e+00\n", tmp);
+                printf("  %%%d = fadd double %%%d, %%%d\n", tmp, left.reg, right.reg);
                 break;
         }
 
@@ -885,6 +891,7 @@ static struct cg_value codegen_arithmetic(struct node *expr) {
             int is_zero = temporary++;
             int div_value;
             int result;
+            char end_label[64];
 
             printf("  %%%d = icmp eq i32 %%%d, 0\n", is_zero, right.reg);
             printf("  br i1 %%%d, label %%L%d_div_zero, label %%L%d_div_ok\n\n",
@@ -899,6 +906,9 @@ static struct cg_value codegen_arithmetic(struct node *expr) {
             printf("  br label %%L%d_div_end\n\n", label);
 
             printf("L%d_div_end:\n", label);
+            snprintf(end_label, sizeof(end_label), "L%d_div_end", label);
+            set_current_block_label(end_label);
+
             result = temporary++;
             printf("  %%%d = phi i32 [ %%%d, %%L%d_div_ok ], [ 0, %%L%d_div_zero ]\n",
                    result, div_value, label, label);
@@ -911,6 +921,7 @@ static struct cg_value codegen_arithmetic(struct node *expr) {
             int is_zero = temporary++;
             int mod_value;
             int result;
+            char end_label[64];
 
             printf("  %%%d = icmp eq i32 %%%d, 0\n", is_zero, right.reg);
             printf("  br i1 %%%d, label %%L%d_mod_zero, label %%L%d_mod_ok\n\n",
@@ -925,6 +936,9 @@ static struct cg_value codegen_arithmetic(struct node *expr) {
             printf("  br label %%L%d_mod_end\n\n", label);
 
             printf("L%d_mod_end:\n", label);
+            snprintf(end_label, sizeof(end_label), "L%d_mod_end", label);
+            set_current_block_label(end_label);
+
             result = temporary++;
             printf("  %%%d = phi i32 [ %%%d, %%L%d_mod_ok ], [ 0, %%L%d_mod_zero ]\n",
                    result, mod_value, label, label);
@@ -965,49 +979,71 @@ static struct cg_value codegen_shift_or_xor(struct node *expr) {
 
 static struct cg_value codegen_boolean_binary(struct node *expr) {
     int label = label_counter++;
-    int result_ptr = temporary++;
     struct cg_value left;
     struct cg_value right;
     int result;
-
-    printf("  %%%d = alloca i1\n", result_ptr);
+    char right_pred[64];
+    char label_name[64];
 
     left = codegen_expression(getchild(expr, 0));
 
     if (expr->category == Or) {
-
         printf("  br i1 %%%d, label %%L%d_or_true, label %%L%d_or_right\n\n",
                left.reg, label, label);
 
-        printf("L%d_or_true:\n", label);
-        printf("  store i1 1, i1* %%%d\n", result_ptr);
+        printf("L%d_or_right:\n", label);
+        snprintf(label_name, sizeof(label_name), "L%d_or_right", label);
+        set_current_block_label(label_name);
+
+        right = codegen_expression(getchild(expr, 1));
+        strncpy(right_pred, current_block_label, sizeof(right_pred) - 1);
+        right_pred[sizeof(right_pred) - 1] = '\0';
+
         printf("  br label %%L%d_or_end\n\n", label);
 
-        printf("L%d_or_right:\n", label);
-        right = codegen_expression(getchild(expr, 1));
-        printf("  store i1 %%%d, i1* %%%d\n", right.reg, result_ptr);
+        printf("L%d_or_true:\n", label);
+        snprintf(label_name, sizeof(label_name), "L%d_or_true", label);
+        set_current_block_label(label_name);
+
         printf("  br label %%L%d_or_end\n\n", label);
 
         printf("L%d_or_end:\n", label);
-    } else {
+        snprintf(label_name, sizeof(label_name), "L%d_or_end", label);
+        set_current_block_label(label_name);
 
-        printf("  br i1 %%%d, label %%L%d_and_right, label %%L%d_and_false\n\n",
-               left.reg, label, label);
+        result = temporary++;
+        printf("  %%%d = phi i1 [ 1, %%L%d_or_true ], [ %%%d, %%%s ]\n",
+               result, label, right.reg, right_pred);
 
-        printf("L%d_and_right:\n", label);
-        right = codegen_expression(getchild(expr, 1));
-        printf("  store i1 %%%d, i1* %%%d\n", right.reg, result_ptr);
-        printf("  br label %%L%d_and_end\n\n", label);
-
-        printf("L%d_and_false:\n", label);
-        printf("  store i1 0, i1* %%%d\n", result_ptr);
-        printf("  br label %%L%d_and_end\n\n", label);
-
-        printf("L%d_and_end:\n", label);
+        return make_value(bool_type, result);
     }
 
+    printf("  br i1 %%%d, label %%L%d_and_right, label %%L%d_and_false\n\n",
+           left.reg, label, label);
+
+    printf("L%d_and_right:\n", label);
+    snprintf(label_name, sizeof(label_name), "L%d_and_right", label);
+    set_current_block_label(label_name);
+
+    right = codegen_expression(getchild(expr, 1));
+    strncpy(right_pred, current_block_label, sizeof(right_pred) - 1);
+    right_pred[sizeof(right_pred) - 1] = '\0';
+
+    printf("  br label %%L%d_and_end\n\n", label);
+
+    printf("L%d_and_false:\n", label);
+    snprintf(label_name, sizeof(label_name), "L%d_and_false", label);
+    set_current_block_label(label_name);
+
+    printf("  br label %%L%d_and_end\n\n", label);
+
+    printf("L%d_and_end:\n", label);
+    snprintf(label_name, sizeof(label_name), "L%d_and_end", label);
+    set_current_block_label(label_name);
+
     result = temporary++;
-    printf("  %%%d = load i1, i1* %%%d\n", result, result_ptr);
+    printf("  %%%d = phi i1 [ %%%d, %%%s ], [ 0, %%L%d_and_false ]\n",
+           result, right.reg, right_pred, label);
 
     return make_value(bool_type, result);
 }
@@ -1477,6 +1513,7 @@ static void codegen_method(struct node *method_decl) {
     label_counter = 1;
     current_return_type = return_type;
     block_terminated = 0;
+    set_current_block_label("entry");
     clear_local_vars();
 
     printf("define %s %s(", llvm_type(return_type), llvm_name);

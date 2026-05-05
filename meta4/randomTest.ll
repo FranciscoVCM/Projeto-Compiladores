@@ -6,6 +6,7 @@ declare i32 @atoi(i8*)
 @.fmt_str = private constant [3 x i8] c"%s\00"
 @.str_true = private constant [5 x i8] c"true\00"
 @.str_false = private constant [6 x i8] c"false\00"
+@.empty_str = private constant [1 x i8] c"\00"
 
 @.strlit.0 = private constant [2 x i8] c"\0A\00"
 @.strlit.1 = private constant [2 x i8] c"\0A\00"
@@ -89,16 +90,29 @@ L3print_end:
   %43 = add i32 %41, %42
   %44 = sub i32 0, %43
   %45 = sub i32 0, %44
-  %46 = add i32 %45, 1
-  %47 = sext i32 %46 to i64
-  %48 = getelementptr inbounds i8*, i8** %args.argv, i64 %47
-  %49 = load i8*, i8** %48
-  %50 = call i32 @atoi(i8* %49)
-  %51 = sub i32 0, %50
-  %52 = sub i32 0, %51
-  %53 = sub i32 0, %52
-  %54 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_int, i32 0, i32 0), i32 %53)
-  %55 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.4, i32 0, i32 0))
+  %46 = icmp sge i32 %45, 0
+  %47 = add i32 %45, 1
+  %48 = icmp slt i32 %47, %args.argc
+  %49 = and i1 %46, %48
+  br i1 %49, label %L4_parse_ok, label %L4_parse_bad
+
+L4_parse_ok:
+  %50 = sext i32 %47 to i64
+  %51 = getelementptr inbounds i8*, i8** %args.argv, i64 %50
+  %52 = load i8*, i8** %51
+  br label %L4_parse_end
+
+L4_parse_bad:
+  br label %L4_parse_end
+
+L4_parse_end:
+  %53 = phi i8* [ %52, %L4_parse_ok ], [ getelementptr inbounds ([1 x i8], [1 x i8]* @.empty_str, i32 0, i32 0), %L4_parse_bad ]
+  %54 = call i32 @atoi(i8* %53)
+  %55 = sub i32 0, %54
+  %56 = sub i32 0, %55
+  %57 = sub i32 0, %56
+  %58 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_int, i32 0, i32 0), i32 %57)
+  %59 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.4, i32 0, i32 0))
   ret void
 }
 

@@ -6,6 +6,7 @@ declare i32 @atoi(i8*)
 @.fmt_str = private constant [3 x i8] c"%s\00"
 @.str_true = private constant [5 x i8] c"true\00"
 @.str_false = private constant [6 x i8] c"false\00"
+@.empty_str = private constant [1 x i8] c"\00"
 
 @.strlit.0 = private constant [10 x i8] c"Is pair: \00"
 @.strlit.1 = private constant [3 x i8] c"|\0A\00"
@@ -77,73 +78,84 @@ L4_while_body:
   store i32 %24, i32* %input
   %25 = load i32, i32* %g
   %26 = add i32 2, 0
-  %27 = srem i32 %25, %26
-  %28 = add i32 0, 0
-  %29 = icmp eq i32 %27, %28
-  br i1 %29, label %L5_if_then, label %L5_if_else
+  %27 = icmp eq i32 %26, 0
+  br i1 %27, label %L6_mod_zero, label %L6_mod_ok
+
+L6_mod_ok:
+  %28 = srem i32 %25, %26
+  br label %L6_mod_end
+
+L6_mod_zero:
+  br label %L6_mod_end
+
+L6_mod_end:
+  %29 = phi i32 [ %28, %L6_mod_ok ], [ 0, %L6_mod_zero ]
+  %30 = add i32 0, 0
+  %31 = icmp eq i32 %29, %30
+  br i1 %31, label %L5_if_then, label %L5_if_else
 
 L5_if_then:
-  %30 = load i32, i32* %is_pair
-  %31 = add i32 1, 0
-  %32 = add i32 %30, %31
-  store i32 %32, i32* %is_pair
+  %32 = load i32, i32* %is_pair
+  %33 = add i32 1, 0
+  %34 = add i32 %32, %33
+  store i32 %34, i32* %is_pair
   br label %L5_if_end
 
 L5_if_else:
   br label %L5_if_end
 
 L5_if_end:
-  %33 = load i32, i32* %g
-  %34 = add i32 1, 0
-  %35 = add i32 %33, %34
-  store i32 %35, i32* %g
+  %35 = load i32, i32* %g
+  %36 = add i32 1, 0
+  %37 = add i32 %35, %36
+  store i32 %37, i32* %g
   br label %L4_while_cond
 
 L4_while_end:
-  %36 = add i32 0, 0
-  store i32 %36, i32* %g
-  %37 = load i32, i32* %i
-  %38 = add i32 1, 0
-  %39 = add i32 %37, %38
-  store i32 %39, i32* %i
+  %38 = add i32 0, 0
+  store i32 %38, i32* %g
+  %39 = load i32, i32* %i
+  %40 = add i32 1, 0
+  %41 = add i32 %39, %40
+  store i32 %41, i32* %i
   br label %L3_while_cond
 
 L3_while_end:
   br label %L2_if_end
 
 L2_if_else:
-  %40 = load i32, i32* %k
-  %41 = add i32 2, 0
-  %42 = icmp eq i32 %40, %41
-  br i1 %42, label %L6_if_then, label %L6_if_else
+  %42 = load i32, i32* %k
+  %43 = add i32 2, 0
+  %44 = icmp eq i32 %42, %43
+  br i1 %44, label %L7_if_then, label %L7_if_else
 
-L6_if_then:
-  %43 = load i32, i32* %input
-  %44 = add i32 3, 0
-  %45 = mul i32 %43, %44
-  store i32 %45, i32* %input
-  br label %L6_if_end
+L7_if_then:
+  %45 = load i32, i32* %input
+  %46 = add i32 3, 0
+  %47 = mul i32 %45, %46
+  store i32 %47, i32* %input
+  br label %L7_if_end
 
-L6_if_else:
-  br label %L6_if_end
+L7_if_else:
+  br label %L7_if_end
 
-L6_if_end:
+L7_if_end:
   br label %L2_if_end
 
 L2_if_end:
-  %46 = load i32, i32* %k
-  %47 = add i32 1, 0
-  %48 = add i32 %46, %47
-  store i32 %48, i32* %k
+  %48 = load i32, i32* %k
+  %49 = add i32 1, 0
+  %50 = add i32 %48, %49
+  store i32 %50, i32* %k
   br label %L1_while_cond
 
 L1_while_end:
-  %49 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([10 x i8], [10 x i8]* @.strlit.0, i32 0, i32 0))
-  %50 = load i32, i32* %is_pair
-  %51 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_int, i32 0, i32 0), i32 %50)
-  %52 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.strlit.1, i32 0, i32 0))
-  %53 = load i32, i32* %input
-  ret i32 %53
+  %51 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([10 x i8], [10 x i8]* @.strlit.0, i32 0, i32 0))
+  %52 = load i32, i32* %is_pair
+  %53 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_int, i32 0, i32 0), i32 %52)
+  %54 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.strlit.1, i32 0, i32 0))
+  %55 = load i32, i32* %input
+  ret i32 %55
 }
 
 define void @_main_StringArray(i32 %args.argc, i8** %args.argv) {
@@ -155,13 +167,26 @@ define void @_main_StringArray(i32 %args.argc, i8** %args.argv) {
   %3 = call i32 @_b_int(i32 %2)
   store i32 %3, i32* %aux1
   %4 = add i32 0, 0
-  %5 = add i32 %4, 1
-  %6 = sext i32 %5 to i64
-  %7 = getelementptr inbounds i8*, i8** %args.argv, i64 %6
-  %8 = load i8*, i8** %7
-  %9 = call i32 @atoi(i8* %8)
-  %10 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_int, i32 0, i32 0), i32 %9)
-  %11 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.2, i32 0, i32 0))
+  %5 = icmp sge i32 %4, 0
+  %6 = add i32 %4, 1
+  %7 = icmp slt i32 %6, %args.argc
+  %8 = and i1 %5, %7
+  br i1 %8, label %L1_parse_ok, label %L1_parse_bad
+
+L1_parse_ok:
+  %9 = sext i32 %6 to i64
+  %10 = getelementptr inbounds i8*, i8** %args.argv, i64 %9
+  %11 = load i8*, i8** %10
+  br label %L1_parse_end
+
+L1_parse_bad:
+  br label %L1_parse_end
+
+L1_parse_end:
+  %12 = phi i8* [ %11, %L1_parse_ok ], [ getelementptr inbounds ([1 x i8], [1 x i8]* @.empty_str, i32 0, i32 0), %L1_parse_bad ]
+  %13 = call i32 @atoi(i8* %12)
+  %14 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_int, i32 0, i32 0), i32 %13)
+  %15 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.2, i32 0, i32 0))
   ret void
 }
 

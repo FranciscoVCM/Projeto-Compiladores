@@ -42,37 +42,48 @@ define double @_overload_double(double %n.param) {
   %6 = add i32 2, 0
   %7 = call i32 @_main_int(i32 %6)
   %8 = add i32 5, 0
-  %9 = sdiv i32 %7, %8
-  %10 = add i32 6, 0
-  %11 = mul i32 %9, %10
-  %12 = sitofp i32 %11 to double
-  %13 = fadd double %5, %12
-  %14 = add i32 2, 0
-  %15 = add i32 3, 0
-  %16 = mul i32 %14, %15
-  %17 = sitofp i32 %16 to double
-  %18 = fadd double %13, %17
-  %19 = add i32 3, 0
-  %20 = add i32 4, 0
-  %21 = mul i32 %19, %20
-  %22 = sitofp i32 %21 to double
-  %23 = fadd double %18, %22
-  %24 = add i32 2, 0
-  %25 = add i32 8, 0
-  %26 = mul i32 %24, %25
-  %27 = sitofp i32 %26 to double
-  %28 = fadd double %23, %27
-  %29 = add i32 5, 0
-  %30 = add i32 9, 0
-  %31 = mul i32 %29, %30
-  %32 = sitofp i32 %31 to double
-  %33 = fadd double %28, %32
-  %34 = add i32 2, 0
-  %35 = add i32 2, 0
-  %36 = call i32 @_overload_int_int(i32 %34, i32 %35)
-  %37 = sitofp i32 %36 to double
-  %38 = fadd double %33, %37
-  ret double %38
+  %9 = icmp eq i32 %8, 0
+  br i1 %9, label %L1_div_zero, label %L1_div_ok
+
+L1_div_ok:
+  %10 = sdiv i32 %7, %8
+  br label %L1_div_end
+
+L1_div_zero:
+  br label %L1_div_end
+
+L1_div_end:
+  %11 = phi i32 [ %10, %L1_div_ok ], [ 0, %L1_div_zero ]
+  %12 = add i32 6, 0
+  %13 = mul i32 %11, %12
+  %14 = sitofp i32 %13 to double
+  %15 = fadd double %5, %14
+  %16 = add i32 2, 0
+  %17 = add i32 3, 0
+  %18 = mul i32 %16, %17
+  %19 = sitofp i32 %18 to double
+  %20 = fadd double %15, %19
+  %21 = add i32 3, 0
+  %22 = add i32 4, 0
+  %23 = mul i32 %21, %22
+  %24 = sitofp i32 %23 to double
+  %25 = fadd double %20, %24
+  %26 = add i32 2, 0
+  %27 = add i32 8, 0
+  %28 = mul i32 %26, %27
+  %29 = sitofp i32 %28 to double
+  %30 = fadd double %25, %29
+  %31 = add i32 5, 0
+  %32 = add i32 9, 0
+  %33 = mul i32 %31, %32
+  %34 = sitofp i32 %33 to double
+  %35 = fadd double %30, %34
+  %36 = add i32 2, 0
+  %37 = add i32 2, 0
+  %38 = call i32 @_overload_int_int(i32 %36, i32 %37)
+  %39 = sitofp i32 %38 to double
+  %40 = fadd double %35, %39
+  ret double %40
 }
 
 define i32 @_overload_double_double(double %b.param, double %b1.param) {
@@ -190,160 +201,194 @@ L3print_end:
   %34 = add i32 %32, %33
   %35 = add i32 8, 0
   %36 = add i32 2, 0
-  %37 = srem i32 %35, %36
-  %38 = add i32 %34, %37
-  %39 = load double, double* %d
-  %40 = add i32 3, 0
-  %41 = sitofp i32 %40 to double
-  %42 = fdiv double %39, %41
-  %43 = sitofp i32 %38 to double
-  %44 = fadd double %43, %42
-  %45 = load i32, i32* %a
-  %46 = load double, double* %d
-  %47 = sitofp i32 %45 to double
-  %48 = fmul double %47, %46
-  %49 = fadd double %44, %48
-  %50 = load double, double* %d
-  %51 = fadd double %49, %50
-  %52 = load i32, i32* %a
-  %53 = sitofp i32 %52 to double
-  %54 = fsub double %51, %53
-  %55 = load i32, i32* %a
-  %56 = load i32, i32* %b
-  %57 = mul i32 %55, %56
-  %58 = load double, double* %d
-  %59 = sitofp i32 %57 to double
-  %60 = fdiv double %59, %58
-  %61 = load i32, i32* %a
-  %62 = load i32, i32* %b
-  %63 = mul i32 %61, %62
-  %64 = load double, double* %d
-  %65 = sitofp i32 %63 to double
-  %66 = fdiv double %65, %64
-  %67 = fmul double %60, %66
-  %68 = fadd double %54, %67
-  %69 = fadd double 2.20000000000000018e+00, 0.000000e+00
-  %70 = call double @_overload_double(double %69)
-  %71 = fadd double %68, %70
-  %72 = add i32 1, 0
-  %73 = add i32 1, 0
-  %74 = call i32 @_overload_int_int(i32 %72, i32 %73)
-  %75 = sitofp i32 %74 to double
-  store double %75, double* %d
-  %76 = fadd double %71, %75
-  %77 = add i32 5, 0
-  %78 = call i32 @_main_int(i32 %77)
-  %79 = sitofp i32 %78 to double
-  %80 = fadd double %76, %79
-  %81 = sub i32 %args.argc, 1
-  %82 = add i32 1, 0
-  %83 = sub i32 %81, %82
-  %84 = icmp sge i32 %83, 0
-  %85 = add i32 %83, 1
-  %86 = icmp slt i32 %85, %args.argc
-  %87 = and i1 %84, %86
-  br i1 %87, label %L4_parse_ok, label %L4_parse_bad
+  %37 = icmp eq i32 %36, 0
+  br i1 %37, label %L4_mod_zero, label %L4_mod_ok
 
-L4_parse_ok:
-  %88 = sext i32 %85 to i64
-  %89 = getelementptr inbounds i8*, i8** %args.argv, i64 %88
-  %90 = load i8*, i8** %89
-  br label %L4_parse_end
+L4_mod_ok:
+  %38 = srem i32 %35, %36
+  br label %L4_mod_end
 
-L4_parse_bad:
-  br label %L4_parse_end
+L4_mod_zero:
+  br label %L4_mod_end
 
-L4_parse_end:
-  %91 = phi i8* [ %90, %L4_parse_ok ], [ getelementptr inbounds ([1 x i8], [1 x i8]* @.empty_str, i32 0, i32 0), %L4_parse_bad ]
-  %92 = call i32 @atoi(i8* %91)
-  %93 = sitofp i32 %92 to double
-  %94 = fadd double %80, %93
-  %95 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.fmt_double, i32 0, i32 0), double %94)
-  %96 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.strlit.5, i32 0, i32 0))
-  %97 = load i32, i32* %a
-  %98 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_int, i32 0, i32 0), i32 %97)
-  %99 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.strlit.6, i32 0, i32 0))
-  %100 = load i32, i32* %a
-  %101 = add i32 2, 0
-  %102 = add i32 2, 0
-  %103 = mul i32 %101, %102
-  %104 = add i32 3, 0
-  %105 = add i32 5, 0
-  %106 = sdiv i32 %104, %105
-  %107 = add i32 %103, %106
-  %108 = add i32 5, 0
-  %109 = call i32 @_main_int(i32 %108)
-  %110 = add i32 %107, %109
-  %111 = icmp sge i32 %100, %110
-  br i1 %111, label %L5_if_then, label %L5_if_else
+L4_mod_end:
+  %39 = phi i32 [ %38, %L4_mod_ok ], [ 0, %L4_mod_zero ]
+  %40 = add i32 %34, %39
+  %41 = load double, double* %d
+  %42 = add i32 3, 0
+  %43 = sitofp i32 %42 to double
+  %44 = fdiv double %41, %43
+  %45 = sitofp i32 %40 to double
+  %46 = fadd double %45, %44
+  %47 = load i32, i32* %a
+  %48 = load double, double* %d
+  %49 = sitofp i32 %47 to double
+  %50 = fmul double %49, %48
+  %51 = fadd double %46, %50
+  %52 = load double, double* %d
+  %53 = fadd double %51, %52
+  %54 = load i32, i32* %a
+  %55 = sitofp i32 %54 to double
+  %56 = fsub double %53, %55
+  %57 = load i32, i32* %a
+  %58 = load i32, i32* %b
+  %59 = mul i32 %57, %58
+  %60 = load double, double* %d
+  %61 = sitofp i32 %59 to double
+  %62 = fdiv double %61, %60
+  %63 = load i32, i32* %a
+  %64 = load i32, i32* %b
+  %65 = mul i32 %63, %64
+  %66 = load double, double* %d
+  %67 = sitofp i32 %65 to double
+  %68 = fdiv double %67, %66
+  %69 = fmul double %62, %68
+  %70 = fadd double %56, %69
+  %71 = fadd double 2.20000000000000018e+00, 0.000000e+00
+  %72 = call double @_overload_double(double %71)
+  %73 = fadd double %70, %72
+  %74 = add i32 1, 0
+  %75 = add i32 1, 0
+  %76 = call i32 @_overload_int_int(i32 %74, i32 %75)
+  %77 = sitofp i32 %76 to double
+  store double %77, double* %d
+  %78 = fadd double %73, %77
+  %79 = add i32 5, 0
+  %80 = call i32 @_main_int(i32 %79)
+  %81 = sitofp i32 %80 to double
+  %82 = fadd double %78, %81
+  %83 = sub i32 %args.argc, 1
+  %84 = add i32 1, 0
+  %85 = sub i32 %83, %84
+  %86 = icmp sge i32 %85, 0
+  %87 = add i32 %85, 1
+  %88 = icmp slt i32 %87, %args.argc
+  %89 = and i1 %86, %88
+  br i1 %89, label %L5_parse_ok, label %L5_parse_bad
 
-L5_if_then:
-  %112 = load i32, i32* %a
-  %113 = add i32 2, 0
-  %114 = icmp sle i32 %112, %113
-  br i1 %114, label %L6_if_then, label %L6_if_else
+L5_parse_ok:
+  %90 = sext i32 %87 to i64
+  %91 = getelementptr inbounds i8*, i8** %args.argv, i64 %90
+  %92 = load i8*, i8** %91
+  br label %L5_parse_end
+
+L5_parse_bad:
+  br label %L5_parse_end
+
+L5_parse_end:
+  %93 = phi i8* [ %92, %L5_parse_ok ], [ getelementptr inbounds ([1 x i8], [1 x i8]* @.empty_str, i32 0, i32 0), %L5_parse_bad ]
+  %94 = call i32 @atoi(i8* %93)
+  %95 = sitofp i32 %94 to double
+  %96 = fadd double %82, %95
+  %97 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.fmt_double, i32 0, i32 0), double %96)
+  %98 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.strlit.5, i32 0, i32 0))
+  %99 = load i32, i32* %a
+  %100 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_int, i32 0, i32 0), i32 %99)
+  %101 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.strlit.6, i32 0, i32 0))
+  %102 = load i32, i32* %a
+  %103 = add i32 2, 0
+  %104 = add i32 2, 0
+  %105 = mul i32 %103, %104
+  %106 = add i32 3, 0
+  %107 = add i32 5, 0
+  %108 = icmp eq i32 %107, 0
+  br i1 %108, label %L7_div_zero, label %L7_div_ok
+
+L7_div_ok:
+  %109 = sdiv i32 %106, %107
+  br label %L7_div_end
+
+L7_div_zero:
+  br label %L7_div_end
+
+L7_div_end:
+  %110 = phi i32 [ %109, %L7_div_ok ], [ 0, %L7_div_zero ]
+  %111 = add i32 %105, %110
+  %112 = add i32 5, 0
+  %113 = call i32 @_main_int(i32 %112)
+  %114 = add i32 %111, %113
+  %115 = icmp sge i32 %102, %114
+  br i1 %115, label %L6_if_then, label %L6_if_else
 
 L6_if_then:
-  %115 = add i32 2, 0
   %116 = load i32, i32* %a
-  %117 = icmp sge i32 %115, %116
-  br i1 %117, label %L7_if_then, label %L7_if_else
-
-L7_if_then:
-  %118 = add i32 2, 0
-  %119 = load i32, i32* %a
-  %120 = icmp sle i32 %118, %119
-  br i1 %120, label %L8_if_then, label %L8_if_else
+  %117 = add i32 2, 0
+  %118 = icmp sle i32 %116, %117
+  br i1 %118, label %L8_if_then, label %L8_if_else
 
 L8_if_then:
-  %121 = load i32, i32* %a
-  %122 = add i32 2, 0
-  %123 = icmp eq i32 %121, %122
-  br i1 %123, label %L9_if_then, label %L9_if_else
+  %119 = add i32 2, 0
+  %120 = load i32, i32* %a
+  %121 = icmp sge i32 %119, %120
+  br i1 %121, label %L9_if_then, label %L9_if_else
 
 L9_if_then:
-  %124 = add i32 2, 0
-  %125 = load i32, i32* %a
-  %126 = icmp eq i32 %124, %125
-  br i1 %126, label %L10_if_then, label %L10_if_else
+  %122 = add i32 2, 0
+  %123 = load i32, i32* %a
+  %124 = icmp sle i32 %122, %123
+  br i1 %124, label %L10_if_then, label %L10_if_else
 
 L10_if_then:
-  %127 = load i32, i32* %a
-  %128 = add i32 2, 0
-  %129 = icmp sgt i32 %127, %128
-  br i1 %129, label %L11_if_then, label %L11_if_else
+  %125 = load i32, i32* %a
+  %126 = add i32 2, 0
+  %127 = icmp eq i32 %125, %126
+  br i1 %127, label %L11_if_then, label %L11_if_else
 
 L11_if_then:
-  %130 = load i32, i32* %a
-  %131 = add i32 2, 0
-  %132 = icmp slt i32 %130, %131
-  br i1 %132, label %L12_if_then, label %L12_if_else
+  %128 = add i32 2, 0
+  %129 = load i32, i32* %a
+  %130 = icmp eq i32 %128, %129
+  br i1 %130, label %L12_if_then, label %L12_if_else
 
 L12_if_then:
-  %133 = add i32 2, 0
-  %134 = load i32, i32* %a
-  %135 = icmp sgt i32 %133, %134
-  br i1 %135, label %L13_if_then, label %L13_if_else
+  %131 = load i32, i32* %a
+  %132 = add i32 2, 0
+  %133 = icmp sgt i32 %131, %132
+  br i1 %133, label %L13_if_then, label %L13_if_else
 
 L13_if_then:
-  %136 = add i32 2, 0
-  %137 = load i32, i32* %a
-  %138 = icmp slt i32 %136, %137
-  br i1 %138, label %L14_if_then, label %L14_if_else
+  %134 = load i32, i32* %a
+  %135 = add i32 2, 0
+  %136 = icmp slt i32 %134, %135
+  br i1 %136, label %L14_if_then, label %L14_if_else
 
 L14_if_then:
-  %139 = load i32, i32* %a
-  %140 = add i32 2, 0
-  %141 = icmp ne i32 %139, %140
-  br i1 %141, label %L15_if_then, label %L15_if_else
+  %137 = add i32 2, 0
+  %138 = load i32, i32* %a
+  %139 = icmp sgt i32 %137, %138
+  br i1 %139, label %L15_if_then, label %L15_if_else
 
 L15_if_then:
-  %142 = add i32 2, 0
-  %143 = load i32, i32* %a
-  %144 = icmp ne i32 %142, %143
-  br i1 %144, label %L16_if_then, label %L16_if_else
+  %140 = add i32 2, 0
+  %141 = load i32, i32* %a
+  %142 = icmp slt i32 %140, %141
+  br i1 %142, label %L16_if_then, label %L16_if_else
 
 L16_if_then:
+  %143 = load i32, i32* %a
+  %144 = add i32 2, 0
+  %145 = icmp ne i32 %143, %144
+  br i1 %145, label %L17_if_then, label %L17_if_else
+
+L17_if_then:
+  %146 = add i32 2, 0
+  %147 = load i32, i32* %a
+  %148 = icmp ne i32 %146, %147
+  br i1 %148, label %L18_if_then, label %L18_if_else
+
+L18_if_then:
+  br label %L18_if_end
+
+L18_if_else:
+  br label %L18_if_end
+
+L18_if_end:
+  br label %L17_if_end
+
+L17_if_else:
+  br label %L17_if_end
+
+L17_if_end:
   br label %L16_if_end
 
 L16_if_else:
@@ -398,109 +443,109 @@ L8_if_else:
   br label %L8_if_end
 
 L8_if_end:
-  br label %L7_if_end
-
-L7_if_else:
-  br label %L7_if_end
-
-L7_if_end:
   br label %L6_if_end
 
 L6_if_else:
   br label %L6_if_end
 
 L6_if_end:
-  br label %L5_if_end
-
-L5_if_else:
-  br label %L5_if_end
-
-L5_if_end:
-  %145 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.strlit.7, i32 0, i32 0))
-  %146 = load double, double* %d
-  %147 = add i32 2, 0
-  %148 = sitofp i32 %147 to double
-  %149 = fcmp oge double %146, %148
-  br i1 %149, label %L17_if_then, label %L17_if_else
-
-L17_if_then:
+  %149 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.strlit.7, i32 0, i32 0))
   %150 = load double, double* %d
   %151 = add i32 2, 0
   %152 = sitofp i32 %151 to double
-  %153 = fcmp ole double %150, %152
-  br i1 %153, label %L18_if_then, label %L18_if_else
-
-L18_if_then:
-  %154 = add i32 2, 0
-  %155 = load double, double* %d
-  %156 = sitofp i32 %154 to double
-  %157 = fcmp oge double %156, %155
-  br i1 %157, label %L19_if_then, label %L19_if_else
+  %153 = fcmp oge double %150, %152
+  br i1 %153, label %L19_if_then, label %L19_if_else
 
 L19_if_then:
+  %154 = load double, double* %d
+  %155 = add i32 2, 0
+  %156 = sitofp i32 %155 to double
+  %157 = fcmp ole double %154, %156
+  br i1 %157, label %L20_if_then, label %L20_if_else
+
+L20_if_then:
   %158 = add i32 2, 0
   %159 = load double, double* %d
   %160 = sitofp i32 %158 to double
-  %161 = fcmp ole double %160, %159
-  br i1 %161, label %L20_if_then, label %L20_if_else
-
-L20_if_then:
-  %162 = load double, double* %d
-  %163 = add i32 2, 0
-  %164 = sitofp i32 %163 to double
-  %165 = fcmp oeq double %162, %164
-  br i1 %165, label %L21_if_then, label %L21_if_else
+  %161 = fcmp oge double %160, %159
+  br i1 %161, label %L21_if_then, label %L21_if_else
 
 L21_if_then:
-  %166 = add i32 2, 0
-  %167 = load double, double* %d
-  %168 = sitofp i32 %166 to double
-  %169 = fcmp oeq double %168, %167
-  br i1 %169, label %L22_if_then, label %L22_if_else
+  %162 = add i32 2, 0
+  %163 = load double, double* %d
+  %164 = sitofp i32 %162 to double
+  %165 = fcmp ole double %164, %163
+  br i1 %165, label %L22_if_then, label %L22_if_else
 
 L22_if_then:
-  %170 = load double, double* %d
-  %171 = add i32 2, 0
-  %172 = sitofp i32 %171 to double
-  %173 = fcmp ogt double %170, %172
-  br i1 %173, label %L23_if_then, label %L23_if_else
+  %166 = load double, double* %d
+  %167 = add i32 2, 0
+  %168 = sitofp i32 %167 to double
+  %169 = fcmp oeq double %166, %168
+  br i1 %169, label %L23_if_then, label %L23_if_else
 
 L23_if_then:
+  %170 = add i32 2, 0
+  %171 = load double, double* %d
+  %172 = sitofp i32 %170 to double
+  %173 = fcmp oeq double %172, %171
+  br i1 %173, label %L24_if_then, label %L24_if_else
+
+L24_if_then:
   %174 = load double, double* %d
   %175 = add i32 2, 0
   %176 = sitofp i32 %175 to double
-  %177 = fcmp olt double %174, %176
-  br i1 %177, label %L24_if_then, label %L24_if_else
-
-L24_if_then:
-  %178 = add i32 2, 0
-  %179 = load double, double* %d
-  %180 = sitofp i32 %178 to double
-  %181 = fcmp ogt double %180, %179
-  br i1 %181, label %L25_if_then, label %L25_if_else
+  %177 = fcmp ogt double %174, %176
+  br i1 %177, label %L25_if_then, label %L25_if_else
 
 L25_if_then:
+  %178 = load double, double* %d
+  %179 = add i32 2, 0
+  %180 = sitofp i32 %179 to double
+  %181 = fcmp olt double %178, %180
+  br i1 %181, label %L26_if_then, label %L26_if_else
+
+L26_if_then:
   %182 = add i32 2, 0
   %183 = load double, double* %d
   %184 = sitofp i32 %182 to double
-  %185 = fcmp olt double %184, %183
-  br i1 %185, label %L26_if_then, label %L26_if_else
-
-L26_if_then:
-  %186 = load double, double* %d
-  %187 = add i32 2, 0
-  %188 = sitofp i32 %187 to double
-  %189 = fcmp one double %186, %188
-  br i1 %189, label %L27_if_then, label %L27_if_else
+  %185 = fcmp ogt double %184, %183
+  br i1 %185, label %L27_if_then, label %L27_if_else
 
 L27_if_then:
-  %190 = add i32 2, 0
-  %191 = load double, double* %d
-  %192 = sitofp i32 %190 to double
-  %193 = fcmp one double %192, %191
-  br i1 %193, label %L28_if_then, label %L28_if_else
+  %186 = add i32 2, 0
+  %187 = load double, double* %d
+  %188 = sitofp i32 %186 to double
+  %189 = fcmp olt double %188, %187
+  br i1 %189, label %L28_if_then, label %L28_if_else
 
 L28_if_then:
+  %190 = load double, double* %d
+  %191 = add i32 2, 0
+  %192 = sitofp i32 %191 to double
+  %193 = fcmp one double %190, %192
+  br i1 %193, label %L29_if_then, label %L29_if_else
+
+L29_if_then:
+  %194 = add i32 2, 0
+  %195 = load double, double* %d
+  %196 = sitofp i32 %194 to double
+  %197 = fcmp one double %196, %195
+  br i1 %197, label %L30_if_then, label %L30_if_else
+
+L30_if_then:
+  br label %L30_if_end
+
+L30_if_else:
+  br label %L30_if_end
+
+L30_if_end:
+  br label %L29_if_end
+
+L29_if_else:
+  br label %L29_if_end
+
+L29_if_end:
   br label %L28_if_end
 
 L28_if_else:
@@ -561,90 +606,90 @@ L19_if_else:
   br label %L19_if_end
 
 L19_if_end:
-  br label %L18_if_end
-
-L18_if_else:
-  br label %L18_if_end
-
-L18_if_end:
-  br label %L17_if_end
-
-L17_if_else:
-  br label %L17_if_end
-
-L17_if_end:
-  %194 = load double, double* %d
-  %195 = fadd double 2.20000000000000018e+00, 0.000000e+00
-  %196 = fcmp oge double %194, %195
-  br i1 %196, label %L29_if_then, label %L29_if_else
-
-L29_if_then:
-  %197 = load double, double* %d
-  %198 = fadd double 2.20000000000000018e+00, 0.000000e+00
-  %199 = fcmp ole double %197, %198
-  br i1 %199, label %L30_if_then, label %L30_if_else
-
-L30_if_then:
-  %200 = fadd double 2.20000000000000018e+00, 0.000000e+00
-  %201 = load double, double* %d
-  %202 = fcmp oge double %200, %201
-  br i1 %202, label %L31_if_then, label %L31_if_else
+  %198 = load double, double* %d
+  %199 = fadd double 2.20000000000000018e+00, 0.000000e+00
+  %200 = fcmp oge double %198, %199
+  br i1 %200, label %L31_if_then, label %L31_if_else
 
 L31_if_then:
-  %203 = fadd double 2.20000000000000018e+00, 0.000000e+00
-  %204 = load double, double* %d
-  %205 = fcmp ole double %203, %204
-  br i1 %205, label %L32_if_then, label %L32_if_else
+  %201 = load double, double* %d
+  %202 = fadd double 2.20000000000000018e+00, 0.000000e+00
+  %203 = fcmp ole double %201, %202
+  br i1 %203, label %L32_if_then, label %L32_if_else
 
 L32_if_then:
-  %206 = load double, double* %d
-  %207 = fadd double 2.20000000000000018e+00, 0.000000e+00
-  %208 = fcmp oeq double %206, %207
-  br i1 %208, label %L33_if_then, label %L33_if_else
+  %204 = fadd double 2.20000000000000018e+00, 0.000000e+00
+  %205 = load double, double* %d
+  %206 = fcmp oge double %204, %205
+  br i1 %206, label %L33_if_then, label %L33_if_else
 
 L33_if_then:
-  %209 = fadd double 2.20000000000000018e+00, 0.000000e+00
-  %210 = load double, double* %d
-  %211 = fcmp oeq double %209, %210
-  br i1 %211, label %L34_if_then, label %L34_if_else
+  %207 = fadd double 2.20000000000000018e+00, 0.000000e+00
+  %208 = load double, double* %d
+  %209 = fcmp ole double %207, %208
+  br i1 %209, label %L34_if_then, label %L34_if_else
 
 L34_if_then:
-  %212 = load double, double* %d
-  %213 = fadd double 2.20000000000000018e+00, 0.000000e+00
-  %214 = fcmp ogt double %212, %213
-  br i1 %214, label %L35_if_then, label %L35_if_else
+  %210 = load double, double* %d
+  %211 = fadd double 2.20000000000000018e+00, 0.000000e+00
+  %212 = fcmp oeq double %210, %211
+  br i1 %212, label %L35_if_then, label %L35_if_else
 
 L35_if_then:
-  %215 = load double, double* %d
-  %216 = fadd double 2.20000000000000018e+00, 0.000000e+00
-  %217 = fcmp olt double %215, %216
-  br i1 %217, label %L36_if_then, label %L36_if_else
+  %213 = fadd double 2.20000000000000018e+00, 0.000000e+00
+  %214 = load double, double* %d
+  %215 = fcmp oeq double %213, %214
+  br i1 %215, label %L36_if_then, label %L36_if_else
 
 L36_if_then:
-  %218 = fadd double 2.20000000000000018e+00, 0.000000e+00
-  %219 = load double, double* %d
-  %220 = fcmp ogt double %218, %219
-  br i1 %220, label %L37_if_then, label %L37_if_else
+  %216 = load double, double* %d
+  %217 = fadd double 2.20000000000000018e+00, 0.000000e+00
+  %218 = fcmp ogt double %216, %217
+  br i1 %218, label %L37_if_then, label %L37_if_else
 
 L37_if_then:
-  %221 = fadd double 2.20000000000000018e+00, 0.000000e+00
-  %222 = load double, double* %d
-  %223 = fcmp olt double %221, %222
-  br i1 %223, label %L38_if_then, label %L38_if_else
+  %219 = load double, double* %d
+  %220 = fadd double 2.20000000000000018e+00, 0.000000e+00
+  %221 = fcmp olt double %219, %220
+  br i1 %221, label %L38_if_then, label %L38_if_else
 
 L38_if_then:
-  %224 = load double, double* %d
-  %225 = fadd double 2.20000000000000018e+00, 0.000000e+00
-  %226 = fcmp one double %224, %225
-  br i1 %226, label %L39_if_then, label %L39_if_else
+  %222 = fadd double 2.20000000000000018e+00, 0.000000e+00
+  %223 = load double, double* %d
+  %224 = fcmp ogt double %222, %223
+  br i1 %224, label %L39_if_then, label %L39_if_else
 
 L39_if_then:
-  %227 = fadd double 2.20000000000000018e+00, 0.000000e+00
-  %228 = load double, double* %d
-  %229 = fcmp one double %227, %228
-  br i1 %229, label %L40_if_then, label %L40_if_else
+  %225 = fadd double 2.20000000000000018e+00, 0.000000e+00
+  %226 = load double, double* %d
+  %227 = fcmp olt double %225, %226
+  br i1 %227, label %L40_if_then, label %L40_if_else
 
 L40_if_then:
+  %228 = load double, double* %d
+  %229 = fadd double 2.20000000000000018e+00, 0.000000e+00
+  %230 = fcmp one double %228, %229
+  br i1 %230, label %L41_if_then, label %L41_if_else
+
+L41_if_then:
+  %231 = fadd double 2.20000000000000018e+00, 0.000000e+00
+  %232 = load double, double* %d
+  %233 = fcmp one double %231, %232
+  br i1 %233, label %L42_if_then, label %L42_if_else
+
+L42_if_then:
+  br label %L42_if_end
+
+L42_if_else:
+  br label %L42_if_end
+
+L42_if_end:
+  br label %L41_if_end
+
+L41_if_else:
+  br label %L41_if_end
+
+L41_if_end:
   br label %L40_if_end
 
 L40_if_else:
@@ -705,78 +750,52 @@ L31_if_else:
   br label %L31_if_end
 
 L31_if_end:
-  br label %L30_if_end
-
-L30_if_else:
-  br label %L30_if_end
-
-L30_if_end:
-  br label %L29_if_end
-
-L29_if_else:
-  br label %L29_if_end
-
-L29_if_end:
-  %230 = alloca i1
-  %231 = alloca i1
-  %232 = alloca i1
-  %233 = alloca i1
   %234 = load i1, i1* %b1
   %235 = icmp ne i1 1, 0
   %236 = icmp eq i1 %234, %235
-  br i1 %236, label %L45_and_right, label %L45_and_false
+  br i1 %236, label %L47_and_right, label %L47_and_false
 
-L45_and_right:
+L47_and_right:
   %237 = load double, double* %d
   %238 = fadd double 2.20000000000000018e+00, 0.000000e+00
   %239 = fcmp oge double %237, %238
-  store i1 %239, i1* %233
-  br label %L45_and_end
+  br label %L47_and_end
 
-L45_and_false:
-  store i1 0, i1* %233
-  br label %L45_and_end
+L47_and_false:
+  br label %L47_and_end
 
-L45_and_end:
-  %240 = load i1, i1* %233
-  br i1 %240, label %L44_and_right, label %L44_and_false
+L47_and_end:
+  %240 = phi i1 [ %239, %L47_and_right ], [ 0, %L47_and_false ]
+  br i1 %240, label %L46_and_right, label %L46_and_false
 
-L44_and_right:
+L46_and_right:
   %241 = add i32 2, 0
   %242 = load double, double* %d
   %243 = sitofp i32 %241 to double
   %244 = fcmp oge double %243, %242
-  store i1 %244, i1* %232
-  br label %L44_and_end
+  br label %L46_and_end
 
-L44_and_false:
-  store i1 0, i1* %232
-  br label %L44_and_end
+L46_and_false:
+  br label %L46_and_end
 
-L44_and_end:
-  %245 = load i1, i1* %232
-  br i1 %245, label %L43_and_right, label %L43_and_false
+L46_and_end:
+  %245 = phi i1 [ %244, %L46_and_right ], [ 0, %L46_and_false ]
+  br i1 %245, label %L45_and_right, label %L45_and_false
 
-L43_and_right:
+L45_and_right:
   %246 = fadd double 2.20000000000000018e+00, 0.000000e+00
   %247 = load double, double* %d
   %248 = fcmp ole double %246, %247
-  store i1 %248, i1* %231
-  br label %L43_and_end
+  br label %L45_and_end
 
-L43_and_false:
-  store i1 0, i1* %231
-  br label %L43_and_end
+L45_and_false:
+  br label %L45_and_end
 
-L43_and_end:
-  %249 = load i1, i1* %231
-  br i1 %249, label %L42_or_true, label %L42_or_right
+L45_and_end:
+  %249 = phi i1 [ %248, %L45_and_right ], [ 0, %L45_and_false ]
+  br i1 %249, label %L44_or_true, label %L44_or_right
 
-L42_or_true:
-  store i1 1, i1* %230
-  br label %L42_or_end
-
-L42_or_right:
+L44_or_right:
   %250 = fadd double 2.20000000000000018e+00, 0.000000e+00
   %251 = load double, double* %d
   %252 = fadd double 2.29999999999999982e+00, 0.000000e+00
@@ -791,336 +810,322 @@ L42_or_right:
   store double %258, double* %d
   %259 = fadd double %251, %258
   %260 = fcmp oeq double %250, %259
-  store i1 %260, i1* %230
-  br label %L42_or_end
+  br label %L44_or_end
 
-L42_or_end:
-  %261 = load i1, i1* %230
-  br i1 %261, label %L41_if_then, label %L41_if_else
+L44_or_true:
+  br label %L44_or_end
 
-L41_if_then:
+L44_or_end:
+  %261 = phi i1 [ 1, %L44_or_true ], [ %260, %L44_or_right ]
+  br i1 %261, label %L43_if_then, label %L43_if_else
+
+L43_if_then:
   %262 = icmp ne i1 1, 0
   %263 = load i1, i1* %b1
   %264 = icmp eq i1 %262, %263
-  br i1 %264, label %L46_if_then, label %L46_if_else
+  br i1 %264, label %L48_if_then, label %L48_if_else
 
-L46_if_then:
+L48_if_then:
   %265 = load i1, i1* %b1
   %266 = icmp ne i1 1, 0
   %267 = icmp ne i1 %265, %266
-  br i1 %267, label %L47_if_then, label %L47_if_else
+  br i1 %267, label %L49_if_then, label %L49_if_else
 
-L47_if_then:
+L49_if_then:
   %268 = icmp ne i1 1, 0
   %269 = load i1, i1* %b1
   %270 = icmp ne i1 %268, %269
-  br i1 %270, label %L48_if_then, label %L48_if_else
+  br i1 %270, label %L50_if_then, label %L50_if_else
 
-L48_if_then:
-  br label %L48_if_end
+L50_if_then:
+  br label %L50_if_end
 
-L48_if_else:
-  br label %L48_if_end
+L50_if_else:
+  br label %L50_if_end
 
-L48_if_end:
-  br label %L47_if_end
-
-L47_if_else:
-  br label %L47_if_end
-
-L47_if_end:
-  br label %L46_if_end
-
-L46_if_else:
-  br label %L46_if_end
-
-L46_if_end:
-  br label %L41_if_end
-
-L41_if_else:
-  br label %L41_if_end
-
-L41_if_end:
-  %271 = alloca i1
-  %272 = alloca i1
-  %273 = alloca i1
-  %274 = load i1, i1* %b1
-  br i1 %274, label %L52_and_right, label %L52_and_false
-
-L52_and_right:
-  %275 = icmp ne i1 1, 0
-  store i1 %275, i1* %273
-  br label %L52_and_end
-
-L52_and_false:
-  store i1 0, i1* %273
-  br label %L52_and_end
-
-L52_and_end:
-  %276 = load i1, i1* %273
-  br i1 %276, label %L51_or_true, label %L51_or_right
-
-L51_or_true:
-  store i1 1, i1* %272
-  br label %L51_or_end
-
-L51_or_right:
-  %277 = load i1, i1* %b1
-  store i1 %277, i1* %272
-  br label %L51_or_end
-
-L51_or_end:
-  %278 = load i1, i1* %272
-  br i1 %278, label %L50_or_true, label %L50_or_right
-
-L50_or_true:
-  store i1 1, i1* %271
-  br label %L50_or_end
-
-L50_or_right:
-  %279 = alloca i1
-  %280 = icmp ne i1 1, 0
-  br i1 %280, label %L53_and_right, label %L53_and_false
-
-L53_and_right:
-  %281 = load i1, i1* %b1
-  %282 = xor i1 %281, true
-  %283 = icmp ne i1 0, 0
-  %284 = xor i1 %282, %283
-  store i1 %284, i1* %279
-  br label %L53_and_end
-
-L53_and_false:
-  store i1 0, i1* %279
-  br label %L53_and_end
-
-L53_and_end:
-  %285 = load i1, i1* %279
-  store i1 %285, i1* %271
-  br label %L50_or_end
-
-L50_or_end:
-  %286 = load i1, i1* %271
-  br i1 %286, label %L49_if_then, label %L49_if_else
-
-L49_if_then:
-  %287 = alloca i1
-  %288 = alloca i1
-  %289 = alloca i1
-  %290 = icmp ne i1 1, 0
-  br i1 %290, label %L57_and_right, label %L57_and_false
-
-L57_and_right:
-  %291 = load i1, i1* %b1
-  store i1 %291, i1* %289
-  br label %L57_and_end
-
-L57_and_false:
-  store i1 0, i1* %289
-  br label %L57_and_end
-
-L57_and_end:
-  %292 = load i1, i1* %289
-  br i1 %292, label %L56_or_true, label %L56_or_right
-
-L56_or_true:
-  store i1 1, i1* %288
-  br label %L56_or_end
-
-L56_or_right:
-  %293 = icmp ne i1 1, 0
-  store i1 %293, i1* %288
-  br label %L56_or_end
-
-L56_or_end:
-  %294 = load i1, i1* %288
-  br i1 %294, label %L55_or_true, label %L55_or_right
-
-L55_or_true:
-  store i1 1, i1* %287
-  br label %L55_or_end
-
-L55_or_right:
-  %295 = alloca i1
-  %296 = load i1, i1* %b1
-  br i1 %296, label %L58_and_right, label %L58_and_false
-
-L58_and_right:
-  %297 = icmp ne i1 0, 0
-  %298 = load i1, i1* %b1
-  %299 = xor i1 %298, true
-  %300 = xor i1 %297, %299
-  store i1 %300, i1* %295
-  br label %L58_and_end
-
-L58_and_false:
-  store i1 0, i1* %295
-  br label %L58_and_end
-
-L58_and_end:
-  %301 = load i1, i1* %295
-  store i1 %301, i1* %287
-  br label %L55_or_end
-
-L55_or_end:
-  %302 = load i1, i1* %287
-  br i1 %302, label %L54_if_then, label %L54_if_else
-
-L54_if_then:
-  br label %L54_if_end
-
-L54_if_else:
-  br label %L54_if_end
-
-L54_if_end:
+L50_if_end:
   br label %L49_if_end
 
 L49_if_else:
   br label %L49_if_end
 
 L49_if_end:
-  %303 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.strlit.8, i32 0, i32 0))
-  %304 = load i32, i32* %a
-  %305 = load double, double* %d
-  %306 = fneg double %305
-  %307 = sitofp i32 %304 to double
-  %308 = fmul double %307, %306
-  %309 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.fmt_double, i32 0, i32 0), double %308)
-  %310 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.9, i32 0, i32 0))
-  %311 = icmp ne i1 0, 0
-  %312 = load i1, i1* %b1
-  %313 = xor i1 %312, true
-  %314 = xor i1 %311, %313
-  br i1 %314, label %L59print_true, label %L59print_false
+  br label %L48_if_end
 
-L59print_true:
-  %315 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str_true, i32 0, i32 0))
-  br label %L59print_end
+L48_if_else:
+  br label %L48_if_end
 
-L59print_false:
-  %316 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str_false, i32 0, i32 0))
-  br label %L59print_end
+L48_if_end:
+  br label %L43_if_end
 
-L59print_end:
-  %317 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.10, i32 0, i32 0))
-  %318 = sub i32 %args.argc, 1
-  %319 = fadd double 1.10000000000000009e+00, 0.000000e+00
-  %320 = sitofp i32 %318 to double
-  %321 = fadd double %320, %319
-  %322 = add i32 3, 0
-  %323 = sitofp i32 %322 to double
-  %324 = call double @_overload_double(double %323)
-  %325 = fadd double %321, %324
-  %326 = add i32 3, 0
-  %327 = add i32 3, 0
-  %328 = mul i32 %326, %327
-  %329 = sitofp i32 %328 to double
-  %330 = fadd double %325, %329
-  %331 = add i32 2, 0
-  %332 = sitofp i32 %331 to double
-  %333 = fadd double %330, %332
-  %334 = add i32 2, 0
-  %335 = sitofp i32 %334 to double
-  %336 = fadd double %333, %335
-  %337 = add i32 2, 0
-  %338 = sub i32 0, %337
-  %339 = sitofp i32 %338 to double
-  %340 = fadd double %336, %339
-  %341 = add i32 3, 0
-  %342 = add i32 3, 0
-  %343 = sdiv i32 %341, %342
-  %344 = sitofp i32 %343 to double
-  %345 = fadd double %340, %344
-  store double %345, double* %d1
-  %346 = add i32 0, 0
-  store i32 %346, i32* %i
-  %347 = add i32 0, 0
-  store i32 %347, i32* %j
-  %348 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.strlit.11, i32 0, i32 0))
-  br label %L60_while_cond
+L43_if_else:
+  br label %L43_if_end
 
-L60_while_cond:
-  %349 = load i32, i32* %i
-  %350 = add i32 10, 0
-  %351 = icmp slt i32 %349, %350
-  br i1 %351, label %L60_while_body, label %L60_while_end
+L43_if_end:
+  %271 = load i1, i1* %b1
+  br i1 %271, label %L54_and_right, label %L54_and_false
 
-L60_while_body:
-  br label %L61_while_cond
+L54_and_right:
+  %272 = icmp ne i1 1, 0
+  br label %L54_and_end
 
-L61_while_cond:
-  %352 = add i32 10, 0
-  %353 = load i32, i32* %i
-  %354 = icmp sgt i32 %352, %353
-  br i1 %354, label %L61_while_body, label %L61_while_end
+L54_and_false:
+  br label %L54_and_end
 
-L61_while_body:
-  br label %L62_while_cond
+L54_and_end:
+  %273 = phi i1 [ %272, %L54_and_right ], [ 0, %L54_and_false ]
+  br i1 %273, label %L53_or_true, label %L53_or_right
 
-L62_while_cond:
-  %355 = alloca i1
-  %356 = add i32 20, 0
-  %357 = load i32, i32* %j
-  %358 = icmp sgt i32 %356, %357
-  br i1 %358, label %L63_and_right, label %L63_and_false
+L53_or_right:
+  %274 = load i1, i1* %b1
+  br label %L53_or_end
 
-L63_and_right:
-  %359 = load i32, i32* %i
-  %360 = add i32 10, 0
-  %361 = icmp slt i32 %359, %360
-  store i1 %361, i1* %355
-  br label %L63_and_end
+L53_or_true:
+  br label %L53_or_end
 
-L63_and_false:
-  store i1 0, i1* %355
-  br label %L63_and_end
+L53_or_end:
+  %275 = phi i1 [ 1, %L53_or_true ], [ %274, %L53_or_right ]
+  br i1 %275, label %L52_or_true, label %L52_or_right
 
-L63_and_end:
-  %362 = load i1, i1* %355
-  br i1 %362, label %L62_while_body, label %L62_while_end
+L52_or_right:
+  %276 = icmp ne i1 1, 0
+  br i1 %276, label %L55_and_right, label %L55_and_false
 
-L62_while_body:
-  %363 = load i32, i32* %i
-  %364 = add i32 1, 0
-  %365 = add i32 %363, %364
-  store i32 %365, i32* %i
-  %366 = load i32, i32* %j
-  %367 = add i32 1, 0
-  %368 = add i32 %366, %367
-  store i32 %368, i32* %j
-  %369 = load i32, i32* %i
-  %370 = add i32 10, 0
-  %371 = icmp eq i32 %369, %370
-  br i1 %371, label %L64_if_then, label %L64_if_else
+L55_and_right:
+  %277 = load i1, i1* %b1
+  %278 = xor i1 %277, true
+  %279 = icmp ne i1 0, 0
+  %280 = xor i1 %278, %279
+  br label %L55_and_end
 
-L64_if_then:
-  %372 = load i32, i32* %j
-  %373 = add i32 9, 0
-  %374 = icmp eq i32 %372, %373
-  br i1 %374, label %L65_if_then, label %L65_if_else
+L55_and_false:
+  br label %L55_and_end
 
-L65_if_then:
-  br label %L65_if_end
+L55_and_end:
+  %281 = phi i1 [ %280, %L55_and_right ], [ 0, %L55_and_false ]
+  br label %L52_or_end
 
-L65_if_else:
-  br label %L65_if_end
+L52_or_true:
+  br label %L52_or_end
 
-L65_if_end:
-  br label %L64_if_end
+L52_or_end:
+  %282 = phi i1 [ 1, %L52_or_true ], [ %281, %L55_and_end ]
+  br i1 %282, label %L51_if_then, label %L51_if_else
 
-L64_if_else:
-  br label %L64_if_end
+L51_if_then:
+  %283 = icmp ne i1 1, 0
+  br i1 %283, label %L59_and_right, label %L59_and_false
 
-L64_if_end:
-  br label %L62_while_cond
+L59_and_right:
+  %284 = load i1, i1* %b1
+  br label %L59_and_end
 
-L62_while_end:
-  br label %L61_while_cond
+L59_and_false:
+  br label %L59_and_end
 
-L61_while_end:
-  br label %L60_while_cond
+L59_and_end:
+  %285 = phi i1 [ %284, %L59_and_right ], [ 0, %L59_and_false ]
+  br i1 %285, label %L58_or_true, label %L58_or_right
 
-L60_while_end:
+L58_or_right:
+  %286 = icmp ne i1 1, 0
+  br label %L58_or_end
+
+L58_or_true:
+  br label %L58_or_end
+
+L58_or_end:
+  %287 = phi i1 [ 1, %L58_or_true ], [ %286, %L58_or_right ]
+  br i1 %287, label %L57_or_true, label %L57_or_right
+
+L57_or_right:
+  %288 = load i1, i1* %b1
+  br i1 %288, label %L60_and_right, label %L60_and_false
+
+L60_and_right:
+  %289 = icmp ne i1 0, 0
+  %290 = load i1, i1* %b1
+  %291 = xor i1 %290, true
+  %292 = xor i1 %289, %291
+  br label %L60_and_end
+
+L60_and_false:
+  br label %L60_and_end
+
+L60_and_end:
+  %293 = phi i1 [ %292, %L60_and_right ], [ 0, %L60_and_false ]
+  br label %L57_or_end
+
+L57_or_true:
+  br label %L57_or_end
+
+L57_or_end:
+  %294 = phi i1 [ 1, %L57_or_true ], [ %293, %L60_and_end ]
+  br i1 %294, label %L56_if_then, label %L56_if_else
+
+L56_if_then:
+  br label %L56_if_end
+
+L56_if_else:
+  br label %L56_if_end
+
+L56_if_end:
+  br label %L51_if_end
+
+L51_if_else:
+  br label %L51_if_end
+
+L51_if_end:
+  %295 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.strlit.8, i32 0, i32 0))
+  %296 = load i32, i32* %a
+  %297 = load double, double* %d
+  %298 = fneg double %297
+  %299 = sitofp i32 %296 to double
+  %300 = fmul double %299, %298
+  %301 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.fmt_double, i32 0, i32 0), double %300)
+  %302 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.9, i32 0, i32 0))
+  %303 = icmp ne i1 0, 0
+  %304 = load i1, i1* %b1
+  %305 = xor i1 %304, true
+  %306 = xor i1 %303, %305
+  br i1 %306, label %L61print_true, label %L61print_false
+
+L61print_true:
+  %307 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str_true, i32 0, i32 0))
+  br label %L61print_end
+
+L61print_false:
+  %308 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str_false, i32 0, i32 0))
+  br label %L61print_end
+
+L61print_end:
+  %309 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.strlit.10, i32 0, i32 0))
+  %310 = sub i32 %args.argc, 1
+  %311 = fadd double 1.10000000000000009e+00, 0.000000e+00
+  %312 = sitofp i32 %310 to double
+  %313 = fadd double %312, %311
+  %314 = add i32 3, 0
+  %315 = sitofp i32 %314 to double
+  %316 = call double @_overload_double(double %315)
+  %317 = fadd double %313, %316
+  %318 = add i32 3, 0
+  %319 = add i32 3, 0
+  %320 = mul i32 %318, %319
+  %321 = sitofp i32 %320 to double
+  %322 = fadd double %317, %321
+  %323 = add i32 2, 0
+  %324 = sitofp i32 %323 to double
+  %325 = fadd double %322, %324
+  %326 = add i32 2, 0
+  %327 = sitofp i32 %326 to double
+  %328 = fadd double %325, %327
+  %329 = add i32 2, 0
+  %330 = sub i32 0, %329
+  %331 = sitofp i32 %330 to double
+  %332 = fadd double %328, %331
+  %333 = add i32 3, 0
+  %334 = add i32 3, 0
+  %335 = icmp eq i32 %334, 0
+  br i1 %335, label %L62_div_zero, label %L62_div_ok
+
+L62_div_ok:
+  %336 = sdiv i32 %333, %334
+  br label %L62_div_end
+
+L62_div_zero:
+  br label %L62_div_end
+
+L62_div_end:
+  %337 = phi i32 [ %336, %L62_div_ok ], [ 0, %L62_div_zero ]
+  %338 = sitofp i32 %337 to double
+  %339 = fadd double %332, %338
+  store double %339, double* %d1
+  %340 = add i32 0, 0
+  store i32 %340, i32* %i
+  %341 = add i32 0, 0
+  store i32 %341, i32* %j
+  %342 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.fmt_str, i32 0, i32 0), i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.strlit.11, i32 0, i32 0))
+  br label %L63_while_cond
+
+L63_while_cond:
+  %343 = load i32, i32* %i
+  %344 = add i32 10, 0
+  %345 = icmp slt i32 %343, %344
+  br i1 %345, label %L63_while_body, label %L63_while_end
+
+L63_while_body:
+  br label %L64_while_cond
+
+L64_while_cond:
+  %346 = add i32 10, 0
+  %347 = load i32, i32* %i
+  %348 = icmp sgt i32 %346, %347
+  br i1 %348, label %L64_while_body, label %L64_while_end
+
+L64_while_body:
+  br label %L65_while_cond
+
+L65_while_cond:
+  %349 = add i32 20, 0
+  %350 = load i32, i32* %j
+  %351 = icmp sgt i32 %349, %350
+  br i1 %351, label %L66_and_right, label %L66_and_false
+
+L66_and_right:
+  %352 = load i32, i32* %i
+  %353 = add i32 10, 0
+  %354 = icmp slt i32 %352, %353
+  br label %L66_and_end
+
+L66_and_false:
+  br label %L66_and_end
+
+L66_and_end:
+  %355 = phi i1 [ %354, %L66_and_right ], [ 0, %L66_and_false ]
+  br i1 %355, label %L65_while_body, label %L65_while_end
+
+L65_while_body:
+  %356 = load i32, i32* %i
+  %357 = add i32 1, 0
+  %358 = add i32 %356, %357
+  store i32 %358, i32* %i
+  %359 = load i32, i32* %j
+  %360 = add i32 1, 0
+  %361 = add i32 %359, %360
+  store i32 %361, i32* %j
+  %362 = load i32, i32* %i
+  %363 = add i32 10, 0
+  %364 = icmp eq i32 %362, %363
+  br i1 %364, label %L67_if_then, label %L67_if_else
+
+L67_if_then:
+  %365 = load i32, i32* %j
+  %366 = add i32 9, 0
+  %367 = icmp eq i32 %365, %366
+  br i1 %367, label %L68_if_then, label %L68_if_else
+
+L68_if_then:
+  br label %L68_if_end
+
+L68_if_else:
+  br label %L68_if_end
+
+L68_if_end:
+  br label %L67_if_end
+
+L67_if_else:
+  br label %L67_if_end
+
+L67_if_end:
+  br label %L65_while_cond
+
+L65_while_end:
+  br label %L64_while_cond
+
+L64_while_end:
+  br label %L63_while_cond
+
+L63_while_end:
   ret void
 }
 
